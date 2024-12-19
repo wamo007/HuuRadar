@@ -17,16 +17,21 @@ let page
 
 const initialSetup = async () => {
     browser = await puppeteer.launch({ 
-        headless: false,
+        headless: true,
         args: ["--disable-notifications"],
     })
 
     page = await browser.newPage()
 
+    await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.181 Safari/537.36')
     await page.goto(FUNDA_URL, { waitUntil: 'networkidle2' })
 
-    await page.waitForSelector('button[id="didomi-notice-disagree-button"]')
-    await page.click('button[id="didomi-notice-disagree-button"]')
+    try {
+        await page.waitForSelector('button[id="didomi-notice-disagree-button"]', {timeout: 500})
+        await page.click('button[id="didomi-notice-disagree-button"]')
+    } catch (error) {
+        console.log('Funda popup did not appear, skipping this step...')
+    }
 }
 
 initialSetup()

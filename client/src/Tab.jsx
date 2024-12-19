@@ -1,3 +1,4 @@
+import { LazyLoadImage } from 'react-lazy-load-image-component'
 import './Tab.css'
 
 function Tab({ responseData }) {
@@ -6,7 +7,7 @@ function Tab({ responseData }) {
       {responseData.map((tab, index) => (
         <div key={index}>
           <a href={tab.link}>
-            <img src={tab.img} srcSet={tab.img} alt="Item Image" />
+            <LazyLoadImage src={tab.img} srcSet={tab.img} width={180} height={120} alt="Item Image" />
           </a>
           <div>
             <a href={tab.link}>

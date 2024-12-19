@@ -3,7 +3,7 @@ const puppeteer = require('puppeteer-extra')
 const { DEFAULT_INTERCEPT_RESOLUTION_PRIORITY } = require('puppeteer')
 const AdblockerPlugin = require('puppeteer-extra-plugin-adblocker')
 
-const PAPARIUS_URL = `https://www.pararius.com`
+const IAMEXPAT_URL = `https://www.iamexpat.nl`
 
 puppeteer.use(
   AdblockerPlugin({
@@ -17,80 +17,87 @@ let page
 
 const initialSetup = async () => {
     browser = await puppeteer.launch({ 
-        headless: true,
+        headless: false,
         args: ["--disable-notifications"],
     })
 
     page = await browser.newPage()
 
-    await page.goto(PAPARIUS_URL, { waitUntil: 'networkidle2' })
+    await page.goto(IAMEXPAT_URL, { waitUntil: 'networkidle2' })
 
     try {
-        await page.waitForSelector('button[id="onetrust-reject-all-handler"]', {timeout: 400})
-        await page.click('button[id="onetrust-reject-all-handler"]')
+        await page.waitForSelector('button[id="onetrust-pc-btn-handler"]', {timeout: 400})
+        await page.click('button[id="onetrust-pc-btn-handler"]')
+        await page.waitForSelector('button.ot-pc-refuse-all-handler', {timeout: 400})
+        await page.click('button.ot-pc-refuse-all-handler')
     } catch (error) {
-        console.log('Paparius popup did not appear, skipping this step...')
+        console.log('Privacy popup did not appear, skipping this step...')
     }
 
 }
 
 initialSetup()
 
-const papariusScraper = async (city, radius, sortGlobal, minPrice, maxPrice) => {
+const iAmExpatScraper = async (city, radius, sortGlobal, minPrice, maxPrice) => {
 
     let data
-    let radiusPaparius
+    let radiusIAmExpat
     let initialUrl
-    let papariusData = []
+    let iamexpatData = []
     let currentPage = 1
 
-    function sortPaparius(sortingChosen) {
+    function sortIAmExpat(sortingChosen) {
         const options = {
-            'new': '',
-            'old': '',
-            'cheap': '/sort-price-low',
-            'pricy': '/sort-price-high',
+            'new': 'li[data-val="sort_desc"]',
+            'old': 'li[data-val="sort_asc"]',
+            'cheap': 'li[data-val="sort_price_asc"]',
+            'pricy': 'li[data-val="sort_price_desc"]',
         }
         return options[sortingChosen.toLowerCase()] ?? 'Sorting type unknown... How???'
     }
 
     if (radius === '0') {
-        radiusPaparius = ''
+        radiusIAmExpat = ''
     } else {
-        radiusPaparius = `/radius-${radius}`
+        radiusIAmExpat = `/radius-${radius}`
     }
 
     if (!minPrice && !maxPrice) {
-        initialUrl = `${PAPARIUS_URL}/apartments/${city.toLowerCase()}${radiusPaparius}${sortPaparius(sortGlobal)}`
+        initialUrl = `${IAMEXPAT_URL}/housing/rentals/${city}/room`
     } else if (!minPrice) {
         minPrice = '0'
-        initialUrl = `${PAPARIUS_URL}/apartments/${city.toLowerCase()}/${minPrice}-${maxPrice}/${radiusPaparius}${sortPaparius(sortGlobal)}`
+        initialUrl = `${IAMEXPAT_URL}/housing/rentals/${city}/room/${minPrice}-${maxPrice}`
     } else if (!maxPrice || maxPrice === 0) {
         maxPrice = '60000'
-        initialUrl = `${PAPARIUS_URL}/apartments/${city.toLowerCase()}/${minPrice}-${maxPrice}/${radiusPaparius}${sortPaparius(sortGlobal)}`
+        initialUrl = `${IAMEXPAT_URL}/housing/rentals/${city}/room/${minPrice}-${maxPrice}`
     } else {
-        initialUrl = `${PAPARIUS_URL}/apartments/${city.toLowerCase()}/${minPrice}-${maxPrice}/${radiusPaparius}${sortPaparius(sortGlobal)}`
+        initialUrl = `${IAMEXPAT_URL}/housing/rentals/${city}/room/${minPrice}-${maxPrice}`
     }
 
     await page.goto(initialUrl, {
         waitUntil: 'domcontentloaded'
     })
 
+    await page.evaluate(() => {
+        const changeSorting = document.querySelector(sortIAmExpat(sortGlobal))
+        if (changeSorting) changeSorting.click()
+    })
+
     let maxPage = await page.evaluate(() => {
         const totalPages = Array.from(document.querySelectorAll('ul.pagination__list li a'))
             .map((a) => {
+                // const otherPages = a.querySelector('a')
                 return a ? parseInt(a.textContent.trim(), 10) : NaN
             })
             .filter((num) => !isNaN(num))
         return (totalPages.length > 0) ? Math.max(...totalPages) : 1
     })
-    
-    while (currentPage <= maxPage) {
-        const changingUrl = `${initialUrl}/page-${currentPage}`
-        await page.goto(changingUrl, {
-            waitUntil: 'domcontentloaded'
-        })
 
+    while (currentPage <= maxPage) {
+        await page.evaluate(() => {
+            const nextPage = document.querySelector(sortIAmExpat(sortGlobal))
+            if (changeSorting) changeSorting.click()
+        })
         await autoScroll(page)
 
         data = await page.evaluate(() => {
@@ -107,24 +114,24 @@ const papariusScraper = async (city, radius, sortGlobal, minPrice, maxPrice) => 
                 const sellerLink = section.querySelector('div.listing-search-item__info a')?.getAttribute('href') || ''
                 
                 return {
-                    link: `https://www.pararius.com${link}`,
+                    link: `https://www.iamexpat.nl${link}`,
                     img: img.substring(0, img.length - 20),
                     heading,
                     address,
                     price,
                     size,
                     seller,
-                    sellerLink: `https://www.pararius.com${sellerLink}`
+                    sellerLink: `https://www.iamexpat.nl${sellerLink}`
                 }
             })
         })
 
-        papariusData.push(...data)
+        iamexpatData.push(...data)
 
         currentPage++
     }
 
-    return papariusData
+    return iamexpatData
 }
 
 async function autoScroll(page) {
@@ -146,4 +153,4 @@ async function autoScroll(page) {
     })
 }
 
-module.exports = papariusScraper
+module.exports = iAmExpatScraper

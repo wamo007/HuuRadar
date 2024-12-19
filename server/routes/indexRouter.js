@@ -3,6 +3,7 @@ const indexRouter = Router()
 const fundaScraper = require('../controllers/funda')
 const papariusScraper = require('../controllers/paparius')
 const rentolaScraper = require('../controllers/rentola')
+const hAnywhereScraper = require('../controllers/hAnywhere')
 
 indexRouter.get('/', (req, res) => {
     res.send('works')
@@ -21,15 +22,18 @@ indexRouter.post('/', async (req, res) => {
     }
 
     try {
+        console.log(`Processing the request for ${city}, ${radius}, ${sortGlobal}, ${minPrice} - ${maxPrice}. Time: ${new Date()}`)
         // const funda = await fundaScraper(city, radius, sortGlobal, minPrice, maxPrice)
         // const paparius = await papariusScraper(city, radius, sortGlobal, minPrice, maxPrice)
         await Promise.all([
             fundaScraper(city, radius, sortGlobal, minPrice, maxPrice),
             papariusScraper(city, radius, sortGlobal, minPrice, maxPrice),
             rentolaScraper(city, sortGlobal, minPrice, maxPrice),
-        ]).then(([ funda, paparius, rentola ]) => {
+            hAnywhereScraper(city, sortGlobal, minPrice, maxPrice)
+        ]).then(([ funda, paparius, rentola, hAnywhere ]) => {
             res.status(200)
-            .json({ funda, paparius, rentola })
+            .json({ funda, paparius, rentola, hAnywhere })
+            console.log(`The request for ${city} has been completed on ${new Date()}`)
         })
     } catch (error) {
         console.error('Error finding information on the websites: ', error)

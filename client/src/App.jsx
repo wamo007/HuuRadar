@@ -33,6 +33,20 @@ function App() {
           ) : (
             <p>No Results on Paparius...</p>
           )}
+          {(responseData.rentola.length > 0 ) ? (
+            <div className="rentolaResults">Results on Rentola
+              <Tab className='rentolaTab' responseData={responseData.rentola} />
+            </div>
+          ) : (
+            <p>No Results on Rentola...</p>
+          )}
+          {(responseData.hAnywhere.length > 0 ) ? (
+            <div className="hAnywhereResults">Results on Housing Anywhere
+              <Tab className='hAnywhereTab' responseData={responseData.hAnywhere} />
+            </div>
+          ) : (
+            <p>No Results on Housing Anywhere...</p>
+          )}
         </div>
       ) : (
         <p>No data available. Please provide a valid link.</p>

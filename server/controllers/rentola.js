@@ -17,21 +17,18 @@ let page
 
 const initialSetup = async () => {
     browser = await puppeteer.launch({ 
-        headless: false,
+        headless: true,
         args: ["--disable-notifications"],
     })
 
     page = await browser.newPage()
 
     await page.goto(RENTOLA_URL, { waitUntil: 'networkidle2' })
-
-    await page.waitForSelector('button[id="didomi-notice-disagree-button"]')
-    await page.click('button[id="didomi-notice-disagree-button"]')
 }
 
 initialSetup()
 
-const rentolaScraper = async (city, radius, sortGlobal, minPrice, maxPrice) => {
+const rentolaScraper = async (city, sortGlobal, minPrice, maxPrice) => {
 
     let data
     let initialUrl
@@ -48,15 +45,15 @@ const rentolaScraper = async (city, radius, sortGlobal, minPrice, maxPrice) => {
     }
 
     if (!minPrice && !maxPrice) {
-        initialUrl = `${RENTOLA_URL}for-rent?location=${city}&order=${sortRentola}`
+        initialUrl = `${RENTOLA_URL}for-rent?location=${city}&order=${sortRentola(sortGlobal)}`
     } else if (!minPrice) {
         minPrice = '0'
-        initialUrl = `${RENTOLA_URL}for-rent?location=${city}&order=${sortRentola}&rent=${minPrice}-${maxPrice}`
+        initialUrl = `${RENTOLA_URL}for-rent?location=${city}&order=${sortRentola(sortGlobal)}&rent=${minPrice}-${maxPrice}`
     } else if (!maxPrice || maxPrice === 0) {
         maxPrice = '60000'
-        initialUrl = `${RENTOLA_URL}for-rent?location=${city}&order=${sortRentola}&rent=${minPrice}-${maxPrice}`
+        initialUrl = `${RENTOLA_URL}for-rent?location=${city}&order=${sortRentola(sortGlobal)}&rent=${minPrice}-${maxPrice}`
     } else {
-        initialUrl = `${RENTOLA_URL}for-rent?location=${city}&order=${sortRentola}&rent=${minPrice}-${maxPrice}`
+        initialUrl = `${RENTOLA_URL}for-rent?location=${city}&order=${sortRentola(sortGlobal)}&rent=${minPrice}-${maxPrice}`
     }
 
     // await page.setViewport({ width: 600, height: 1000})
@@ -65,8 +62,25 @@ const rentolaScraper = async (city, radius, sortGlobal, minPrice, maxPrice) => {
         waitUntil: 'domcontentloaded'
     })
 
-    // autoscroll and select operation
+    while (true) {
+        const loadMoreHidden = await page.evaluate(() => {
+            return document.querySelector('div#pagination-load-more')
+                .getAttribute('style') === 'display: none;'
+        })
 
+        if (loadMoreHidden) {
+            break
+        }
+
+        await page.evaluate(() => {
+            const loadMoreButton = document.querySelector('button[id="load-more"]')
+            if (loadMoreButton) loadMoreButton.click()
+        })
+        await page.evaluate(() => new Promise(resolve => setTimeout(resolve, 1000)))
+    }
+
+    await autoScroll(page)
+    
     data = await page.evaluate(() => {
         return Array.from(document.querySelectorAll(
           'div.search-results div[data-controller="thumbnail--main"]'
@@ -74,29 +88,43 @@ const rentolaScraper = async (city, radius, sortGlobal, minPrice, maxPrice) => {
             const link = div.querySelector("a").getAttribute('href')
             const img = div.querySelector("img")?.getAttribute('src') || ''
             const heading = div.querySelector("div.location-label").textContent.trim()
-            // const address = div.querySelector('div[data-test-id="postal-code-city"]')?.textContent.trim()
             const price = div.querySelector('div.fake-btn b').textContent.trim()
             const size = div.querySelector('div.row div.prop-value')?.textContent.trim() || ''
-            const seller = div.querySelector('div.mt-4 a')?.textContent.trim() || ''
-            const sellerLink = div.querySelector('div.mt-4 a')?.getAttribute('href') || ''
     
             return {
-                link,
+                link: `https://www.rentola.nl${link}`,
                 img,
-                heading,
-                address: `${city}`,
+                heading: heading.split(' ').slice(0, -2).join(' '),
+                address: heading.split(' ').slice(-1).join(' '),
                 price: `${price} p/mo.`,
-                size: `${size}²`,
-                seller,
-                sellerLink
+                size: `${size.replace('\nm2','m')}²`,
+                seller: 'Rentola',
+                sellerLink: `https://www.rentola.nl${link}`
             }
         })
     })
     rentolaData.push(...data)
-    
+
     return rentolaData
 }
 
+async function autoScroll(page) {
+    await page.evaluate(async () => {
+        await new Promise((resolve) => {
+            let totalHeight = 0
+            const distance = 320
+            const timer = setInterval(() => {
+                const scrollHeight = document.body.scrollHeight
+                window.scrollBy(0, distance)
+                totalHeight += distance
 
+                if (totalHeight >= scrollHeight - window.innerHeight) {
+                    clearInterval(timer)
+                    resolve()
+                }
+            }, 150)
+        })
+    })
+}
 
 module.exports = rentolaScraper

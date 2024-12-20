@@ -1,5 +1,8 @@
 import { useState, useCallback } from 'react'
 import './App.css'
+import Funda from './assets/funda.png'
+import Paparius from './assets/paparius.png'
+import Rentola from './assets/rentola.png'
 import Tab from './Tab.jsx'
 import Nav from './Nav.jsx'
 
@@ -17,35 +20,42 @@ function App() {
       
       <Nav responseDataChange={handleResponseDataChange} />
 
-      {(responseData.funda || responseData.paparius) ? (
+      {(responseData.funda || responseData.paparius || responseData.rentola) ? (
         <div className='searchResults'>
           {(responseData.funda.length > 0 ) ? (
-            <div className="fundaResults">Results on Funda
+            <div className="fundaResults">
+              <div className="logo">
+                <img src={Funda} alt="Funda Logo Image" width={120} height={96} />
+                <h3>Results on Funda</h3>
+              </div>
               <Tab className='fundaTab' responseData={responseData.funda} />
             </div>
           ) : (
-            <p>No Results on Funda...</p>
+            <h3>No Results on Funda...</h3>
           )}
+          <hr className='w-3/4 h-1 mx-auto my-8 bg-gray-200 border-0 dark:bg-gray-700 mt-10'/>
           {(responseData.paparius.length > 0 ) ? (
-            <div className="papariusResults">Results on Paparius
+            <div className="papariusResults">
+              <div className="logo">
+                <img src={Paparius} alt="Paparius Logo Image" width={120} />
+                <h3>Results on Paparius</h3>
+              </div>
               <Tab className='papariusTab' responseData={responseData.paparius} />
             </div>
           ) : (
-            <p>No Results on Paparius...</p>
+            <h3>No Results on Paparius...</h3>
           )}
+          <hr className='w-3/4 h-1 mx-auto my-8 bg-gray-200 border-0 dark:bg-gray-700 mt-10'/>
           {(responseData.rentola.length > 0 ) ? (
-            <div className="rentolaResults">Results on Rentola
+            <div className="rentolaResults">
+              <div className="logo">
+                <img src={Rentola} alt="Rentola Logo Image" width={120} />
+                <h3>Results on Rentola</h3>
+              </div>
               <Tab className='rentolaTab' responseData={responseData.rentola} />
             </div>
           ) : (
-            <p>No Results on Rentola...</p>
-          )}
-          {(responseData.hAnywhere.length > 0 ) ? (
-            <div className="hAnywhereResults">Results on Housing Anywhere
-              <Tab className='hAnywhereTab' responseData={responseData.hAnywhere} />
-            </div>
-          ) : (
-            <p>No Results on Housing Anywhere...</p>
+            <h3>No Results on Rentola...</h3>
           )}
         </div>
       ) : (

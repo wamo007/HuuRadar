@@ -119,6 +119,7 @@ const papariusScraper = async (city, radius, sortGlobal, minPrice, maxPrice) => 
             })
         })
 
+        if (papariusData.length > 100) break
         papariusData.push(...data)
 
         currentPage++

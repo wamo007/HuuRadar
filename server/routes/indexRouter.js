@@ -3,7 +3,7 @@ const indexRouter = Router()
 const fundaScraper = require('../controllers/funda')
 const papariusScraper = require('../controllers/paparius')
 const rentolaScraper = require('../controllers/rentola')
-const hAnywhereScraper = require('../controllers/hAnywhere')
+// const hAnywhereScraper = require('../controllers/hAnywhere')
 
 indexRouter.get('/', (req, res) => {
     res.send('works')
@@ -29,7 +29,7 @@ indexRouter.post('/', async (req, res) => {
             fundaScraper(city, radius, sortGlobal, minPrice, maxPrice),
             papariusScraper(city, radius, sortGlobal, minPrice, maxPrice),
             rentolaScraper(city, sortGlobal, minPrice, maxPrice),
-            hAnywhereScraper(city, sortGlobal, minPrice, maxPrice)
+            // hAnywhereScraper(city, sortGlobal, minPrice, maxPrice)
         ]).then(([ funda, paparius, rentola, hAnywhere ]) => {
             res.status(200)
             .json({ funda, paparius, rentola, hAnywhere })

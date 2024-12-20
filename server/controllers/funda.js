@@ -54,9 +54,9 @@ const fundaScraper = async (city, radius, sortGlobal, minPrice, maxPrice) => {
     }
 
     if (!minPrice && !maxPrice) {
-        initialUrl = `${FUNDA_URL}zoeken/huur?selected_area=%5B"${city.toLowerCase()},${radius}km"%5D&sort="${sortFunda(sortGlobal)}`
+        initialUrl = `${FUNDA_URL}zoeken/huur?selected_area=%5B"${city.toLowerCase()},${radius}km"%5D&sort="${sortFunda(sortGlobal)}&object_type=%5B"apartment","house"%5D`
     } else {
-        initialUrl = `${FUNDA_URL}zoeken/huur?selected_area=%5B"${city.toLowerCase()},${radius}km"%5D&sort="${sortFunda(sortGlobal)}"&price="${minPrice}-${maxPrice}"`
+        initialUrl = `${FUNDA_URL}zoeken/huur?selected_area=%5B"${city.toLowerCase()},${radius}km"%5D&sort="${sortFunda(sortGlobal)}"&price="${minPrice}-${maxPrice}"&object_type=%5B"apartment","house"%5D`
     } 
 
     // await page.setViewport({ width: 600, height: 1000})
@@ -107,6 +107,7 @@ const fundaScraper = async (city, radius, sortGlobal, minPrice, maxPrice) => {
             })
         })
 
+        if (fundaData.length > 100) break
         fundaData.push(...data)
 
         currentPage++

@@ -17,7 +17,7 @@ let page
 
 const initialSetup = async () => {
     browser = await puppeteer.launch({ 
-        headless: true,
+        headless: false,
         args: ["--disable-notifications"],
     })
 
@@ -62,6 +62,7 @@ const hAnywhereScraper = async (city, sortGlobal, minPrice, maxPrice) => {
     }
     // await page.setViewport({ width: 600, height: 1000})
 
+    console.log(initialUrl)
     await page.goto(initialUrl, {
         waitUntil: 'domcontentloaded'
     })

@@ -32,6 +32,7 @@ const rentolaScraper = async (city, sortGlobal, minPrice, maxPrice) => {
 
     let data
     let initialUrl
+    let clicked = 0
     let rentolaData = []
 
     function sortRentola(sortingChosen) {
@@ -62,7 +63,7 @@ const rentolaScraper = async (city, sortGlobal, minPrice, maxPrice) => {
         waitUntil: 'domcontentloaded'
     })
 
-    while (true) {
+    while (clicked < 5) {
         const loadMoreHidden = await page.evaluate(() => {
             return document.querySelector('div#pagination-load-more')
                 .getAttribute('style') === 'display: none;'
@@ -76,6 +77,8 @@ const rentolaScraper = async (city, sortGlobal, minPrice, maxPrice) => {
             const loadMoreButton = document.querySelector('button[id="load-more"]')
             if (loadMoreButton) loadMoreButton.click()
         })
+
+        clicked++
         await page.evaluate(() => new Promise(resolve => setTimeout(resolve, 1000)))
     }
 
@@ -103,6 +106,7 @@ const rentolaScraper = async (city, sortGlobal, minPrice, maxPrice) => {
             }
         })
     })
+
     rentolaData.push(...data)
 
     return rentolaData

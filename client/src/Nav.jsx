@@ -10,8 +10,6 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { useState, useEffect } from 'react'
-import axios from 'axios'
-
 
 function Nav({ responseDataChange }) {
   const [city, setCity] = useState('')
@@ -38,13 +36,34 @@ function Nav({ responseDataChange }) {
     if (!city) return
 
     try {
-      const response = await axios.post(
-        'http://localhost:8080/api/', 
-        { city, radius, sortGlobal, minPrice, maxPrice }
-      )
+      const response = await fetch('http://localhost:8080/api/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ city, radius, sortGlobal, minPrice, maxPrice }),
+      })
+      
+      const reader = response.body.getReader()
+      const decoder = new TextDecoder("utf-8")
+      let finished = false;
 
-      responseDataChange(response.data)
-      setError(null)
+      while (!finished) {
+          const { value, finished: streamDone } = await reader.read()
+          finished = streamDone;
+
+          if (value) {
+              const chunk = decoder.decode(value, { stream: true })
+              const lines = chunk.split("\n").filter(Boolean)
+
+              lines.forEach((line) => {
+                  try {
+                      const jsonData = JSON.parse(line);
+                      responseDataChange((prev) => [...prev, jsonData])
+                  } catch (error) {
+                      console.error("Error parsing chunk:", line, error)
+                  }
+              })
+          }
+      }
     } catch (err) {
       console.error(err)
       responseDataChange([])
@@ -117,12 +136,16 @@ function Nav({ responseDataChange }) {
               <Input
                 type="number"
                 className="max-w-[12rem]"
+                id="minPrice"
+                name="minPrice"
                 onChange={(e) => setMinPrice(e.target.value)}
                 placeholder="Enter Minimum Price"
               />
               <Input
                 type="number"
                 className="max-w-[12rem]"
+                id="maxPrice"
+                name="maxPrice"
                 onChange={(e) => setMaxPrice(e.target.value)}
                 placeholder="Enter Maximum Price"
               />

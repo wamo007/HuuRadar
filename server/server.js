@@ -17,5 +17,5 @@ app.use('/api', indexRouter)
 // app.use('/fb', fbRouter)
 
 app.listen(PORT, () => {
-    console.log(`What to Buy - listening on port ${PORT}!`);
+    console.log(`RentNL - listening on port ${PORT}!`);
 })

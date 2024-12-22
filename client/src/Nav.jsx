@@ -13,22 +13,11 @@ import { useState, useEffect } from 'react'
 
 function Nav({ responseDataChange }) {
   const [city, setCity] = useState('')
-  const [radius, setRadius] = useState('')
-  const [sortGlobal, setSortGlobal] = useState('')
+  const [radius, setRadius] = useState('0')
+  const [sortGlobal, setSortGlobal] = useState('new')
   const [minPrice, setMinPrice] = useState('')
   const [maxPrice, setMaxPrice] = useState('')
   const [error, setError] = useState(null)
-
-  
-
-  useEffect(() => {
-    if (city) {
-      setRadius('0')
-      setSortGlobal('new')
-      setMinPrice('')
-      setMaxPrice('')
-    } 
-  }, [city]);
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -44,11 +33,10 @@ function Nav({ responseDataChange }) {
       
       const reader = response.body.getReader()
       const decoder = new TextDecoder("utf-8")
-      let finished = false;
+      let responseData = {}
 
-      while (!finished) {
-          const { value, finished: streamDone } = await reader.read()
-          finished = streamDone;
+      while (true) {
+          const { value, done } = await reader.read()
 
           if (value) {
               const chunk = decoder.decode(value, { stream: true })
@@ -56,13 +44,16 @@ function Nav({ responseDataChange }) {
 
               lines.forEach((line) => {
                   try {
-                      const jsonData = JSON.parse(line);
-                      responseDataChange((prev) => [...prev, jsonData])
+                      const jsonData = JSON.parse(line)
+                      responseData = { ...responseData, ...jsonData}
+                      responseDataChange(responseData)
                   } catch (error) {
                       console.error("Error parsing chunk:", line, error)
                   }
               })
           }
+
+          if (done) break
       }
     } catch (err) {
       console.error(err)

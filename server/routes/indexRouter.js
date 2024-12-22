@@ -43,8 +43,8 @@ indexRouter.post('/', async (req, res) => {
         // ]).then(([ funda, paparius, rentola, hAnywhere ]) => {
         //     res.status(200)
         //     .json({ funda, paparius, rentola, hAnywhere })
-
         res.end()
+        
 
         console.log(`The request for ${city} has been completed on ${new Date()}`)
     } catch (error) {

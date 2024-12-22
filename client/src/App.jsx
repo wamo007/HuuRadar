@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import './App.css'
 import Funda from './assets/funda.png'
 import Paparius from './assets/paparius.png'
@@ -22,7 +22,7 @@ function App() {
 
       {(responseData.funda || responseData.paparius || responseData.rentola) ? (
         <div className='searchResults'>
-          {(responseData.funda.length > 0 ) ? (
+          {(responseData.funda?.length > 0 ) ? (
             <div className="fundaResults">
               <div className="logo">
                 <img src={Funda} alt="Funda Logo Image" width={120} height={96} />
@@ -34,7 +34,7 @@ function App() {
             <h3>No Results on Funda...</h3>
           )}
           <hr className='w-3/4 h-1 mx-auto my-8 bg-gray-200 border-0 dark:bg-gray-700 mt-10'/>
-          {(responseData.paparius.length > 0 ) ? (
+          {(responseData.paparius?.length > 0 ) ? (
             <div className="papariusResults">
               <div className="logo">
                 <img src={Paparius} alt="Paparius Logo Image" width={120} />
@@ -46,7 +46,7 @@ function App() {
             <h3>No Results on Paparius...</h3>
           )}
           <hr className='w-3/4 h-1 mx-auto my-8 bg-gray-200 border-0 dark:bg-gray-700 mt-10'/>
-          {(responseData.rentola.length > 0 ) ? (
+          {(responseData.rentola?.length > 0 ) ? (
             <div className="rentolaResults">
               <div className="logo">
                 <img src={Rentola} alt="Rentola Logo Image" width={120} />
@@ -59,7 +59,7 @@ function App() {
           )}
         </div>
       ) : (
-        <p>No data available. Please provide a valid link.</p>
+        <></>
       )}
       {error && <p style={{ color: 'red' }}>{error}</p>}
     

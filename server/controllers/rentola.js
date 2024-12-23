@@ -23,6 +23,7 @@ const initialSetup = async () => {
 
     page = await browser.newPage()
 
+    await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.181 Safari/537.36')
     await page.goto(RENTOLA_URL, { waitUntil: 'networkidle2' })
 }
 
@@ -63,24 +64,26 @@ const rentolaScraper = async (city, sortGlobal, minPrice, maxPrice) => {
         waitUntil: 'domcontentloaded'
     })
 
-    while (clicked < 5) {
-        const loadMoreHidden = await page.evaluate(() => {
-            return document.querySelector('div#pagination-load-more')
-                .getAttribute('style') === 'display: none;'
-        })
+    // Keeping this in case if it would be useful...
 
-        if (loadMoreHidden) {
-            break
-        }
+    // while (clicked < 2) {
+    //     const loadMoreHidden = await page.evaluate(() => {
+    //         return document.querySelector('div#pagination-load-more')
+    //             .getAttribute('style') === 'display: none;'
+    //     })
 
-        await page.evaluate(() => {
-            const loadMoreButton = document.querySelector('button[id="load-more"]')
-            if (loadMoreButton) loadMoreButton.click()
-        })
+    //     if (loadMoreHidden) {
+    //         break
+    //     }
 
-        clicked++
-        await page.evaluate(() => new Promise(resolve => setTimeout(resolve, 1000)))
-    }
+    //     await page.evaluate(() => {
+    //         const loadMoreButton = document.querySelector('button[id="load-more"]')
+    //         if (loadMoreButton) loadMoreButton.click()
+    //     })
+
+    //     clicked++
+    //     await page.evaluate(() => new Promise(resolve => setTimeout(resolve, 1000)))
+    // }
 
     await autoScroll(page)
     
@@ -116,7 +119,7 @@ async function autoScroll(page) {
     await page.evaluate(async () => {
         await new Promise((resolve) => {
             let totalHeight = 0
-            const distance = 320
+            const distance = 300
             const timer = setInterval(() => {
                 const scrollHeight = document.body.scrollHeight
                 window.scrollBy(0, distance)

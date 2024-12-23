@@ -107,9 +107,9 @@ const fundaScraper = async (city, radius, sortGlobal, minPrice, maxPrice) => {
             })
         })
 
-        if (fundaData.length > 100) break
         fundaData.push(...data)
 
+        if (currentPage === 2) break
         currentPage++
     }
     

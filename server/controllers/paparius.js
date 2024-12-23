@@ -85,7 +85,7 @@ const papariusScraper = async (city, radius, sortGlobal, minPrice, maxPrice) => 
         return (totalPages.length > 0) ? Math.max(...totalPages) : 1
     })
     
-    while (currentPage <= maxPage) {
+    // while (currentPage <= maxPage) {
         const changingUrl = `${initialUrl}/page-${currentPage}`
         await page.goto(changingUrl, {
             waitUntil: 'domcontentloaded'
@@ -119,11 +119,11 @@ const papariusScraper = async (city, radius, sortGlobal, minPrice, maxPrice) => 
             })
         })
 
-        if (papariusData.length > 100) break
         papariusData.push(...data)
 
-        currentPage++
-    }
+    //     if (currentPage === 2) break
+    //     currentPage++
+    // }
 
     return papariusData
 }
@@ -132,7 +132,7 @@ async function autoScroll(page) {
     await page.evaluate(async () => {
         await new Promise((resolve) => {
             let totalHeight = 0
-            const distance = 350
+            const distance = 380
             const timer = setInterval(() => {
                 const scrollHeight = document.body.scrollHeight
                 window.scrollBy(0, distance)
@@ -142,7 +142,7 @@ async function autoScroll(page) {
                     clearInterval(timer)
                     resolve()
                 }
-            }, 130)
+            }, 120)
         })
     })
 }

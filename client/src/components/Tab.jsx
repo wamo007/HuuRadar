@@ -1,12 +1,22 @@
+import PlaceHolder from '../assets/placeholder.png'
 import { LazyLoadImage } from 'react-lazy-load-image-component'
 
 function Tab({ responseData }) {
+
+  const imageCheck = (image) => {
+    if (!image.includes('.jpg')) {
+      return PlaceHolder
+    } else {
+      return image
+    }
+  }
+
   return (
     <>
       {responseData.map((tab, index) => (
         <div key={index} className='p-3 w-[204px] h-[304px] rounded-lg shadow-2xl'>
           <a href={tab.link} target="_blank">
-            <LazyLoadImage src={tab.img} srcSet={tab.img} width={180} height={120} 
+            <LazyLoadImage src={imageCheck(tab.img)} srcSet={imageCheck(tab.img)} width={180} height={120} 
             alt="Item Image" className='w-[180px] h-[120px] object-cover m-auto rounded-lg' />
           </a>
           <div className='pt-1 h-[160px] flex flex-col justify-between'>

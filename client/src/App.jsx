@@ -3,12 +3,42 @@ import './App.css'
 import Funda from './assets/funda.png'
 import Paparius from './assets/paparius.png'
 import Rentola from './assets/rentola.png'
-import Tab from './Tab.jsx'
-import Nav from './Nav.jsx'
+import Tab from './components/Tab.jsx'
+import Nav from './components/Nav.jsx'
+import { Toaster } from 'react-hot-toast'
+import { renderMatches } from 'react-router-dom'
 
 function App() {
   const [responseData, setResponseData] = useState([])
+  const [noResults, setNoResults] = useState({
+    paparius: false,
+    rentola: false
+  })
   const [error, setError] = useState(null)
+
+  useEffect(() => {
+    if (!responseData.paparius?.length) {
+      const papariusTimer = setTimeout(() => {
+        setNoResults({ ...noResults, paparius: true })
+      }, 30000)
+
+      return () => clearTimeout(papariusTimer)
+    } else {
+      setNoResults({ ...noResults, paparius: false })
+    }
+  }, [responseData.paparius])
+
+  useEffect(() => {
+    if (!responseData.rentola?.length) {
+      const rentolaTimer = setTimeout(() => {
+        setNoResults({ ...noResults, rentola: true })
+      }, 30000)
+
+      return () => clearTimeout(rentolaTimer)
+    } else {
+      setNoResults({ ...noResults, rentola: false })
+    }
+  }, [responseData.rentola])
 
   const handleResponseDataChange = useCallback((data, err) => {
     setResponseData(data)
@@ -19,7 +49,7 @@ function App() {
     <div>
       
       <Nav responseDataChange={handleResponseDataChange} />
-
+      <Toaster position='bottom-right' toastOptions={{duration: 2000}} />
       {(responseData.funda || responseData.paparius || responseData.rentola) ? (
         <div className='searchResults'>
           {(responseData.funda?.length > 0 ) ? (
@@ -33,29 +63,35 @@ function App() {
           ) : (
             <h3>No Results on Funda...</h3>
           )}
-          <hr className='w-3/4 h-1 mx-auto my-8 bg-gray-200 border-0 dark:bg-gray-700 mt-10'/>
-          {(responseData.paparius?.length > 0 ) ? (
-            <div className="papariusResults">
-              <div className="logo">
-                <img src={Paparius} alt="Paparius Logo Image" width={120} />
-                <h3>Results on Paparius</h3>
+          
+          {(responseData.paparius?.length > 0) ? (
+            <>
+              <hr className='w-3/4 h-1 mx-auto my-8 bg-gray-200 border-0 dark:bg-gray-700 mt-10'/>
+              <div className="papariusResults">
+                <div className="logo">
+                  <img src={Paparius} alt="Paparius Logo Image" width={120} />
+                  <h3>Results on Paparius</h3>
+                </div>
+                <Tab className='papariusTab' responseData={responseData.paparius} />
               </div>
-              <Tab className='papariusTab' responseData={responseData.paparius} />
-            </div>
+            </>
           ) : (
-            <h3>No Results on Paparius...</h3>
+            noResults.paparius && <h3>No Results on Paparius...</h3>
           )}
-          <hr className='w-3/4 h-1 mx-auto my-8 bg-gray-200 border-0 dark:bg-gray-700 mt-10'/>
+          
           {(responseData.rentola?.length > 0 ) ? (
-            <div className="rentolaResults">
-              <div className="logo">
-                <img src={Rentola} alt="Rentola Logo Image" width={120} />
-                <h3>Results on Rentola</h3>
+            <>
+              <hr className='w-3/4 h-1 mx-auto my-8 bg-gray-200 border-0 dark:bg-gray-700 mt-10'/>
+              <div className="rentolaResults">
+                <div className="logo">
+                  <img src={Rentola} alt="Rentola Logo Image" width={120} />
+                  <h3>Results on Rentola</h3>
+                </div>
+                <Tab className='rentolaTab' responseData={responseData.rentola} />
               </div>
-              <Tab className='rentolaTab' responseData={responseData.rentola} />
-            </div>
+            </>
           ) : (
-            <h3>No Results on Rentola...</h3>
+            noResults.rentola && <h3>No Results on Rentola...</h3>
           )}
         </div>
       ) : (

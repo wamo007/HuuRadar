@@ -1,105 +1,25 @@
-import { useState, useCallback, useEffect } from 'react'
 import './App.css'
-import Funda from './assets/funda.png'
-import Paparius from './assets/paparius.png'
-import Rentola from './assets/rentola.png'
-import Tab from './components/Tab.jsx'
-import Nav from './components/Nav.jsx'
+import Home from './pages/Home'
+import Registration from './pages/Registration'
+import Login from './pages/Login'
+import Contacts from './pages/Contacts'
 import { Toaster } from 'react-hot-toast'
-import { renderMatches } from 'react-router-dom'
+import { Routes, Route } from 'react-router-dom'
+import Nav from './components/Nav'
 
 function App() {
-  const [responseData, setResponseData] = useState([])
-  const [noResults, setNoResults] = useState({
-    paparius: false,
-    rentola: false
-  })
-  const [error, setError] = useState(null)
 
-  useEffect(() => {
-    if (!responseData.paparius?.length) {
-      const papariusTimer = setTimeout(() => {
-        setNoResults({ ...noResults, paparius: true })
-      }, 30000)
-
-      return () => clearTimeout(papariusTimer)
-    } else {
-      setNoResults({ ...noResults, paparius: false })
-    }
-  }, [responseData.paparius])
-
-  useEffect(() => {
-    if (!responseData.rentola?.length) {
-      const rentolaTimer = setTimeout(() => {
-        setNoResults({ ...noResults, rentola: true })
-      }, 30000)
-
-      return () => clearTimeout(rentolaTimer)
-    } else {
-      setNoResults({ ...noResults, rentola: false })
-    }
-  }, [responseData.rentola])
-
-  const handleResponseDataChange = useCallback((data, err) => {
-    setResponseData(data)
-    setError(err)
-  }, [])
-  
   return (
-    <div>
-      
-      <Nav responseDataChange={handleResponseDataChange} />
+    <>
+      <Nav />
       <Toaster position='bottom-right' toastOptions={{duration: 2000}} />
-      {(responseData.funda || responseData.paparius || responseData.rentola) ? (
-        <div className='searchResults'>
-          {(responseData.funda?.length > 0 ) ? (
-            <div className="fundaResults">
-              <div className="logo">
-                <img src={Funda} alt="Funda Logo Image" width={120} height={96} />
-                <h3>Results on Funda</h3>
-              </div>
-              <Tab className='fundaTab' responseData={responseData.funda} />
-            </div>
-          ) : (
-            <h3>No Results on Funda...</h3>
-          )}
-          
-          {(responseData.paparius?.length > 0) ? (
-            <>
-              <hr className='w-3/4 h-1 mx-auto my-8 bg-gray-200 border-0 dark:bg-gray-700 mt-10'/>
-              <div className="papariusResults">
-                <div className="logo">
-                  <img src={Paparius} alt="Paparius Logo Image" width={120} />
-                  <h3>Results on Paparius</h3>
-                </div>
-                <Tab className='papariusTab' responseData={responseData.paparius} />
-              </div>
-            </>
-          ) : (
-            noResults.paparius && <h3>No Results on Paparius...</h3>
-          )}
-          
-          {(responseData.rentola?.length > 0 ) ? (
-            <>
-              <hr className='w-3/4 h-1 mx-auto my-8 bg-gray-200 border-0 dark:bg-gray-700 mt-10'/>
-              <div className="rentolaResults">
-                <div className="logo">
-                  <img src={Rentola} alt="Rentola Logo Image" width={120} />
-                  <h3>Results on Rentola</h3>
-                </div>
-                <Tab className='rentolaTab' responseData={responseData.rentola} />
-              </div>
-            </>
-          ) : (
-            noResults.rentola && <h3>No Results on Rentola...</h3>
-          )}
-        </div>
-      ) : (
-        <></>
-      )}
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-    
-    </div>
+      <Routes>
+        <Route path='/' element={<Home />} />
+        <Route path='/registration' element={<Registration />} />
+        <Route path='/login' element={<Login />} />
+        <Route path='/contacts' element={<Contacts />} />
+      </Routes>
+    </>
   )
 }
 

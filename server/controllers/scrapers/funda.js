@@ -24,7 +24,12 @@ const initialSetup = async () => {
     page = await browser.newPage()
 
     await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.181 Safari/537.36')
-    await page.goto(FUNDA_URL, { waitUntil: 'networkidle2' })
+    await page.goto(FUNDA_URL, { waitUntil: 'networkidle2',
+        timeout: 30000,
+        }).catch((err) => {
+            console.error(`Navigation to ${FUNDA_URL} failed:`, err.message);
+            return []
+            })
 
     try {
         await page.waitForSelector('button[id="didomi-notice-disagree-button"]', {timeout: 500})
@@ -62,8 +67,12 @@ const fundaScraper = async (city, radius, sortGlobal, minPrice, maxPrice) => {
     // await page.setViewport({ width: 600, height: 1000})
 
     await page.goto(initialUrl, {
-        waitUntil: 'domcontentloaded'
-    })
+        waitUntil: 'domcontentloaded',
+        timeout: 30000,
+        }).catch((err) => {
+            console.error(`Navigation to ${initialUrl} failed:`, err.message);
+            return []
+        })
 
     let maxPage = await page.evaluate(() => {
         const totalPages = Array.from(document.querySelectorAll('ul.pagination li'))

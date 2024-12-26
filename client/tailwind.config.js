@@ -50,7 +50,73 @@ export default {
   				'4': 'hsl(var(--chart-4))',
   				'5': 'hsl(var(--chart-5))'
   			}
-  		}
+  		},
+		transitionDelay: {
+			'600': '600ms'
+		},
+		animation: {
+			slideIn4: 'slideIn4 0.7s ease-out forwards',
+			slideIn6: 'slideIn6 0.8s ease-out forwards',
+			slideIn7: 'slideIn7 1s ease-out forwards',
+			slideIn8: 'slideIn8 1.2s ease-out forwards',
+			shake: "shake 0.6s cubic-bezier(.36,.07,.19,.97) both",
+		},
+		keyframes: {
+			shake: {
+				'10%, 90%': {
+					transform: 'translateX(-1px)'
+				},
+				'20%, 80%': {
+				transform: 'translateX(1px)'
+				},
+				'30%, 50%, 70%': {
+				transform: 'translateX(-2px)'
+				},
+				'40%, 60%': {
+				transform: 'translateX(2px)'
+				}
+			},
+			slideIn4: {
+				'0%': {
+					opacity: '0',
+					transform: 'translateX(-4rem)'
+				},
+				'100%': {
+					opacity: '1',
+					transform: 'translateX(0)'
+				}
+			},
+			slideIn6: {
+				'0%': {
+					opacity: '0',
+					transform: 'translateX(-6rem)'
+				},
+				'100%': {
+					opacity: '1',
+					transform: 'translateX(0)'
+				}
+			},
+			slideIn7: {
+				'0%': {
+					opacity: '0',
+					transform: 'translateX(-7rem)'
+				},
+				'100%': {
+					opacity: '1',
+					transform: 'translateX(0)'
+				}
+			},
+			slideIn8: {
+				'0%': {
+					opacity: '0',
+					transform: 'translateX(-8rem)'
+				},
+				'100%': {
+					opacity: '1',
+					transform: 'translateX(0)'
+				}
+			}
+		}
   	}
   },
   plugins: [require("tailwindcss-animate")],

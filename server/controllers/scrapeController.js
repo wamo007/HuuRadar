@@ -1,15 +1,8 @@
-const { Router } = require('express')
-const indexRouter = Router()
-const fundaScraper = require('../controllers/funda')
-const papariusScraper = require('../controllers/paparius')
-const rentolaScraper = require('../controllers/rentola')
-// const hAnywhereScraper = require('../controllers/hAnywhere')
+const fundaScraper = require('./scrapers/funda')
+const papariusScraper = require('./scrapers/paparius')
+const rentolaScraper = require('./scrapers/rentola')
 
-indexRouter.get('/', (req, res) => {
-    res.send('works')
-})
-
-indexRouter.post('/', async (req, res) => {
+const scrapeController = async (req, res) => {
     const city = req.body.city
     const radius = req.body.radius
     const sortGlobal = req.body.sortGlobal
@@ -52,6 +45,6 @@ indexRouter.post('/', async (req, res) => {
         res.status(500)
         .json({ success: false, error: 'Failed to find info on the websites.' })
     }
-})
+}
 
-module.exports = indexRouter
+module.exports = scrapeController

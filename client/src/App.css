@@ -1,15 +1,37 @@
 #root {
-  max-width: 1440px;
+  /* max-width: 1440px; */
+  width: 90%;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 0.5rem 2rem 2rem;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+}
+
+nav {
+  display: flex;
+  justify-content: space-between;
+  height: 3%;
+  padding: 0 1.5rem;
+}
+
+nav>* {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.body {
+  height: 97%;
+  padding-top: 1.5rem;
 }
 
 form {
   display: flex;
   gap: 2rem;
   align-content: space-between;
-  padding-bottom: 2rem;
+  justify-content: flex-start;
+  padding: 0 1.5rem 2rem;
 }
 
 .searchResults>div {
@@ -41,7 +63,7 @@ button:disabled:hover {
   transform: translate3d(0, 0, 0);
   backface-visibility: hidden;
   perspective: 1000px;
-  animation-delay: 500ms;
+  animation-delay: 600ms;
 }
 
 @keyframes shake {

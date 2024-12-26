@@ -23,7 +23,13 @@ const initialSetup = async () => {
 
     page = await browser.newPage()
 
-    await page.goto(PAPARIUS_URL, { waitUntil: 'networkidle2' })
+    await page.goto(PAPARIUS_URL, { 
+        waitUntil: 'networkidle2',
+        timeout: 30000,
+        }).catch((err) => {
+            console.error(`Navigation to ${PAPARIUS_URL} failed:`, err.message);
+            return []
+        })
 
     try {
         await page.waitForSelector('button[id="onetrust-reject-all-handler"]', {timeout: 400})
@@ -73,17 +79,21 @@ const papariusScraper = async (city, radius, sortGlobal, minPrice, maxPrice) => 
     }
 
     await page.goto(initialUrl, {
-        waitUntil: 'domcontentloaded'
-    })
+        waitUntil: 'domcontentloaded',
+        timeout: 30000,
+        }).catch((err) => {
+            console.error(`Navigation to ${initialUrl} failed:`, err.message);
+            return []
+        })
 
-    let maxPage = await page.evaluate(() => {
-        const totalPages = Array.from(document.querySelectorAll('ul.pagination__list li a'))
-            .map((a) => {
-                return a ? parseInt(a.textContent.trim(), 10) : NaN
-            })
-            .filter((num) => !isNaN(num))
-        return (totalPages.length > 0) ? Math.max(...totalPages) : 1
-    })
+    // let maxPage = await page.evaluate(() => {
+    //     const totalPages = Array.from(document.querySelectorAll('ul.pagination__list li a'))
+    //         .map((a) => {
+    //             return a ? parseInt(a.textContent.trim(), 10) : NaN
+    //         })
+    //         .filter((num) => !isNaN(num))
+    //     return (totalPages.length > 0) ? Math.max(...totalPages) : 1
+    // })
     
     // while (currentPage <= maxPage) {
         const changingUrl = `${initialUrl}/page-${currentPage}`

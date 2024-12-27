@@ -5,13 +5,13 @@ import Login from './pages/Login'
 import Contacts from './pages/Contacts'
 import { Toaster } from 'react-hot-toast'
 import { Routes, Route } from 'react-router-dom'
-import Nav from './components/Nav'
+import Header from './components/Header'
 
 function App() {
 
   return (
     <>
-      <Nav />
+      <Header />
       <Toaster position='bottom-right' toastOptions={{duration: 2000}} />
       <Routes>
         <Route path='/' element={<Home />} />

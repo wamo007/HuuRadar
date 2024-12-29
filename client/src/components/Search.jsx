@@ -83,16 +83,15 @@ function SearchPanel({ responseDataChange }) {
 
   return (
     <>
-      <div className="searchPanel">
+      <div className="container mx-auto justify-between items-center py-4 px-6 md:px-2 lg:px-10 xl:px-14 2xl:px-30">
+        <form onSubmit={handleSubmit} className="flex flex-wrap flex-col sm:flex-row gap-6 justify-center md:justify-start items-center animate-slideIn4">
 
-        <form onSubmit={handleSubmit}>
-              
-          <ComboboxCity selectedCity={city} onCityChange={setCity} className='transition-transform duration-500 ease-in-out'/>
-            
+          <ComboboxCity selectedCity={city} onCityChange={setCity}/>
+          
           {( city ) ? (
             <>
-              <Select name="radiusDrop" id="radiusDrop" className={cn('animate-slideIn4')} onValueChange={setRadius}>
-                <SelectTrigger className="w-[15rem]">
+              <Select name="radiusDrop" id="radiusDrop" onValueChange={setRadius}>
+                <SelectTrigger className="w-52 animate-slideIn4">
                   <SelectValue placeholder="Select the radius" />
                 </SelectTrigger>
                 <SelectContent>
@@ -105,9 +104,9 @@ function SearchPanel({ responseDataChange }) {
                   </SelectGroup>
                 </SelectContent>
               </Select>
-
+          
               <Select name="sortDrop" id="sortDrop" onValueChange={setSortGlobal}>
-                <SelectTrigger className="w-[15rem]">
+                <SelectTrigger className="w-52 animate-slideIn5">
                   <SelectValue placeholder="Select the order" />
                 </SelectTrigger>
                 <SelectContent>
@@ -120,10 +119,10 @@ function SearchPanel({ responseDataChange }) {
                   </SelectGroup>
                 </SelectContent>
               </Select>
-                        
+              
               <Input
                 type="number"
-                className="max-w-[12rem] animate-slideIn6"
+                className="max-w-52 animate-slideIn6"
                 id="minPrice"
                 name="minPrice"
                 onChange={(e) => setMinPrice(e.target.value)}
@@ -131,15 +130,18 @@ function SearchPanel({ responseDataChange }) {
               />
               <Input
                 type="number"
-                className="max-w-[12rem] animate-slideIn7"
+                className="max-w-52 animate-slideIn7"
                 id="maxPrice"
                 name="maxPrice"
                 onChange={(e) => setMaxPrice(e.target.value)}
                 placeholder="Enter Maximum Price"
               />
-              <Button type="submit" className={(animateCount === true) ? '' : 'animate-slideIn8'} disabled={loading}>
+              <div className="flex gap-5 flex-wrap flex-col sm:flex-row justify-center">
+              <Button type="submit" className={`${(animateCount === true) ? '' : 'animate-slideIn8'} w-[120px]`} disabled={loading}>
                 {loading && <Loader2 className="animate-spin" />}
                 Search</Button>
+              <Button className='w-[120px] animate-slideIn10' type='button'>Notify me!</Button>
+              </div>
             </>
           ) : (<></>)}
         </form>

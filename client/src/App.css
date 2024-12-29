@@ -15,7 +15,7 @@
   padding: 0 1.5rem;
 } */
 
-form {
+/* form {
   display: flex;
   gap: 2rem;
   align-content: space-between;
@@ -27,7 +27,7 @@ form {
   display: grid;
   grid-template-columns: repeat(auto-fill, 204px);
   grid-gap: 5rem;
-}
+} */
 
 button:disabled:hover {
   cursor: default;

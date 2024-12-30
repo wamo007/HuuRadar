@@ -55,6 +55,10 @@ export default {
 			'600': '600ms'
 		},
 		animation: {
+			typewriterBlinkCursor: `
+				typewriter 4s steps(44) 1s 1 normal both,
+				blinkTextCursor 500ms steps(44) infinite normal
+				`,
 			slideIn4: 'slideIn4 0.7s ease-in-out forwards',
 			slideIn5: 'slideIn4 0.8s ease-in-out forwards',
 			slideIn6: 'slideIn6 0.9s ease-in-out forwards',
@@ -64,6 +68,22 @@ export default {
 			shake: "shake 0.6s cubic-bezier(.36,.07,.19,.97) both",
 		},
 		keyframes: {
+			typewriter: {
+				'0%': {
+					width: '0'
+				},
+				'100%': {
+					width: '100%'
+				}
+			},
+			blinkTextCursor: {
+				'0%': {
+					borderRightColor: 'rgba(255,255,255,.75)'
+				},
+				'100%': {
+					borderRightColor: 'transparent'
+				}
+			},
 			shake: {
 				'10%, 90%': {
 					transform: 'translateX(-1px)'

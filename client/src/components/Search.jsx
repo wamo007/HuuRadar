@@ -9,13 +9,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { toast } from 'react-hot-toast'
+import { useToast } from "@/hooks/use-toast"
 import { useState } from 'react'
 import { Loader2 } from "lucide-react"
 import { ComboboxCity } from "./ui/combobox"
-import { cn } from "@/lib/utils"
 
-function SearchPanel({ responseDataChange }) {
+function SearchPanel({ responseDataChange, loadingStatus }) {
   const [city, setCity] = useState('')
   const [radius, setRadius] = useState('0')
   const [sortGlobal, setSortGlobal] = useState('new')
@@ -24,12 +23,15 @@ function SearchPanel({ responseDataChange }) {
   const [loading, setLoading] = useState(false)
   const [animateCount, setAnimateCount] = useState(false)
 
+  const { toast } = useToast()
+
   const handleSubmit = async (e) => {
     e.preventDefault()
 
     if (!city) return
 
     setLoading(true)
+    loadingStatus(true)
     setAnimateCount(true)
 
     try {
@@ -68,9 +70,13 @@ function SearchPanel({ responseDataChange }) {
       }
 
       if (response.error) {
-        toast.error(response.error)
+        toast({
+          variant: 'destructive',
+          title: 'Uh oh! Something went wrong...',
+          description: 'There was a problem with your request.',
+        })
       } else {
-        toast.success('Search Successful!')
+        toast({title: 'Search Successful!'})
       }
 
     } catch (err) {
@@ -79,11 +85,12 @@ function SearchPanel({ responseDataChange }) {
     }
 
     setLoading(false)
+    loadingStatus(false)
   }
 
   return (
     <>
-      <div className="container mx-auto justify-between items-center py-4 px-6 md:px-2 lg:px-10 xl:px-14 2xl:px-30">
+      <div className="">
         <form onSubmit={handleSubmit} className="flex flex-wrap flex-col sm:flex-row gap-6 justify-center md:justify-start items-center animate-slideIn4">
 
           <ComboboxCity selectedCity={city} onCityChange={setCity}/>
@@ -91,7 +98,7 @@ function SearchPanel({ responseDataChange }) {
           {( city ) ? (
             <>
               <Select name="radiusDrop" id="radiusDrop" onValueChange={setRadius}>
-                <SelectTrigger className="w-52 animate-slideIn4">
+                <SelectTrigger className="w-52 animate-slideIn4 text-md">
                   <SelectValue placeholder="Select the radius" />
                 </SelectTrigger>
                 <SelectContent>
@@ -106,7 +113,7 @@ function SearchPanel({ responseDataChange }) {
               </Select>
           
               <Select name="sortDrop" id="sortDrop" onValueChange={setSortGlobal}>
-                <SelectTrigger className="w-52 animate-slideIn5">
+                <SelectTrigger className="w-52 animate-slideIn5 text-md">
                   <SelectValue placeholder="Select the order" />
                 </SelectTrigger>
                 <SelectContent>
@@ -122,7 +129,7 @@ function SearchPanel({ responseDataChange }) {
               
               <Input
                 type="number"
-                className="max-w-52 animate-slideIn6"
+                className="max-w-52 animate-slideIn6 md:text-md"
                 id="minPrice"
                 name="minPrice"
                 onChange={(e) => setMinPrice(e.target.value)}
@@ -130,17 +137,17 @@ function SearchPanel({ responseDataChange }) {
               />
               <Input
                 type="number"
-                className="max-w-52 animate-slideIn7"
+                className="max-w-52 animate-slideIn7 md:text-md"
                 id="maxPrice"
                 name="maxPrice"
                 onChange={(e) => setMaxPrice(e.target.value)}
                 placeholder="Enter Maximum Price"
               />
               <div className="flex gap-5 flex-wrap flex-col sm:flex-row justify-center">
-              <Button type="submit" className={`${(animateCount === true) ? '' : 'animate-slideIn8'} w-[120px]`} disabled={loading}>
+              <Button type="submit" className={`${(animateCount === true) ? '' : 'animate-slideIn8'} w-[120px] text-md`} disabled={loading}>
                 {loading && <Loader2 className="animate-spin" />}
                 Search</Button>
-              <Button className='w-[120px] animate-slideIn10' type='button'>Notify me!</Button>
+              <Button className='w-[120px] animate-slideIn10 text-md' type='button'>Notify me!</Button>
               </div>
             </>
           ) : (<></>)}

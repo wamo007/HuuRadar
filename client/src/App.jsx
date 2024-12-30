@@ -4,7 +4,7 @@ import Registration from './pages/Registration'
 import Login from './pages/Login'
 import Contacts from './components/Contacts'
 import Demo from './pages/Demo'
-import { Toaster } from 'react-hot-toast'
+import { Toaster } from './components/ui/toaster'
 import { Routes, Route } from 'react-router-dom'
 
 

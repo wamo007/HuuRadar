@@ -116,12 +116,20 @@ const papariusScraper = async (city, radius, sortGlobal, minPrice, maxPrice) => 
                 const seller = section.querySelector('div.listing-search-item__info a')?.textContent.trim() || ''
                 const sellerLink = section.querySelector('div.listing-search-item__info a')?.getAttribute('href') || ''
                 
+                let filterPrice = ''
+
+                if (isNaN(parseFloat(price.substring(1, price.length - 10)))) {
+                    filterPrice = 'Price On Request'
+                } else {
+                    filterPrice = `${price.substring(0, 1)} ${price.substring(1, price.length - 10)} p/mo.`
+                }
+
                 return {
                     link: `https://www.pararius.com${link}`,
                     img: img.substring(0, img.length - 20),
                     heading,
                     address,
-                    price,
+                    price: filterPrice,
                     size,
                     seller,
                     sellerLink: `https://www.pararius.com${sellerLink}`

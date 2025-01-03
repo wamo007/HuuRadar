@@ -44,8 +44,11 @@ export default function AverageBarChart({ responseData }) {
     .map((tab) => parseFloat(tab.price.replace(/\D/g, "")))
     .filter((price) => !isNaN(price))
 
-    const totalPrice = validPrices.reduce((sum, price) => sum + price)
-    return Math.round(totalPrice / validPrices.length)
+    if (validPrices.length > 0) {
+      const totalPrice = validPrices.reduce((sum, price) => sum + price)
+      return Math.round(totalPrice / validPrices.length)
+    }
+    return 0
   }
 
   useEffect(() => {

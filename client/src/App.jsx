@@ -1,10 +1,10 @@
 import './App.css'
 import Home from './pages/Home'
-import Registration from './pages/Registration'
-import Login from './pages/Login'
+import Login from './pages/SignForm'
 import Contacts from './components/Contacts'
 import Demo from './pages/Demo'
-import { Toaster } from './components/ui/toaster'
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 import { Routes, Route } from 'react-router-dom'
 
 
@@ -12,13 +12,13 @@ function App() {
 
   return (
     <>
-      <Toaster position='bottom-right' toastOptions={{duration: 2000}} />
+      <ToastContainer position='bottom-right' toastOptions={{duration: 2000}} />
       <Routes>
         <Route path='/' element={<Home />} />
         <Route path='/contacts' element={<Contacts />} />
         <Route path='/demo' element={<Demo />} />
-        <Route path='/registration' element={<Registration />} />
-        <Route path='/login' element={<Login />} />
+        <Route path='/registration' element={<Login signType="Sign Up" />} />
+        <Route path='/login' element={<Login signType="Login" />} />
       </Routes>
     </>
   )

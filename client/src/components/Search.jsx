@@ -9,7 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { useToast } from "@/hooks/use-toast"
+import { toast } from "react-toastify"
 import { useState } from 'react'
 import { Loader2 } from "lucide-react"
 import { ComboboxCity } from "./ui/combobox"
@@ -22,8 +22,6 @@ function SearchPanel({ responseDataChange, loadingStatus }) {
   const [maxPrice, setMaxPrice] = useState('')
   const [loading, setLoading] = useState(false)
   const [animateCount, setAnimateCount] = useState(false)
-
-  const { toast } = useToast()
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -70,13 +68,9 @@ function SearchPanel({ responseDataChange, loadingStatus }) {
       }
 
       if (response.error) {
-        toast({
-          variant: 'destructive',
-          title: 'Uh oh! Something went wrong...',
-          description: 'There was a problem with your request.',
-        })
+        toast.error('Uh oh! Something went wrong...')
       } else {
-        toast({title: 'Search Successful!'})
+        toast.success('Search Successful!')
       }
 
     } catch (err) {

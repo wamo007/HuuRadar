@@ -9,6 +9,9 @@ import paparius from './paparius.png'
 import rentola from './rentola.png'
 import placeholder from './placeholder.png'
 import moreplace from './morePlaceHolder.jpg'
+import passKey from './key.svg'
+import mail from './mail.svg'
+import person from './person.svg'
 
 export const assets = {
     logo,
@@ -22,4 +25,7 @@ export const assets = {
     rentola,
     placeholder,
     moreplace,
+    passKey,
+    mail,
+    person,
 }

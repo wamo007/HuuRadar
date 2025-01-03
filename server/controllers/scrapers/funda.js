@@ -1,16 +1,18 @@
 const puppeteer = require('puppeteer-extra')
 
-const { DEFAULT_INTERCEPT_RESOLUTION_PRIORITY } = require('puppeteer')
-const AdblockerPlugin = require('puppeteer-extra-plugin-adblocker')
+// const { DEFAULT_INTERCEPT_RESOLUTION_PRIORITY } = require('puppeteer')
+// const AdblockerPlugin = require('puppeteer-extra-plugin-adblocker')
+const stealthPlugin = require('puppeteer-extra-plugin-stealth');
 
 const FUNDA_URL = `https://www.funda.nl/en/`
 
-puppeteer.use(
-  AdblockerPlugin({
-    interceptResolutionPriority: DEFAULT_INTERCEPT_RESOLUTION_PRIORITY,
-    blockTrackers: true
-  })
-)
+// puppeteer.use(
+//   AdblockerPlugin({
+    // interceptResolutionPriority: DEFAULT_INTERCEPT_RESOLUTION_PRIORITY,
+    // blockTrackers: true
+//   })
+// )
+puppeteer.use(stealthPlugin());
 
 let browser
 let page
@@ -18,12 +20,14 @@ let page
 const initialSetup = async () => {
     browser = await puppeteer.launch({ 
         headless: true,
-        args: ["--disable-notifications"],
+        args: [
+            "--disable-notifications",
+            "--disable-blink-features=AutomationControlled",
+        ],
     })
 
     page = await browser.newPage()
 
-    await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.181 Safari/537.36')
     await page.goto(FUNDA_URL, { waitUntil: 'networkidle2',
         timeout: 30000,
         }).catch((err) => {
@@ -32,8 +36,8 @@ const initialSetup = async () => {
             })
 
     try {
-        await page.waitForSelector('button[id="didomi-notice-disagree-button"]', {timeout: 500})
-        await page.click('button[id="didomi-notice-disagree-button"]')
+        const disagreeBtn = await page.waitForSelector('button[id="didomi-notice-disagree-button"]', {timeout: 1000})
+        if (disagreeBtn) await page.click('button[id="didomi-notice-disagree-button"]')
     } catch (error) {
         console.log('Funda popup did not appear, skipping this step...')
     }
@@ -103,12 +107,20 @@ const fundaScraper = async (city, radius, sortGlobal, minPrice, maxPrice) => {
                 const seller = div.querySelector('div.mt-4 a')?.textContent.trim() || ''
                 const sellerLink = div.querySelector('div.mt-4 a')?.getAttribute('href') || ''
       
+                let filterPrice = ''
+
+                if (price.length < 10) {
+                    filterPrice = 'Price On Request'
+                } else {
+                    filterPrice = price
+                }
+
                 return {
                     link,
                     img,
                     heading,
                     address,
-                    price,
+                    price: filterPrice,
                     size,
                     seller,
                     sellerLink

@@ -14,7 +14,7 @@ function Tab({ responseData }) {
   return (
     <>
       {responseData.map((tab, index) => (
-        <div key={index} className='p-3 w-[204px] h-[304px] md:rounded-lg md:shadow-2xl max-md:border max-md:border-slate-400 max-[408px]:w-[180px]'>
+        <div key={index} className='p-3 w-[204px] h-[304px] bg-white md:rounded-lg md:shadow-2xl max-md:border max-md:border-slate-400 max-[408px]:w-[180px]'>
           <a href={tab.link} target="_blank">
             <LazyLoadImage src={imageCheck(tab.img)} srcSet={imageCheck(tab.img)} width={180} height={120} 
             alt="Item Image" className='w-[180px] h-[120px] object-cover m-auto rounded-lg' />

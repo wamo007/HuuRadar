@@ -1,25 +1,23 @@
 const puppeteer = require('puppeteer-extra')
 
-// const { DEFAULT_INTERCEPT_RESOLUTION_PRIORITY } = require('puppeteer')
-// const AdblockerPlugin = require('puppeteer-extra-plugin-adblocker')
-const stealthPlugin = require('puppeteer-extra-plugin-stealth');
+const { DEFAULT_INTERCEPT_RESOLUTION_PRIORITY } = require('puppeteer')
+const AdblockerPlugin = require('puppeteer-extra-plugin-adblocker')
 
 const FUNDA_URL = `https://www.funda.nl/en/`
 
-// puppeteer.use(
-//   AdblockerPlugin({
-    // interceptResolutionPriority: DEFAULT_INTERCEPT_RESOLUTION_PRIORITY,
-    // blockTrackers: true
-//   })
-// )
-puppeteer.use(stealthPlugin());
+puppeteer.use(
+  AdblockerPlugin({
+    interceptResolutionPriority: DEFAULT_INTERCEPT_RESOLUTION_PRIORITY,
+    blockTrackers: true
+  })
+)
 
 let browser
 let page
 
 const initialSetup = async () => {
     browser = await puppeteer.launch({ 
-        headless: true,
+        headless: false,
         args: [
             "--disable-notifications",
             "--disable-blink-features=AutomationControlled",

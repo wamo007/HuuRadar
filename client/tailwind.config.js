@@ -68,7 +68,8 @@ export default {
 			slideIn7: 'slideIn7 1s ease-in-out forwards',
 			slideIn8: 'slideIn8 1.2s ease-in-out forwards',
 			slideIn10: 'slideIn10 1.4s ease-in-out forwards',
-			shake: "shake 0.6s cubic-bezier(.36,.07,.19,.97) both",
+			shake: 'shake 0.6s cubic-bezier(.36,.07,.19,.97) both',
+			listOpen: 'listOpen 0.5s ease-in-out forwards'
 		},
 		keyframes: {
 			typewriter: {
@@ -99,6 +100,16 @@ export default {
 				},
 				'40%, 60%': {
 				transform: 'translateX(2px)'
+				}
+			},
+			listOpen: {
+				'0%': {
+					opacity: '0',
+					transform: 'translateY(-2rem)'
+				},
+				'100%': {
+					opacity: '1',
+					transform: 'translateY(0rem)'
 				}
 			},
 			slideIn4: {

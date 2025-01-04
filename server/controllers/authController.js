@@ -56,7 +56,7 @@ const registerUser = async (req, res) => {
 
         await transporter.sendMail(mailOptions)
 
-        return res.json({ success: true })
+        return res.json({ success: true, message: 'Registration successful' })
 
     } catch (err) {
         res.json({
@@ -104,7 +104,7 @@ const loginUser = async (req, res) => {
             maxAge: 7 * 24 * 60 * 60 * 1000
         })
 
-        return res.json({ success: true })
+        return res.json({ success: true, message: 'Login successful' })
 
     } catch (err) {
         res.json({
@@ -123,7 +123,7 @@ const logOutUser = async (req, res) => {
             maxAge: 7 * 24 * 60 * 60 * 1000
         })
 
-        return res.json({ success: true })
+        return res.json({ success: true, message: 'Log out successful' })
     } catch (err) {
         return res.json({
             message: err.message
@@ -158,7 +158,7 @@ const sendVerifyOtp = async (req, res) => {
         }
 
         await transporter.sendMail(mailOptions)
-        res.json({ success: true })
+        res.json({ success: true, message: 'Please check you email...' })
     } catch (err) {
         return res.json({
             message: err.message
@@ -200,7 +200,7 @@ const verifyEmail = async (req, res) => {
         user.verifyOtpExpires = 0
 
         await user.save()
-        return res.json({ success: true })
+        return res.json({ success: true, message: 'Verification successful!' })
     } catch (err) {
         return res.json({
             message: err.message
@@ -210,7 +210,7 @@ const verifyEmail = async (req, res) => {
 
 const alreadyAuthenticated = async (req, res) => {
     try {
-        return res.json({ success: true })
+        return res.json({ success: true, message: 'You have already been authenticated' })
     } catch (err) {
         res.json({
             message: err.message
@@ -251,7 +251,7 @@ const sendResetOtp = async (req, res) => {
         }
 
         await transporter.sendMail(mailOptions)
-        return res.json({ success: true })
+        return res.json({ success: true, message: 'Please check your email...' })
 
     } catch (err) {
         return res.json({
@@ -302,7 +302,7 @@ const resetPassword = async (req, res) => {
         user.resetOtpExpires = 0
 
         await user.save()
-        return res.json({ success: true })
+        return res.json({ success: true, message: 'Password has been reset' })
 
     } catch (err) {
         return res.json({

@@ -11,7 +11,7 @@ import { Button } from '@/components/ui/button'
 export default function Login({ signType }) {
   const navigate = useNavigate()
 
-  const { backendUrl, setLoggedIn, getUserData } = useContext(userContent)
+  const { backendUrl, setLoggedIn, getUserData, userData } = useContext(userContent)
 
   // const [signType, setSignType] = useState('Sign Up')
   const [name, setName] = useState('')
@@ -31,6 +31,7 @@ export default function Login({ signType }) {
           if (data.success) {
             setLoggedIn(true)
             getUserData()
+            toast.success(`Welcome, ${userData.name}!`)
             navigate('/')
           } else {
             toast.error(data.message)
@@ -42,13 +43,14 @@ export default function Login({ signType }) {
           if (data.success) {
             setLoggedIn(true)
             getUserData()
+            toast.success(`Welcome back, ${userData.name}`)
             navigate('/')
           } else {
             toast.error(data.message)
           }
       }
     } catch (err) {
-      toast.error(data.message)
+      toast.error(err.message)
     }
   }
 
@@ -106,10 +108,8 @@ export default function Login({ signType }) {
               <span onClick={() => navigate('/registration')} className='text-blue-400 cursor-pointer underline'>Sign Up Here!</span>
             </p>
           )}
-          
-          
         </div>
-        </div>
+      </div>
     </div>
   )
 }

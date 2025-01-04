@@ -3,6 +3,8 @@ import { Button, buttonVariants } from "@/components/ui/button"
 import { assets } from '../assets/assets'
 import { useContext, useEffect, useState } from 'react'
 import { userContent } from '@/context/UserContext'
+import { toast } from 'react-toastify'
+import axios from 'axios'
 
 export default function Nav () {
 
@@ -23,7 +25,41 @@ export default function Nav () {
     const isLogin = pathname === '/login'
     const isRegistration = pathname === '/registration'
 
-    const { userData } = useContext(userContent)
+    const { userData, backendUrl, setLoggedIn, setUserData } = useContext(userContent)
+
+    const sendVerificationOtp = async () => {
+        try {
+            axios.defaults.withCredentials = true
+
+            const { data } = await axios.post(backendUrl + '/api/auth/send-verify-otp')
+
+            if (data.success) {
+                navigate('/email-verify')
+                toast.success(data.message)
+            } else {
+                toast.error(data.message)
+            }
+        } catch(error) {
+            toast.error(error.message)
+        }
+    }
+
+    const logout = async () => {
+        try {
+            axios.defaults.withCredentials = true
+            const { data } = await axios.post(backendUrl + '/api/auth/logout')
+            if(data.success){
+                setLoggedIn(false)
+                setUserData(false)
+                toast.success('Successfully logged out!')
+                navigate('/')
+            } else {
+                toast.error(data.message)
+            }
+        } catch (err) {
+            toast.error(err.message)
+        }
+    }
 
     const checkMobileMenu = () => {
         if (showMobileMenu === true) {
@@ -116,9 +152,16 @@ export default function Nav () {
                 ) : (
                     <ul className="hidden md:flex justify-between items-center gap-3 [&_*]:text-center [&_*]:font-bold [&_*]:text-xl">
                         { userData ? (
-                            <li className={isHome ? '*:text-gray-900 hover:*:text-blue-950 ml-[132px]' : '*:text-white hover:*:text-slate-200 ml-[132px]'}><Link to='/account' className={
-                                `${isHome ? buttonVariants({ variant: 'outline' }) : buttonVariants({ variant: '' })} w-[120px]
-                                `}>{userData.name}</Link></li>
+                            <div className={`${isHome ? '[&_*]:text-gray-900 hover:[&_*]:text-blue-950' : '[&_*]:text-white hover:[&_*]:text-slate-200'} ml-[102px] relative group flex justify-center items-center`}><Link to='/account' className={
+                                `${isHome ? buttonVariants({ variant: 'outline' }) : buttonVariants({ variant: '' })} w-[150px] z-10 overflow-hidden
+                                `}>{userData.name}</Link>
+                                <div className='absolute hidden group-hover:block top-0 z-8 pt-10 w-[140px] transition-all animate-listOpen'>
+                                    <ul className={`list-none m-0 p-1 ${isHome ? 'bg-white hover:*:bg-gray-200': 'bg-gray-800 hover:*:bg-blue-900'} *:cursor-pointer rounded-b-xl [&_*]:text-lg`}>
+                                        { !userData.accountVerified && <li onClick={sendVerificationOtp}>Verify email</li> }
+                                        <li onClick={logout}>Logout</li>
+                                    </ul>                              
+                                </div>    
+                            </div>
                         ) : (
                             <>
                                 <li className={isHome ? '*:text-white hover:*:text-slate-200' : '*:text-gray-900 hover:*:text-blue-950'}><Link to='/login' className={

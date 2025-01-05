@@ -6,6 +6,7 @@ const scrapeRouter = require('./routes/scrapeRouter')
 const authRouter = require('./routes/authRouter')
 const userRouter = require('./routes/userRoutes')
 const cookieParser = require('cookie-parser')
+const path = require('path')
 
 const corsOptions = {
     credentials: true,
@@ -22,6 +23,7 @@ const PORT = 8080
 app.use(cors(corsOptions))
 app.use(cookieParser())
 app.use(express.json())
+app.use(express.static(path.join(__dirname, 'public')))
 app.use(express.urlencoded({ extended: false }))
 
 app.use('/api', scrapeRouter)

@@ -1,7 +1,7 @@
 import { useContext, useState } from 'react'
 import axios from 'axios'
 import { assets } from '@/assets/assets'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { userContent } from '../context/UserContext'
 import Nav from '@/components/Nav'
@@ -11,7 +11,7 @@ import { Button } from '@/components/ui/button'
 export default function Login({ signType }) {
   const navigate = useNavigate()
 
-  const { backendUrl, setLoggedIn, getUserData, userData } = useContext(userContent)
+  const { backendUrl, setLoggedIn, getUserData } = useContext(userContent)
 
   // const [signType, setSignType] = useState('Sign Up')
   const [name, setName] = useState('')
@@ -31,10 +31,10 @@ export default function Login({ signType }) {
           if (data.success) {
             setLoggedIn(true)
             getUserData()
-            toast.success(`Welcome, ${userData.name}!`)
+            toast.success(data.message)
             navigate('/')
           } else {
-            toast.error(data.message)
+            toast.error(data.error)
           }
       } else { 
         const { data } = await axios.post(backendUrl + '/api/auth/login', 
@@ -43,10 +43,10 @@ export default function Login({ signType }) {
           if (data.success) {
             setLoggedIn(true)
             getUserData()
-            toast.success(`Welcome back, ${userData.name}`)
+            toast.success(data.message)
             navigate('/')
           } else {
-            toast.error(data.message)
+            toast.error(data.error)
           }
       }
     } catch (err) {
@@ -75,7 +75,7 @@ export default function Login({ signType }) {
               </div>
             )}
            
-           <div className='mb-4 flex items-center gap-3 w-full px-5 py-2.5 rounded-lg bg-[#333A5C]'>
+            <div className='mb-4 flex items-center gap-3 w-full px-5 py-2.5 rounded-lg bg-[#333A5C]'>
               <img src={assets.mail} alt="" />
               <Input 
                 type="email" 
@@ -94,18 +94,18 @@ export default function Login({ signType }) {
                 value={password} 
                 onChange={e => setPassword(e.target.value)} />
             </div>
-            <p className='mb-4 text-indigo-500 cursor-pointer'>Forgot password?</p>
+            <Link to='/reset-password' className='text-indigo-500 cursor-pointer'>Forgot password?</Link>
 
-            <Button className='w-full py-2.5 rounded-lg bg-gradient-to-r from-indigo-500 to-indigo-800 text-white font-medium' type='submit'>{signType === 'Sign Up' ? 'Sign Up' : 'Login'}</Button>
+            <Button className='mt-4 w-full py-2.5 rounded-lg bg-gradient-to-r from-indigo-500 to-indigo-800 text-white font-medium' type='submit'>{signType === 'Sign Up' ? 'Sign Up' : 'Login'}</Button>
           </form>
 
           {signType === 'Sign Up' ? (
             <p className='text-gray-400 text-center text-xs mt-4'>Already have an account?{' '}
-              <span onClick={() => navigate('/login')} className='text-blue-400 cursor-pointer underline'>Login Here!</span>
+              <span onClick={() => navigate('/login')} className='text-blue-400 cursor-pointer underline'>Login</span>
             </p>
           ) : (
             <p className='text-gray-400 text-center text-xs mt-4'>Don't have an account?{' '}
-              <span onClick={() => navigate('/registration')} className='text-blue-400 cursor-pointer underline'>Sign Up Here!</span>
+              <span onClick={() => navigate('/registration')} className='text-blue-400 cursor-pointer underline'>Sign Up</span>
             </p>
           )}
         </div>

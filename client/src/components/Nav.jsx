@@ -152,8 +152,8 @@ export default function Nav () {
                 ) : (
                     <ul className="hidden md:flex justify-between items-center gap-3 [&_*]:text-center [&_*]:font-bold [&_*]:text-xl">
                         { userData ? (
-                            <div className={`${isHome ? '[&_*]:text-gray-900 hover:[&_*]:text-blue-950' : '[&_*]:text-white hover:[&_*]:text-slate-200'} ml-[102px] relative group flex justify-center items-center`}><Link to='/account' className={
-                                `${isHome ? buttonVariants({ variant: 'outline' }) : buttonVariants({ variant: '' })} w-[150px] z-10 overflow-hidden
+                            <div className={`${isHome ? '[&_*]:text-gray-900 hover:[&_*]:text-blue-950' : '[&_*]:text-white hover:[&_*]:text-slate-200'} relative group flex justify-center items-center`}><Link to='/account' className={
+                                `${isHome ? buttonVariants({ variant: 'outline' }) : buttonVariants({ variant: '' })} w-auto min-w-[200px] z-10 overflow-hidden
                                 `}>{userData.name}</Link>
                                 <div className='absolute hidden group-hover:block top-0 z-8 pt-10 w-[140px] transition-all animate-listOpen'>
                                     <ul className={`list-none m-0 p-1 ${isHome ? 'bg-white hover:*:bg-gray-200': 'bg-gray-800 hover:*:bg-blue-900'} *:cursor-pointer rounded-b-xl [&_*]:text-lg`}>

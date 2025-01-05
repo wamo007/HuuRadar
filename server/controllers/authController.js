@@ -2,6 +2,8 @@ const User = require('../models/user')
 const { hashPassword, comparePassword } = require('../helpers/authHashing')
 const jwt = require('jsonwebtoken')
 const  transporter = require('../config/nodeMailer')
+const fs = require('fs')
+const path = require('path')
 
 // Register Endpoint
 const registerUser = async (req, res) => {
@@ -56,7 +58,7 @@ const registerUser = async (req, res) => {
 
         await transporter.sendMail(mailOptions)
 
-        return res.json({ success: true, message: 'Registration successful' })
+        return res.json({ success: true, message: `Welcome, ${user.name}` })
 
     } catch (err) {
         res.json({
@@ -86,12 +88,9 @@ const loginUser = async (req, res) => {
 
         // Check if passwords match & assign JSON Web Token (JWT)
         const match = await comparePassword(password, user.password)
-        // if (match) {
-        //     res.json('Passwords match')
-        // }
         if (!match) {
             return res.json({
-                error: 'Passwords do not match'
+                error: 'Password is incorrect'
             })
         }
         const token = jwt.sign({id: user._id}, 
@@ -104,7 +103,7 @@ const loginUser = async (req, res) => {
             maxAge: 7 * 24 * 60 * 60 * 1000
         })
 
-        return res.json({ success: true, message: 'Login successful' })
+        return res.json({ success: true, message: `Welcome back, ${user.name}` })
 
     } catch (err) {
         res.json({
@@ -149,12 +148,40 @@ const sendVerifyOtp = async (req, res) => {
 
         await user.save()
 
+        const emailVerifyTemplatePath = path.join(__dirname, '../config', 'VerifyAccount.html')
+        let emailVerifyTemplate = fs.readFileSync(emailVerifyTemplatePath, 'utf-8')
+
+        emailVerifyTemplate = emailVerifyTemplate
+            .replace("{{otp}}", otp)
+            .replace("{{name}}", user.name)
+
         const mailOptions = {
             from: process.env.SENDER_EMAIL,
             to: user.email,
             subject: 'Account Verification OTP',
-            text: `Your OTP is ${otp}. 
-            Please, verify your account within 2 hours.`
+            html: emailVerifyTemplate,
+            attachments: [
+                {
+                    filename: 'logo.png',
+                    path: path.join(__dirname, '../public/assets/logo.png'),
+                    cid: 'logo',
+                },
+                {
+                    filename: 'bg_email.png',
+                    path: path.join(__dirname, '../public/assets/bg_email.png'),
+                    cid: 'bg_email',
+                },
+                {
+                    filename: 'github-original.png',
+                    path: path.join(__dirname, '../public/assets/github-original.png'),
+                    cid: 'github',
+                },
+                {
+                    filename: 'linkedin-plain.png',
+                    path: path.join(__dirname, '../public/assets/linkedin-plain.png'),
+                    cid: 'linkedin',
+                }
+            ] 
         }
 
         await transporter.sendMail(mailOptions)
@@ -242,12 +269,40 @@ const sendResetOtp = async (req, res) => {
         
         await user.save()
 
+        const resetPasswordTemplatePath = path.join(__dirname, '../config', 'ResetPassword.html')
+        let resetPasswordTemplate = fs.readFileSync(resetPasswordTemplatePath, 'utf-8')
+
+        resetPasswordTemplate = resetPasswordTemplate
+            .replace("{{otp}}", otp)
+            .replace("{{name}}", user.name)
+
         const mailOptions = {
             from: process.env.SENDER_EMAIL,
             to: user.email,
             subject: 'Password Reset OTP',
-            text: `Your OTP to reset the password is ${otp}. 
-            Please, enter the code within 15 minutes.`
+            html: resetPasswordTemplate,
+            attachments: [
+                {
+                    filename: 'logo.png',
+                    path: path.join(__dirname, '../public/assets/logo.png'),
+                    cid: 'logo',
+                },
+                {
+                    filename: 'bg_email.png',
+                    path: path.join(__dirname, '../public/assets/bg_email.png'),
+                    cid: 'bg_email',
+                },
+                {
+                    filename: 'github-original.png',
+                    path: path.join(__dirname, '../public/assets/github-original.png'),
+                    cid: 'github',
+                },
+                {
+                    filename: 'linkedin-plain.png',
+                    path: path.join(__dirname, '../public/assets/linkedin-plain.png'),
+                    cid: 'linkedin',
+                }
+            ]
         }
 
         await transporter.sendMail(mailOptions)
@@ -260,12 +315,49 @@ const sendResetOtp = async (req, res) => {
     }
 }
 
+const verifyOtp = async (req, res) => {
+    const { email, otp } = req.body
+
+    // if (!email || !otp) {
+    //     return res.json({
+    //         error: 'Email or OTP is not provided.'
+    //     })
+    // }
+
+    try {
+        const user = await User.findOne({ email })
+        if (!user) {
+            return res.json({
+                error: 'User not found'
+            })
+        }
+
+        if (user.resetOtp === '' || user.resetOtp !== otp) {
+            return res.json({
+                error: 'Invalid OTP'
+            })
+        }
+
+        if (user.resetOtpExpires < Date.now()) {
+            return res.json({
+                error: 'OTP expired'
+            })
+        }
+
+        return res.json({ success: true, message: 'OTP has been confirmed' })
+    } catch (err) {
+        return res.json({
+            message: err.message
+        })
+    }
+}
+
 const resetPassword = async (req, res) => {
     const { email, otp, newPassword } = req.body
 
     if (!email || !otp || !newPassword) {
         return res.json({
-            error: 'Email, OTP or the new password is not provided.'
+            error: 'Email or the new password is not provided.'
         })
     }
 
@@ -319,5 +411,6 @@ module.exports = {
     verifyEmail,
     alreadyAuthenticated,
     sendResetOtp,
-    resetPassword
+    verifyOtp,
+    resetPassword,
 }

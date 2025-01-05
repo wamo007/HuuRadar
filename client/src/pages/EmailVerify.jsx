@@ -48,7 +48,7 @@ export default function EmailVerify() {
             getUserData()
             navigate('/')
         } else {
-            toast.error(data.message)
+            toast.error(data.error)
         }
     } catch (error) {
         toast.error(error.message)
@@ -65,7 +65,7 @@ export default function EmailVerify() {
       <div className='flex items-center justify-center'>
         <div className='bg-slate-900 p-10 rounded-lg shadow-xl w-full sm:w-96 text-indigo-300 text-sm'>
           <h2 className='text-3xl font-semibold text-white text-center mb-3'>Email Verification</h2>
-          <p className='text-lg text-center mb-6'>Enter the 6-digit one-time code sent to your email.</p>
+          <p className='text-lg text-center mb-6'>Enter the 6-digit one-time code sent to your email</p>
         
           <form onSubmit={submitHandler}>
             <div className='flex justify-between mb-8' onPaste={handlePaste}>
@@ -83,16 +83,6 @@ export default function EmailVerify() {
 
             <Button className='w-full py-2.5 rounded-lg bg-gradient-to-r from-indigo-500 to-indigo-800 text-white font-medium' type='submit'>Confirm Account</Button>
           </form>
-
-          {/* {signType === 'Sign Up' ? (
-            <p className='text-gray-400 text-center text-xs mt-4'>Already have an account?{' '}
-              <span onClick={() => navigate('/login')} className='text-blue-400 cursor-pointer underline'>Login Here!</span>
-            </p>
-          ) : (
-            <p className='text-gray-400 text-center text-xs mt-4'>Don't have an account?{' '}
-              <span onClick={() => navigate('/registration')} className='text-blue-400 cursor-pointer underline'>Sign Up Here!</span>
-            </p>
-          )} */}
         </div>
       </div>
     </div>

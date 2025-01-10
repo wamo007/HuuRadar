@@ -86,49 +86,62 @@ const papariusScraper = async (city, radius, sortGlobal, minPrice, maxPrice) => 
             return []
         })
 
-    const changingUrl = `${initialUrl}/page-${currentPage}`
-    await page.goto(changingUrl, {
-        waitUntil: 'domcontentloaded'
-    })
-
-    await autoScroll(page)
-
-    data = await page.evaluate(() => {
-        return Array.from(document.querySelectorAll(
-          'ul.search-list li.search-list__item--listing section'
-          )).map((section) => {
-            const link = section.querySelector("a.listing-search-item__link").getAttribute('href')
-            const img = section.querySelector("picture img")?.getAttribute('src') || ''
-            const heading = section.querySelector("h2.listing-search-item__title a").textContent.trim()
-            const address = section.querySelector('div[class^="listing-search-item__sub-title"]').textContent.trim()
-            const price = section.querySelector('div.listing-search-item__price').textContent.trim()
-            const size = section.querySelector('li.illustrated-features__item.illustrated-features__item--surface-area')?.textContent.trim() || ''
-            const seller = section.querySelector('div.listing-search-item__info a')?.textContent.trim() || ''
-            const sellerLink = section.querySelector('div.listing-search-item__info a')?.getAttribute('href') || ''
-                
-            let filterPrice = ''
-
-            if (isNaN(parseFloat(price.substring(1, price.length - 10)))) {
-                filterPrice = 'Price On Request'
-            } else {
-                filterPrice = `${price.substring(0, 1)} ${price.substring(1, price.length - 10)} p/mo.`
-            }
-
-            return {
-                provider: 'paparius',
-                link: `https://www.pararius.com${link}`,
-                img: img.substring(0, img.length - 20),
-                heading,
-                address,
-                price: filterPrice,
-                size,
-                seller,
-                sellerLink: `https://www.pararius.com${sellerLink}`
-            }
+    // let maxPage = await page.evaluate(() => {
+    //     const totalPages = Array.from(document.querySelectorAll('ul.pagination__list li a'))
+    //         .map((a) => {
+    //             return a ? parseInt(a.textContent.trim(), 10) : NaN
+    //         })
+    //         .filter((num) => !isNaN(num))
+    //     return (totalPages.length > 0) ? Math.max(...totalPages) : 1
+    // })
+    
+    // while (currentPage <= maxPage) {
+        const changingUrl = `${initialUrl}/page-${currentPage}`
+        await page.goto(changingUrl, {
+            waitUntil: 'domcontentloaded'
         })
-    })
 
-    papariusData.push(...data)
+        await autoScroll(page)
+
+        data = await page.evaluate(() => {
+            return Array.from(document.querySelectorAll(
+              'ul.search-list li.search-list__item--listing section'
+              )).map((section) => {
+                const link = section.querySelector("a.listing-search-item__link").getAttribute('href')
+                const img = section.querySelector("picture img")?.getAttribute('src') || ''
+                const heading = section.querySelector("h2.listing-search-item__title a").textContent.trim()
+                const address = section.querySelector('div[class^="listing-search-item__sub-title"]').textContent.trim()
+                const price = section.querySelector('div.listing-search-item__price').textContent.trim()
+                const size = section.querySelector('li.illustrated-features__item.illustrated-features__item--surface-area')?.textContent.trim() || ''
+                const seller = section.querySelector('div.listing-search-item__info a')?.textContent.trim() || ''
+                const sellerLink = section.querySelector('div.listing-search-item__info a')?.getAttribute('href') || ''
+                
+                let filterPrice = ''
+
+                if (isNaN(parseFloat(price.substring(1, price.length - 10)))) {
+                    filterPrice = 'Price On Request'
+                } else {
+                    filterPrice = `${price.substring(0, 1)} ${price.substring(1, price.length - 10)} p/mo.`
+                }
+
+                return {
+                    link: `https://www.pararius.com${link}`,
+                    img: img.substring(0, img.length - 20),
+                    heading,
+                    address,
+                    price: filterPrice,
+                    size,
+                    seller,
+                    sellerLink: `https://www.pararius.com${sellerLink}`
+                }
+            })
+        })
+
+        papariusData.push(...data)
+
+    //     if (currentPage === 2) break
+    //     currentPage++
+    // }
 
     return papariusData
 }

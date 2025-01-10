@@ -10,9 +10,11 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { toast } from "react-toastify"
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import { Loader2 } from "lucide-react"
 import { ComboboxCity } from "./ui/combobox"
+import { userContent } from "@/context/UserContext"
+import axios from "axios"
 
 function SearchPanel({ responseDataChange, loadingStatus }) {
   const [city, setCity] = useState('')
@@ -20,8 +22,11 @@ function SearchPanel({ responseDataChange, loadingStatus }) {
   const [sortGlobal, setSortGlobal] = useState('new')
   const [minPrice, setMinPrice] = useState('')
   const [maxPrice, setMaxPrice] = useState('')
+  const [queryData, setQueryData] = useState([])
   const [loading, setLoading] = useState(false)
   const [animateCount, setAnimateCount] = useState(false)
+
+  const { backendUrl, loggedIn, userData } = useContext(userContent)
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -33,7 +38,7 @@ function SearchPanel({ responseDataChange, loadingStatus }) {
     setAnimateCount(true)
 
     try {
-      const response = await fetch('http://localhost:8080/api/', {
+      const response = await fetch(backendUrl + '/api/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ city, radius, sortGlobal, minPrice, maxPrice }),
@@ -57,6 +62,7 @@ function SearchPanel({ responseDataChange, loadingStatus }) {
                   try {
                       const jsonData = JSON.parse(line)
                       responseData = { ...responseData, ...jsonData}
+                      setQueryData(responseData)
                       responseDataChange(responseData)
                   } catch (error) {
                       console.error("Error parsing chunk:", line, error)
@@ -80,6 +86,30 @@ function SearchPanel({ responseDataChange, loadingStatus }) {
 
     setLoading(false)
     loadingStatus(false)
+  }
+  
+  const saveQuery = async (e) => {
+    try {
+      e.preventDefault()
+
+      axios.defaults.withCredentials = true
+
+      if (loggedIn) {
+        const email = userData.email
+        const { data } = await axios.post(backendUrl + '/api/save-query', 
+          { email, city, radius, sortGlobal, minPrice, maxPrice, responseData: JSON.stringify(queryData) })
+
+          if (data.success) {
+            toast.success(data.message)
+          } else {
+            toast.error(data.error)
+          }
+      } else { 
+        toast.error('Please login or sign up to set notifications.')
+      }
+    } catch (err) {
+      toast.error(err.message)
+    }
   }
 
   return (
@@ -141,7 +171,7 @@ function SearchPanel({ responseDataChange, loadingStatus }) {
               <Button type="submit" className={`${(animateCount === true) ? '' : 'animate-slideIn8'} w-[120px] text-md`} disabled={loading}>
                 {loading && <Loader2 className="animate-spin" />}
                 Search</Button>
-              <Button className='w-[120px] animate-slideIn10 text-md' type='button'>Notify me!</Button>
+              <Button onClick={(e) => saveQuery(e)} className='w-[120px] animate-slideIn10 text-md' type='button'>Notify me!</Button>
               </div>
             </>
           ) : (<></>)}

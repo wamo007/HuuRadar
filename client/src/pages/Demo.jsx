@@ -1,5 +1,5 @@
 import { assets } from '../assets/assets'
-import { useState, useCallback, useEffect } from 'react'
+import { useState, useCallback, useEffect, useContext } from 'react'
 import Tab from '../components/Tab.jsx'
 import SearchPanel from '../components/Search.jsx'
 import Nav from '@/components/Nav'
@@ -23,7 +23,6 @@ export default function Demo() {
     const [loadingStatus, setLoadingStatus] = useState(false)
     const [error, setError] = useState(null)
   
-
     useEffect(() => {
       if ((responseData.funda?.length || responseData.paparius?.length) && !responseData.paparius?.length) {
         const papariusTimer = setTimeout(() => {

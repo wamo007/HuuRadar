@@ -39,6 +39,7 @@ const rentolaScraper = async (city, sortGlobal, minPrice, maxPrice) => {
 
     let data
     let initialUrl
+    let clicked = 0
     let rentolaData = []
 
     function sortRentola(sortingChosen) {
@@ -63,6 +64,8 @@ const rentolaScraper = async (city, sortGlobal, minPrice, maxPrice) => {
         initialUrl = `${RENTOLA_URL}for-rent?location=${city}&order=${sortRentola(sortGlobal)}&rent=${minPrice}-${maxPrice}`
     }
 
+    // await page.setViewport({ width: 600, height: 1000})
+
     await page.goto(initialUrl, {
         waitUntil: 'domcontentloaded',
         timeout: 30000,
@@ -70,6 +73,27 @@ const rentolaScraper = async (city, sortGlobal, minPrice, maxPrice) => {
             console.error(`Navigation to ${initialUrl} failed:`, err.message);
             return []
         })
+
+    // Keeping this in case if it would be useful...
+
+    // while (clicked < 2) {
+    //     const loadMoreHidden = await page.evaluate(() => {
+    //         return document.querySelector('div#pagination-load-more')
+    //             .getAttribute('style') === 'display: none;'
+    //     })
+
+    //     if (loadMoreHidden) {
+    //         break
+    //     }
+
+    //     await page.evaluate(() => {
+    //         const loadMoreButton = document.querySelector('button[id="load-more"]')
+    //         if (loadMoreButton) loadMoreButton.click()
+    //     })
+
+    //     clicked++
+    //     await page.evaluate(() => new Promise(resolve => setTimeout(resolve, 1000)))
+    // }
 
     await autoScroll(page)
     
@@ -84,7 +108,6 @@ const rentolaScraper = async (city, sortGlobal, minPrice, maxPrice) => {
             const size = div.querySelector('div.row div.prop-value')?.textContent.trim() || ''
     
             return {
-                provider: 'rentola',
                 link: `https://www.rentola.nl${link}`,
                 img,
                 heading: heading.split(' ').slice(0, -2).join(' '),

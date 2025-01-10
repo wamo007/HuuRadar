@@ -1,7 +1,7 @@
 const User = require('../models/user')
 const { hashPassword, comparePassword } = require('../helpers/authHashing')
 const jwt = require('jsonwebtoken')
-const  transporter = require('../config/nodeMailer')
+const transporter = require('../config/nodeMailer')
 const fs = require('fs')
 const path = require('path')
 
@@ -49,11 +49,39 @@ const registerUser = async (req, res) => {
         })
 
         // sending email at the registration
+        const emailWelcomeTemplatePath = path.join(__dirname, '../config', 'WelcomeMail.html')
+        let emailWelcomeTemplate = fs.readFileSync(emailWelcomeTemplatePath, 'utf-8')
+
+        emailWelcomeTemplate = emailWelcomeTemplate
+            .replace("{{name}}", user.name)
+
         const mailOptions = {
             from: process.env.SENDER_EMAIL,
             to: email,
-            subject: 'Welcome to Rent NL!',
-            text: `Welcome to the website! Your account has been created with email id: ${email}.`
+            subject: 'Welcome to HuuRadar!',
+            html: emailWelcomeTemplate,
+            attachments: [
+                {
+                    filename: 'logo.png',
+                    path: path.join(__dirname, '../public/assets/logo.png'),
+                    cid: 'logo',
+                },
+                {
+                    filename: 'bg_email.png',
+                    path: path.join(__dirname, '../public/assets/bg_email.png'),
+                    cid: 'bg_email',
+                },
+                {
+                    filename: 'github-original.png',
+                    path: path.join(__dirname, '../public/assets/github-original.png'),
+                    cid: 'github',
+                },
+                {
+                    filename: 'linkedin-plain.png',
+                    path: path.join(__dirname, '../public/assets/linkedin-plain.png'),
+                    cid: 'linkedin',
+                }
+            ]
         }
 
         await transporter.sendMail(mailOptions)
@@ -201,6 +229,7 @@ const verifyEmail = async (req, res) => {
             error: 'Missing Details...'
         })
     }
+    
     try {
         const user = await User.findById(userId)
 
@@ -318,11 +347,11 @@ const sendResetOtp = async (req, res) => {
 const verifyOtp = async (req, res) => {
     const { email, otp } = req.body
 
-    // if (!email || !otp) {
-    //     return res.json({
-    //         error: 'Email or OTP is not provided.'
-    //     })
-    // }
+    if (!email || !otp) {
+        return res.json({
+            error: 'Email or OTP is not provided.'
+        })
+    }
 
     try {
         const user = await User.findOne({ email })

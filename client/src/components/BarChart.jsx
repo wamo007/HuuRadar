@@ -41,7 +41,19 @@ export default function AverageBarChart({ responseData }) {
     if (!provider) return 0
 
     let validPrices = provider
-    .map((tab) => parseFloat(tab.price.replace(/\D/g, "")))
+    .map((tab) => {
+      const price = tab.price.replace(/\s/g, "").match(/(\d+[,]*\d+)/g)
+
+      // if two prices are in one tab (1200 - 1900)
+      if (price && price.length === 2) {
+        const [low, high] = price.map((price) => parseFloat(price.replace(/,/g, "")))
+        return (low + high) / 2
+        
+      } else if (price && price.length === 1) {
+        return parseFloat(tab.price.replace(/\D/g, ""))
+      }
+      return NaN
+    })
     .filter((price) => !isNaN(price))
 
     if (validPrices.length > 0) {

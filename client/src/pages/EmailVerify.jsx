@@ -55,6 +55,21 @@ export default function EmailVerify() {
     }
   }
 
+  const sendVerificationOtp = async () => {
+    try {
+      axios.defaults.withCredentials = true
+
+      const { data } = await axios.post(backendUrl + '/api/auth/send-verify-otp')
+      if (data.success) {
+        toast.success(data.message)
+      } else {
+        toast.error(data.message)
+      }
+    } catch(error) {
+        toast.error(error.message)
+    }
+  }
+
   useEffect(() => {
     loggedIn && userData && userData.accountVerified && navigate('/')
   }, [loggedIn, userData])
@@ -79,7 +94,7 @@ export default function EmailVerify() {
                 ))}
             </div>
 
-            <p className='mb-4 text-indigo-500 cursor-pointer'>Reset OTP</p>
+            <p onClick={sendVerificationOtp} className='mb-4 text-indigo-500 cursor-pointer'>Reset OTP</p>
 
             <Button className='w-full py-2.5 rounded-lg bg-gradient-to-r from-indigo-500 to-indigo-800 text-white font-medium' type='submit'>Confirm Account</Button>
           </form>

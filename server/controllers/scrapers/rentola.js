@@ -1,41 +1,11 @@
-const puppeteer = require('puppeteer-extra')
-
-const { DEFAULT_INTERCEPT_RESOLUTION_PRIORITY } = require('puppeteer')
-const AdblockerPlugin = require('puppeteer-extra-plugin-adblocker')
-
+const { getBrowser } = require('./masterScraper')
 const RENTOLA_URL = `https://www.rentola.nl/en/`
 
-puppeteer.use(
-  AdblockerPlugin({
-    interceptResolutionPriority: DEFAULT_INTERCEPT_RESOLUTION_PRIORITY,
-    blockTrackers: true
-  })
-)
-
-let browser
-let page
-
-const initialSetup = async () => {
-    browser = await puppeteer.launch({ 
-        headless: true,
-        args: ["--disable-notifications"],
-    })
-
-    page = await browser.newPage()
-
-    await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.181 Safari/537.36')
-    await page.goto(RENTOLA_URL, { 
-        waitUntil: 'networkidle2', 
-        timeout: 30000,
-        }).catch((err) => {
-            console.error(`Navigation to ${RENTOLA_URL} failed:`, err.message);
-            return []
-        })
-}
-
-initialSetup()
-
 const rentolaScraper = async (city, sortGlobal, minPrice, maxPrice) => {
+
+    const browser = await getBrowser()
+
+    const page = await browser.newPage()
 
     let data
     let initialUrl
@@ -66,10 +36,10 @@ const rentolaScraper = async (city, sortGlobal, minPrice, maxPrice) => {
     await page.goto(initialUrl, {
         waitUntil: 'domcontentloaded',
         timeout: 30000,
-        }).catch((err) => {
-            console.error(`Navigation to ${initialUrl} failed:`, err.message);
-            return []
-        })
+    }).catch((err) => {
+        console.error(`Navigation to ${initialUrl} failed:`, err.message)
+        return rentolaData
+    })
 
     await autoScroll(page)
     
@@ -99,6 +69,7 @@ const rentolaScraper = async (city, sortGlobal, minPrice, maxPrice) => {
 
     rentolaData.push(...data)
 
+    await page.close()
     return rentolaData
 }
 

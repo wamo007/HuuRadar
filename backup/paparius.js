@@ -1,19 +1,17 @@
-const puppeteer = require('puppeteer-extra')
+const { getBrowser } = require('./masterScraper')
+// const puppeteer = require('puppeteer-extra')
 
-const { DEFAULT_INTERCEPT_RESOLUTION_PRIORITY } = require('puppeteer')
-const AdblockerPlugin = require('puppeteer-extra-plugin-adblocker')
+// const { DEFAULT_INTERCEPT_RESOLUTION_PRIORITY } = require('puppeteer')
+// const AdblockerPlugin = require('puppeteer-extra-plugin-adblocker')
 
 const PAPARIUS_URL = `https://www.pararius.com`
 
-puppeteer.use(
-  AdblockerPlugin({
-    interceptResolutionPriority: DEFAULT_INTERCEPT_RESOLUTION_PRIORITY,
-    blockTrackers: true
-  })
-)
-
-let browser
-let page
+// puppeteer.use(
+//   AdblockerPlugin({
+//     interceptResolutionPriority: DEFAULT_INTERCEPT_RESOLUTION_PRIORITY,
+//     blockTrackers: true
+//   })
+// )
 
 const initialSetup = async () => {
     browser = await puppeteer.launch({ 
@@ -40,9 +38,17 @@ const initialSetup = async () => {
 
 }
 
-initialSetup()
+// initialSetup()
 
 const papariusScraper = async (city, radius, sortGlobal, minPrice, maxPrice) => {
+
+    // const browser = await puppeteer.launch({ 
+    //     headless: true,
+    //     args: ["--disable-notifications"],
+    // })
+    const browser = await getBrowser()
+
+    const page = await browser.newPage()
 
     let data
     let radiusPaparius
@@ -67,15 +73,15 @@ const papariusScraper = async (city, radius, sortGlobal, minPrice, maxPrice) => 
     }
 
     if (!minPrice && !maxPrice) {
-        initialUrl = `${PAPARIUS_URL}/apartments/${city.toLowerCase()}${radiusPaparius}${sortPaparius(sortGlobal)}`
+        initialUrl = `${PAPARIUS_URL}/apartments/${city.toLowerCase()}${radiusPaparius}${sortPaparius(sortGlobal)}/since-3`
     } else if (!minPrice) {
         minPrice = '0'
-        initialUrl = `${PAPARIUS_URL}/apartments/${city.toLowerCase()}/${minPrice}-${maxPrice}/${radiusPaparius}${sortPaparius(sortGlobal)}`
+        initialUrl = `${PAPARIUS_URL}/apartments/${city.toLowerCase()}/${minPrice}-${maxPrice}/${radiusPaparius}${sortPaparius(sortGlobal)}/since-3`
     } else if (!maxPrice || maxPrice === 0) {
         maxPrice = '60000'
-        initialUrl = `${PAPARIUS_URL}/apartments/${city.toLowerCase()}/${minPrice}-${maxPrice}/${radiusPaparius}${sortPaparius(sortGlobal)}`
+        initialUrl = `${PAPARIUS_URL}/apartments/${city.toLowerCase()}/${minPrice}-${maxPrice}/${radiusPaparius}${sortPaparius(sortGlobal)}/since-3`
     } else {
-        initialUrl = `${PAPARIUS_URL}/apartments/${city.toLowerCase()}/${minPrice}-${maxPrice}/${radiusPaparius}${sortPaparius(sortGlobal)}`
+        initialUrl = `${PAPARIUS_URL}/apartments/${city.toLowerCase()}/${minPrice}-${maxPrice}/${radiusPaparius}${sortPaparius(sortGlobal)}/since-3`
     }
 
     await page.goto(initialUrl, {
@@ -86,16 +92,16 @@ const papariusScraper = async (city, radius, sortGlobal, minPrice, maxPrice) => 
             return []
         })
 
-    // let maxPage = await page.evaluate(() => {
-    //     const totalPages = Array.from(document.querySelectorAll('ul.pagination__list li a'))
-    //         .map((a) => {
-    //             return a ? parseInt(a.textContent.trim(), 10) : NaN
-    //         })
-    //         .filter((num) => !isNaN(num))
-    //     return (totalPages.length > 0) ? Math.max(...totalPages) : 1
-    // })
-    
-    // while (currentPage <= maxPage) {
+    let maxPage = await page.evaluate(() => {
+        const totalPages = Array.from(document.querySelectorAll('ul.pagination__list li a'))
+            .map((a) => {
+                return a ? parseInt(a.textContent.trim(), 10) : NaN
+            })
+            .filter((num) => !isNaN(num))
+        return (totalPages.length > 0) ? Math.max(...totalPages) : 1
+    })
+        
+    while (currentPage <= maxPage) {
         const changingUrl = `${initialUrl}/page-${currentPage}`
         await page.goto(changingUrl, {
             waitUntil: 'domcontentloaded'
@@ -115,7 +121,7 @@ const papariusScraper = async (city, radius, sortGlobal, minPrice, maxPrice) => 
                 const size = section.querySelector('li.illustrated-features__item.illustrated-features__item--surface-area')?.textContent.trim() || ''
                 const seller = section.querySelector('div.listing-search-item__info a')?.textContent.trim() || ''
                 const sellerLink = section.querySelector('div.listing-search-item__info a')?.getAttribute('href') || ''
-                
+
                 let filterPrice = ''
 
                 if (isNaN(parseFloat(price.substring(1, price.length - 10)))) {
@@ -125,6 +131,7 @@ const papariusScraper = async (city, radius, sortGlobal, minPrice, maxPrice) => 
                 }
 
                 return {
+                    provider: 'paparius',
                     link: `https://www.pararius.com${link}`,
                     img: img.substring(0, img.length - 20),
                     heading,
@@ -138,11 +145,10 @@ const papariusScraper = async (city, radius, sortGlobal, minPrice, maxPrice) => 
         })
 
         papariusData.push(...data)
-
-    //     if (currentPage === 2) break
-    //     currentPage++
-    // }
-
+        currentPage++
+    }
+    await page.close()
+    // await browser.close()
     return papariusData
 }
 

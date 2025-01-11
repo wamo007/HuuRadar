@@ -84,17 +84,17 @@ const compareQuery = async () => {
                 (oldEntry) => !updatedData.some((newEntry) => newEntry.link === oldEntry.link)
             )
 
-            const updatedEntries = updatedData.filter((newEntry) => {
-                const oldEntry = query.queryData.find((oldEntry) => oldEntry.link === newEntry.link)
-                return oldEntry && !_.isEqual(oldEntry, newEntry)
-            })
-            
-            console.log(`Query ID: ${query._id}`)
-            console.log('New entries: ', newEntries)
+            // const updatedEntries = updatedData.filter((newEntry) => {
+            //     const oldEntry = query.queryData.find((oldEntry) => oldEntry.link === newEntry.link)
+            //     return oldEntry && !_.isEqual(oldEntry, newEntry)
+            // })
+
+            // console.log('New entries: ', newEntries)
             // console.log('Removed entries: ', removedEntries)
             // console.log('Updated entries: ', updatedEntries)
 
-            if (newEntries.length || removedEntries.length || updatedEntries.length) {
+            if (newEntries.length || removedEntries.length) {
+                console.log('New entries: ', newEntries)
                 await Query.findOneAndUpdate(
                     { _id: query._id },
                     {
@@ -110,12 +110,10 @@ const compareQuery = async () => {
     } catch (error) {
         console.log(error.message)
     }
-
-    
 }
 
 // compareQuery()
 
-cron.schedule('*/2 * * * *', compareQuery)
+cron.schedule('*/5 * * * *', compareQuery)
 
 module.exports = saveQuery

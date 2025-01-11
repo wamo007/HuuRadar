@@ -1,5 +1,17 @@
 const { getBrowser } = require('./masterScraper')
+// const puppeteer = require('puppeteer-extra')
+
+// const { DEFAULT_INTERCEPT_RESOLUTION_PRIORITY } = require('puppeteer')
+// const AdblockerPlugin = require('puppeteer-extra-plugin-adblocker')
+
 const FUNDA_URL = `https://www.funda.nl/en/`
+
+// puppeteer.use(
+//   AdblockerPlugin({
+//     interceptResolutionPriority: DEFAULT_INTERCEPT_RESOLUTION_PRIORITY,
+//     blockTrackers: true
+//   })
+// )
 
 const requestHeaders = {
     'user-agent':
@@ -7,8 +19,42 @@ const requestHeaders = {
     Referer: 'https://www.google.com/',
 }
 
+const initialSetup = async () => {
+    const browser = await puppeteer.launch({ 
+        headless: false,
+        args: [
+            "--disable-notifications",
+        ],
+    })
+
+    const page = await browser.newPage()
+
+    await page.goto(FUNDA_URL, { waitUntil: 'networkidle2',
+        timeout: 30000,
+        }).catch((err) => {
+            console.error(`Navigation to ${FUNDA_URL} failed:`, err.message);
+            return []
+            })
+
+    try {
+        const disagreeBtn = await page.waitForSelector('button[id="didomi-notice-disagree-button"]', {timeout: 1000})
+        if (disagreeBtn) await page.click('button[id="didomi-notice-disagree-button"]')
+    } catch (error) {
+        console.log('Funda popup did not appear, skipping this step...')
+    }
+    await page.close()
+}
+
+// initialSetup()
+
 const fundaScraper = async (city, radius, sortGlobal, minPrice, maxPrice) => {
 
+    // const browser = await puppeteer.launch({ 
+    //     headless: false,
+    //     args: [
+    //         "--disable-notifications",
+    //     ],
+    // })
     const browser = await getBrowser()
     const page = await browser.newPage()
     await page.setExtraHTTPHeaders({ ...requestHeaders })
@@ -139,6 +185,7 @@ const fundaScraper = async (city, radius, sortGlobal, minPrice, maxPrice) => {
     }
 
     await page.close()
+    // await browser.close()
     return fundaData
 }
 

@@ -28,6 +28,14 @@ const scrapeController = async (req, res) => {
         const rentola = await rentolaScraper(city,sortGlobal, minPrice, maxPrice)
         res.write(JSON.stringify({ rentola }) + '\n')
 
+        // await Promise.all([
+        //     fundaScraper(city, radius, sortGlobal, minPrice, maxPrice),
+        //     papariusScraper(city, radius, sortGlobal, minPrice, maxPrice),
+        //     rentolaScraper(city, sortGlobal, minPrice, maxPrice),
+        //     // hAnywhereScraper(city, sortGlobal, minPrice, maxPrice)
+        // ]).then(([ funda, paparius, rentola, hAnywhere ]) => {
+        //     res.status(200)
+        //     .json({ funda, paparius, rentola, hAnywhere })
         res.end()
         
 

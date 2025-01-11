@@ -95,9 +95,10 @@ function SearchPanel({ responseDataChange, loadingStatus }) {
       axios.defaults.withCredentials = true
 
       if (loggedIn) {
+        const name = userData.name
         const email = userData.email
         const { data } = await axios.post(backendUrl + '/api/save-query', 
-          { email, city, radius, sortGlobal, minPrice, maxPrice, responseData: JSON.stringify(queryData) })
+          { name, email, city, radius, sortGlobal, minPrice, maxPrice, responseData: JSON.stringify(queryData) })
 
           if (data.success) {
             toast.success(data.message)

@@ -1,13 +1,15 @@
+const fs = require('fs')
+const path = require('path')
 const Query = require('../models/query')
 const cron = require('node-cron')
-const _ = require('lodash')
+const transporter = require('../config/nodeMailer')
 const fundaScraper = require('./scrapers/funda')
 const papariusScraper = require('./scrapers/paparius')
 const rentolaScraper = require('./scrapers/rentola')
 
 const saveQuery = async (req, res) => {
     try {
-        const { email, city, radius, sortGlobal, minPrice, maxPrice, responseData } = req.body
+        const { name, email, city, radius, sortGlobal, minPrice, maxPrice, responseData } = req.body
         
         if (!city || !responseData) {
             return res.json({
@@ -41,6 +43,7 @@ const saveQuery = async (req, res) => {
         }
 
         const query = new Query({
+            name,
             email,
             city,
             radius,
@@ -73,8 +76,8 @@ const compareQuery = async () => {
             const funda = await fundaScraper(city, radius, sortGlobal, minPrice, maxPrice)
             const paparius = await papariusScraper(city, radius, sortGlobal, minPrice, maxPrice)
             const rentola = await rentolaScraper(city,sortGlobal, minPrice, maxPrice)
+            
             const updatedData = [...funda, ...paparius, ...rentola]
-            // console.log(responseData)
 
             const newEntries = updatedData.filter(
                 (newEntry) => !query.queryData.some((oldEntry) => oldEntry.link === newEntry.link)
@@ -93,8 +96,74 @@ const compareQuery = async () => {
             // console.log('Removed entries: ', removedEntries)
             // console.log('Updated entries: ', updatedEntries)
 
-            if (newEntries.length || removedEntries.length) {
+            if (newEntries.length) {
                 console.log('New entries: ', newEntries)
+                try {
+                    const emailNewEntriesTemplatePath = path.join(__dirname, '../config', 'NewEntries.html')
+                    let emailNewEntriesTemplate = fs.readFileSync(emailNewEntriesTemplatePath, 'utf-8')
+            
+                    const mailEntries = newEntries.map((entry) => {
+                        return `
+                            <div style="padding: 10px; margin-bottom: 10px; border-radius: 10px; background-color: whitesmoke;">
+                              <a href="${entry.link}">
+                                <img src="${entry.img.split(' ')[0]}" alt="${entry.heading}" style="width: 180px; height: 120px; border-radius: 10px; object-fit: cover;">
+                              </a>
+                              <div>
+                                <a href="${entry.link}" style="text-decoration: none; color: black;">
+                                  <h2 style="margin-bottom: 7px;">${entry.heading} on ${entry.provider.charAt(0).toUpperCase()}</h2>
+                                  <h3 style="margin: 0;">${entry.address}</h3>
+                                </a>
+                                <div>
+                                  <h3 style="text-decoration: none; color: black;">${entry.price}</h3>
+                                  <h4 style="text-decoration: none; color: black;">Size: ${entry.size}</h4>
+                                  <a href="${entry.sellerLink}" style="text-decoration: none; color: black;">
+                                      Seller: ${entry.seller}
+                                  </a>
+                                </div>
+                              </div>
+                            </div>
+                        `
+                    }).join(''); // to convert it all to a string for the template entry
+                    
+                    emailNewEntriesTemplate = emailNewEntriesTemplate
+                        .replace('{{name}}', query.name)
+                        .replace(/{{#newEntries}}[\s\S]*?{{\/newEntries}}/, mailEntries)
+                    console.log('Processed HTML:', emailNewEntriesTemplate)
+    
+                    const mailOptions = {
+                        from: process.env.SENDER_EMAIL,
+                        to: query.email,
+                        subject: 'New listings avaiable!',
+                        html: emailNewEntriesTemplate,
+                        attachments: [
+                            {
+                                filename: 'logo.png',
+                                path: path.join(__dirname, '../public/assets/logo.png'),
+                                cid: 'logo',
+                            },
+                            {
+                                filename: 'bg_email.png',
+                                path: path.join(__dirname, '../public/assets/bg_email.png'),
+                                cid: 'bg_email',
+                            },
+                            {
+                                filename: 'github-original.png',
+                                path: path.join(__dirname, '../public/assets/github-original.png'),
+                                cid: 'github',
+                            },
+                            {
+                                filename: 'linkedin-plain.png',
+                                path: path.join(__dirname, '../public/assets/linkedin-plain.png'),
+                                cid: 'linkedin',
+                            }
+                        ]
+                    }
+                
+                    await transporter.sendMail(mailOptions)
+                } catch (error) {
+                    console.error('Email error: ', error.message)
+                }
+
                 await Query.findOneAndUpdate(
                     { _id: query._id },
                     {
@@ -102,13 +171,13 @@ const compareQuery = async () => {
                     },
                     { new: true }
                 )
-                console.log(`Query updated for email: ${query.email}`)
+                console.log(`Query updated for email: ${query.email}. ID: ${query._id}`)
             } else {
                 console.log(`No changes for query: ${query._id}`);
             }
         }
     } catch (error) {
-        console.log(error.message)
+        console.log('Error occured: ', error.message)
     }
 }
 

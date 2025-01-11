@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Account Verification</title>
+    <title>New Listings</title>
 
     <link
       href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap"
@@ -87,60 +87,54 @@
                 style="
                   margin: 0;
                   margin-top: 70px;
-                  padding: 92px 30px 115px;
+                  padding: 20px 20px 20px;
                   background: #ffffff;
                   border-radius: 30px;
                   text-align: center;
                 "
               >
-                <div style="width: 100%; max-width: 489px; margin: 0 auto;">
-                  <h1
-                    style="
-                      margin: 0;
-                      font-size: 30px;
-                      font-weight: 500;
-                      color: #1f1f1f;
-                    "
-                  >
-                    Your OTP
-                  </h1>
+                <div style="width: 100%; max-width: 489px; margin: 0 auto -10px;">
                   <p
                     style="
                       margin: 0;
-                      margin-top: 17px;
+                      margin-bottom: 10px;
                       font-size: 24px;
                       font-weight: 500;
                     "
                   >
-                    Hey {{name}},
+                    Hi {{name}},
                   </p>
                   <p
                     style="
                       margin: 0;
-                      margin-top: 17px;
+                      margin-bottom: 10px;
+                      font-size: 18px;
                       font-weight: 500;
                       letter-spacing: 0.56px;
                     "
                   >
-                    Thank you for signing up to HuuRadar. Use the following OTP
-                    to complete the verification of your email address. OTP is
-                    valid for
-                    <span style="font-weight: 600; color: #1f1f1f;">2 hours</span>.
-                    Do not share this code with others.
+                    Here are the new listings on the rental websites:
                   </p>
-                  <p
-                    style="
-                      margin: 0;
-                      margin-left: 20px;
-                      margin-top: 60px;
-                      font-size: 34px;
-                      font-weight: 600;
-                      letter-spacing: 20px;
-                      color: #1F2937;
-                    "
-                  >
-                    {{otp}}
-                  </p>
+                  {{#newEntries}}
+                  <div style="padding: 10px; margin-bottom: 10px; border-radius: 10px; background-color: whitesmoke;">
+                    <a href="{{link}}">
+                      <img src="{{img}}" alt="{{heading}}" style="width: 180px; height: 120px; border-radius: 10px; object-fit: cover;">
+                    </a>
+                    <div>
+                      <a href="{{link}}" style="text-decoration: none; color: black;">
+                        <h2 style="margin-bottom: 7px;">{{heading}} on {{provider}}</h2>
+                        <h3 style="margin: 0;">{{address}}</h3>
+                      </a>
+                      <div>
+                        <h3>{{price}}</h3>
+                        <h4>Size: {{size}}</h4>
+                        <a href="{{sellerLink}}" style="text-decoration: none; color: black;">
+                            Seller: {{seller}}
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                  {{/newEntries}}
                 </div>
               </div>
 

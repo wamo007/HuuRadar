@@ -1,5 +1,5 @@
 export default function Contacts() {
   return (
-    <div>Contacts</div>
+    <div id='Contacts' className="min-h-screen">Contacts</div>
   )
 }

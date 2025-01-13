@@ -134,16 +134,16 @@ export default function Nav () {
     }, [scrollData])
 
     return (
-        <nav className={`${isDemo ? 'sticky' : 'fixed'} top-0 left-0 w-full ${showNav ? '-translate-y-full' : ''} ${navColor ? 'bg-slate-100 bg-clip-padding backdrop-filter backdrop-blur bg-opacity-50 backdrop-saturate-50 backdrop-contrast-125' : ''} transition duration-700 ease-out z-50`}>
+        <nav className={`${isDemo ? 'sticky' : 'fixed'} top-0 left-0 w-full ${showNav ? '-translate-y-full' : ''} ${navColor ? 'bg-slate-100 bg-clip-padding backdrop-filter backdrop-blur bg-opacity-50 backdrop-saturate-50 backdrop-contrast-125' : ''} transition-all duration-700 ease-out z-50`}>
             <div className='container mx-auto flex justify-between items-center py-4 px-6 md:px-2 lg:px-10 xl:px-14 2xl:px-30'>
                 <Link className='flex justify-between items-center gap-3' to='/'>
                     <img src={assets.logo} alt="Website Logo" width={50} />
                     <div className="brand text-gray-900 text-center font-bold text-2xl">HUURADAR</div>
                 </Link>
                 <ul className='hidden md:flex gap-7 md:gap-6 xl:gap-9 text-gray-900 text-xl font-semibold md:text-[19px]'>
-                    <Link to={{pathname: '/', hash: '#Header'}} className='cursor-pointer hover:text-gray-700'>Home</Link>
-                    <Link to={{pathname: '/', hash: '#About'}} className='cursor-pointer hover:text-gray-700'>About</Link>
-                    <Link to={{pathname: '/', hash: '#Contacts'}} className='cursor-pointer hover:text-gray-700'>Contact Me</Link>
+                    <a href='/#Header' className='cursor-pointer hover:text-gray-700'>Home</a>
+                    <a href='/#About' className='cursor-pointer hover:text-gray-700'>About</a>
+                    <a href='/#Contacts' className='cursor-pointer hover:text-gray-700'>Contact Me</a>
                 </ul>
                 { isLogin || isRegistration ? (
                     <li onClick={() => navigate(-1)} className={
@@ -152,9 +152,11 @@ export default function Nav () {
                 ) : (
                     <ul className="hidden md:flex justify-between items-center gap-3 [&_*]:text-center [&_*]:font-bold [&_*]:text-xl">
                         { userData ? (
-                            <div className={`${isHome ? '[&_*]:text-gray-900 hover:[&_*]:text-blue-950' : '[&_*]:text-white hover:[&_*]:text-slate-200'} relative group flex justify-center items-center`}><Link to='/account' className={
-                                `${isHome ? buttonVariants({ variant: 'outline' }) : buttonVariants({ variant: '' })} w-auto min-w-[200px] z-10 overflow-hidden
-                                `}>{userData.name}</Link>
+                            <div className={`${isHome ? '[&_*]:text-gray-900 hover:[&_*]:text-blue-950' : '[&_*]:text-white hover:[&_*]:text-slate-200'} relative group flex justify-center items-center`}>
+                                <Link to='/account' className={
+                                    `${isHome ? buttonVariants({ variant: 'outline' }) : buttonVariants({ variant: '' })} w-auto min-w-[200px] z-10 overflow-hidden
+                                    `}>{userData.name}
+                                </Link>
                                 <div className='absolute hidden group-hover:block top-0 z-8 pt-10 w-[140px] transition-all animate-listOpen'>
                                     <ul className={`list-none m-0 p-1 ${isHome ? 'bg-white hover:*:bg-gray-200': 'bg-gray-800 hover:*:bg-blue-900'} *:cursor-pointer rounded-b-xl [&_*]:text-lg`}>
                                         { !userData.accountVerified && <li onClick={sendVerificationOtp}>Verify email</li> }

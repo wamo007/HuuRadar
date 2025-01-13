@@ -80,11 +80,11 @@ const compareQuery = async () => {
             const updatedData = [...funda, ...paparius, ...rentola]
 
             const newEntries = updatedData.filter(
-                (newEntry) => !query.queryData.some((oldEntry) => oldEntry.link === newEntry.link)
+                (newEntry) => !query.queryData.some((oldEntry) => oldEntry.heading === newEntry.heading)
             )
 
             const removedEntries = query.queryData.filter(
-                (oldEntry) => !updatedData.some((newEntry) => newEntry.link === oldEntry.link)
+                (oldEntry) => !updatedData.some((newEntry) => newEntry.heading === oldEntry.heading)
             )
 
             // const updatedEntries = updatedData.filter((newEntry) => {
@@ -101,16 +101,18 @@ const compareQuery = async () => {
                 try {
                     const emailNewEntriesTemplatePath = path.join(__dirname, '../config', 'NewEntries.html')
                     let emailNewEntriesTemplate = fs.readFileSync(emailNewEntriesTemplatePath, 'utf-8')
-            
+                    
+                    const placeholderImg = 'https://i.ibb.co/T1SrZ3X/placeholder.png'
+
                     const mailEntries = newEntries.map((entry) => {
                         return `
                             <div style="padding: 10px; margin-bottom: 10px; border-radius: 10px; background-color: whitesmoke;">
                               <a href="${entry.link}">
-                                <img src="${entry.img.split(' ')[0]}" alt="${entry.heading}" style="width: 180px; height: 120px; border-radius: 10px; object-fit: cover;">
+                                <img src="${(entry.img.split(' ')[0].includes('data:image/')) ? 'https://i.ibb.co/T1SrZ3X/placeholder.png' : entry.img }" alt="${entry.heading}" style="width: 180px; height: 120px; border-radius: 10px; object-fit: cover;">
                               </a>
                               <div>
                                 <a href="${entry.link}" style="text-decoration: none; color: black;">
-                                  <h2 style="margin-bottom: 7px;">${entry.heading} on ${entry.provider.charAt(0).toUpperCase()}</h2>
+                                  <h2 style="margin-bottom: 7px;">${entry.heading}</h2>
                                   <h3 style="margin: 0;">${entry.address}</h3>
                                 </a>
                                 <div>
@@ -119,6 +121,7 @@ const compareQuery = async () => {
                                   <a href="${entry.sellerLink}" style="text-decoration: none; color: black;">
                                       Seller: ${entry.seller}
                                   </a>
+                                  <p style="font-size: 12px;">Provider: ${entry.provider.charAt(0).toUpperCase() + entry.provider.slice(1)}</p>
                                 </div>
                               </div>
                             </div>

@@ -5,7 +5,7 @@ export default function PlaceholderTab() {
     <>
       <a>
         <img src={assets.moreplace} width={180} height={120} 
-        alt="Item Image" className='w-[180px] h-[120px] object-cover m-auto rounded-lg' />
+        alt="Item Image" className='w-[180px] h-[120px] object-cover m-auto md:rounded-lg' />
       </a>
       <div className='pt-1 h-[160px] flex flex-col justify-between'>
         <a>

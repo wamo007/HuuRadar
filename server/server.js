@@ -2,9 +2,10 @@ const express = require('express')
 const dotenv = require('dotenv').config()
 const cors = require('cors')
 const { mongoose } = require('mongoose')
-const scrapeRouter = require('./routes/scrapeRouter')
-const authRouter = require('./routes/authRouter')
+const scrapeRouter = require('./routes/scrapeRoutes')
+const authRouter = require('./routes/authRoutes')
 const userRouter = require('./routes/userRoutes')
+const feedbackRouter = require('./routes/feedbackRoutes')
 const cookieParser = require('cookie-parser')
 const path = require('path')
 
@@ -29,6 +30,7 @@ app.use(express.urlencoded({ parameterLimit: 100000, limit: '50mb', extended: tr
 app.use('/api', scrapeRouter)
 app.use('/api/auth', authRouter)
 app.use('/api/user', userRouter)
+app.use('/api/feedback', feedbackRouter)
 // app.use('/fb', fbRouter)
 
 app.listen(PORT, () => {

@@ -61,9 +61,9 @@ export default function Demo() {
 
     return (
       <>
-        <div className='relative bg-slate-100 min-h-screen'>
+        <div className='relative bg-slate-100 min-h-screen w-full'>
           <Nav />
-          <div className='bg-white shadow-2xl-b-0 bg-clip-padding backdrop-filter backdrop-blur bg-opacity-50 backdrop-saturate-50 backdrop-contrast-125 rounded-t-lg container flex flex-wrap justify-between items-center mx-auto py-4 sm:px-2 md:px-2 lg:px-10 xl:px-14 2xl:px-30 text-center'>
+          <div className='bg-white shadow-2xl-b-0 bg-clip-padding backdrop-filter backdrop-blur bg-opacity-50 backdrop-saturate-50 backdrop-contrast-125 rounded-t-lg flex flex-wrap justify-between items-center mx-auto py-4 w-11/12 px-6 md:px-2 lg:px-10 xl:px-14 2xl:px-30 text-center'>
             {(responseData.funda || responseData.paparius || responseData.rentola) ? (
               <>
                 <AverageBarChart responseData={responseData} />
@@ -86,17 +86,17 @@ export default function Demo() {
               <div className="flex mx-auto">
                 <div className="w-full text-sm sm:text-lg md:text-2xl  tracking-wider font-semibold text-center 
                   whitespace-nowrap overflow-hidden border-r-2 border-r-[rgba(255,255,255,.75)] animate-typewriterBlinkCursor">
-                  Please initialize the search by choosing the city...
+                  Please initialize the search...
                 </div>
               </div>
             )}
           </div>
-          <div className='bg-white shadow-xl bg-clip-padding backdrop-filter backdrop-blur bg-opacity-50 backdrop-saturate-50 backdrop-contrast-125 rounded-b-lg container mx-auto justify-between items-center pb-4 px-6 md:px-2 lg:px-10 xl:px-14 2xl:px-30 mb-3'>
+          <div className='bg-white shadow-xl bg-clip-padding backdrop-filter backdrop-blur bg-opacity-50 backdrop-saturate-50 backdrop-contrast-125 rounded-b-lg mx-auto justify-between items-center pb-4 px-6 md:px-2 lg:px-10 xl:px-14 2xl:px-30 w-11/12 mb-3'>
             <hr className='w-3/4 h-1 mx-auto bg-gray-200 border-0 dark:bg-gray-700 rounded-xl mb-3.5'/>
             <SearchPanel responseDataChange={handleResponseDataChange} loadingStatus={setLoadingStatus} />
           </div>
           <div className="flex md:items-center w-full overflow-hidden" id='Demo'>
-            <div className='container text-left mx-auto py-4 sm:px-2 md:px-2 lg:px-10 xl:px-14 2xl:px-30'>
+            <div className='w-full text-left mx-auto py-4 sm:px-2 md:px-2 lg:px-10 xl:px-14 2xl:px-30'>
               {(responseData.funda || responseData.paparius || responseData.rentola) ? (
                 <div className='*:grid *:grid-cols-[repeat(auto-fill,_204px)] max-[408px]:*:grid-cols-[repeat(auto-fill,_180px)] *:justify-center *:justify-items-center *:items-center lg:*:gap-20 md:*:gap-16'>
                   {(responseData.funda?.length > 0 ) ? (

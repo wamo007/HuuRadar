@@ -1,33 +1,59 @@
-import { useRef, useState } from "react"
+import { useContext, useRef, useState } from "react"
 import { useIsVisible } from "./ui/scrollingAnim"
 import { assets } from "@/assets/assets"
 import { Input } from "./ui/input"
 import { Button } from "./ui/button"
 import { Textarea } from "./ui/textarea"
+import axios from "axios"
+import { userContent } from "@/context/UserContext"
+import { toast } from "react-toastify"
 
 export default function Contacts() {
   
+  const { backendUrl } = useContext(userContent)
+
   const contact1 = useRef()
   const isVisibleContact1 = useIsVisible(contact1)
+
+  const contact2 = useRef()
+  const isVisibleContact2 = useIsVisible(contact2)
 
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [text, setText] = useState('')
+
+  const submitHandler = async (e) => {
+    try {
+      e.preventDefault()
+      
+      const { data } = await axios.post(backendUrl + '/api/feedback',
+        { name, email, text }
+      )
+      
+      if (data.success) {
+        toast.success(data.message)
+      } else {
+        toast.error(data.error)
+      }
+    } catch (error) {
+      toast.error(error.message)
+    }
+  }
   
   return (
     <div className='relative min-h-screen flex flex-col items-center justify-center w-full overflow-hidden bg-[url("/second_bg1.png")] bg-cover' id='Contacts'>
       <div ref={contact1} className={`absolute top-3 px-7 py-5 bg-white/10 backdrop-blur-sm rounded-xl border border-white/30 md:shadow-lg transition-all ease-in duration-700 ${isVisibleContact1 ? 'opacity-100' : 'opacity-0 translate-y-20'}`}>
-          <h1 className='text-slate-900 text-4xl font-bold mb-2 text-center'>Contact Me!</h1>
+          <h1 className='text-slate-900 text-4xl max-sm:text-3xl font-bold text-center'>Contact Me!</h1>
       </div>
       <div className='py-4 px-6 md:px-2 lg:px-10 xl:px-14 2xl:px-30 w-full flex justify-center items-center gap-3'>
-        <div className='container bg-slate-900 p-10 rounded-lg shadow-2xl w-full max-lg:flex-wrap flex max-lg:mt-32 lg:gap-20 gap-10 justify-evenly items-end text-indigo-300 text-md'>
-          <form className="w-full lg:w-2/3">
+        <div ref={contact2} className={`container bg-slate-900 p-10 rounded-lg shadow-2xl w-full max-lg:flex-wrap flex mt-40 xl:mt-24 lg:gap-20 gap-10 justify-evenly items-end text-indigo-300 text-md transition-all ease-in duration-700 ${isVisibleContact2 ? 'opacity-100' : 'opacity-0 translate-x-20'}`}>
+          <form onSubmit={submitHandler} className="w-full lg:w-2/3">
             <div className='mb-4 flex items-center gap-3 w-full px-5 py-2.5 rounded-lg bg-[#333A5C]'>
               <img src={assets.person} alt="" />
               <Input 
                 type="text" 
                 placeholder='Full Name' 
-                className='bg-transparent outline-none border-none rounded-lg md:text-lg focus-visible:ring-0' 
+                className='bg-transparent outline-none border-none rounded-lg text-sm md:text-lg focus-visible:ring-0' 
                 value={name} 
                 onChange={e => setName(e.target.value)} />
             </div>
@@ -35,17 +61,17 @@ export default function Contacts() {
               <img src={assets.mail} alt="" />
               <Input 
                 type="email" 
-                placeholder='E-Mail' 
-                className='bg-transparent outline-none border-none rounded-lg md:text-lg focus-visible:ring-0' 
+                placeholder='Valid E-Mail' 
+                className='bg-transparent outline-none border-none rounded-lg text-sm md:text-lg focus-visible:ring-0' 
                 value={email} 
                 onChange={e => setEmail(e.target.value)} />
             </div>
-            <div className='mb-4 flex items-start gap-3 w-full h-80 px-5 py-2.5 rounded-lg bg-[#333A5C]'>
+            <div className='mb-4 flex items-start gap-3 w-full h-64 px-5 py-2.5 rounded-lg bg-[#333A5C]'>
               <img src={assets.notes} className="mt-2.5" alt="" />
               <Textarea 
                 type="text" 
                 placeholder='Your request/question/feedback...' 
-                className='bg-transparent outline-none border-none rounded-lg resize-none h-full md:text-lg focus-visible:ring-0' 
+                className='bg-transparent outline-none border-none rounded-lg resize-none h-full text-sm md:text-lg focus-visible:ring-0' 
                 value={text} 
                 onChange={e => setText(e.target.value)} />
             </div>
@@ -58,8 +84,8 @@ export default function Contacts() {
                 Shamil
               </h3>
             </div>
-            <div className='mt-9 w-full flex gap-2 items-center justify-between'>
-              <Button className='w-10/12 text-center rounded-lg bg-gradient-to-r from-indigo-800 to-indigo-700 text-white font-medium md:text-lg pointer-events-none'>
+            <div className='mt-9 w-full flex gap-1 sm:gap-2 items-center justify-between'>
+              <Button className='w-9/12 sm:w-10/12 text-center rounded-lg bg-gradient-to-r from-indigo-800 to-indigo-700 text-white font-medium md:text-lg max-[420px]:text-[12px] pointer-events-none'>
                 shamo.iskandarov@gmail.com
               </Button>
               <a href="https://github.com/wamo007" target="_blank" className='w-1/12 place-items-center'>

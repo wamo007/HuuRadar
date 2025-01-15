@@ -26,16 +26,17 @@ export default function Login({ signType }) {
 
       if (signType === 'Sign Up') {
         const { data } = await axios.post(backendUrl + '/api/auth/registration', 
-          {name, email, password})
+          {name, email, password}
+        )
 
-          if (data.success) {
-            setLoggedIn(true)
-            getUserData()
-            toast.success(data.message)
-            navigate('/')
-          } else {
-            toast.error(data.error)
-          }
+        if (data.success) {
+          setLoggedIn(true)
+          getUserData()
+          toast.success(data.message)
+          navigate('/')
+        } else {
+          toast.error(data.error)
+        }
       } else { 
         const { data } = await axios.post(backendUrl + '/api/auth/login', 
           {email, password})

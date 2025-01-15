@@ -134,13 +134,13 @@ export default function Nav () {
     }, [scrollData])
 
     return (
-        <nav className={`${isDemo ? 'sticky' : 'fixed'} top-0 left-0 w-full ${showNav ? '-translate-y-full' : ''} ${navColor ? 'bg-slate-100 bg-clip-padding backdrop-filter backdrop-blur bg-opacity-50 backdrop-saturate-50 backdrop-contrast-125' : ''} transition-all duration-700 ease-out z-50`}>
-            <div className='container mx-auto flex justify-between items-center py-4 px-6 md:px-2 lg:px-10 xl:px-14 2xl:px-30'>
+        <nav className={`${isDemo ? 'sticky' : 'fixed'} top-0 ${showNav ? '-translate-y-full' : ''} ${navColor ? 'bg-slate-100 bg-clip-padding backdrop-filter backdrop-blur bg-opacity-50 backdrop-saturate-50 backdrop-contrast-125' : ''} mx-auto w-full transition-all duration-700 ease-out z-50`}>
+            <div className='mx-auto flex justify-between items-center py-4 px-6 md:px-2 lg:px-10 xl:px-14 2xl:px-30 w-11/12'>
                 <Link className='flex justify-between items-center gap-3' to='/'>
                     <img src={assets.logo} alt="Website Logo" width={50} />
                     <div className="brand text-slate-900 text-center font-bold text-2xl">HUURADAR</div>
                 </Link>
-                <ul className='hidden md:flex gap-7 md:gap-6 xl:gap-9 text-gray-900 text-xl font-semibold md:text-[19px]'>
+                <ul className='hidden md:flex gap-7 md:gap-3 min-[802px]:gap-6 xl:gap-9 text-gray-900 text-xl font-semibold md:text-[16px] min-[802px]:text-[19px]'>
                     <a href='/#Header' className='cursor-pointer hover:text-gray-700'>Home</a>
                     <a href='/#About' className='cursor-pointer hover:text-gray-700'>About</a>
                     <a href='/#Contacts' className='cursor-pointer hover:text-gray-700'>Contact Me</a>

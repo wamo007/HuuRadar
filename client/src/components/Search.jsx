@@ -116,15 +116,15 @@ function SearchPanel({ responseDataChange, loadingStatus }) {
   return (
     <>
       <div className="">
-        <form onSubmit={handleSubmit} className="flex flex-wrap flex-col sm:flex-row gap-6 justify-center md:justify-start items-center animate-slideIn4">
+        <form onSubmit={handleSubmit} className="flex flex-wrap flex-col sm:flex-row gap-4 justify-center md:justify-start items-center animate-slideIn4">
 
           <ComboboxCity selectedCity={city} onCityChange={setCity}/>
           
           {( city ) ? (
             <>
               <Select name="radiusDrop" id="radiusDrop" onValueChange={setRadius}>
-                <SelectTrigger className="w-52 animate-slideIn4 text-md">
-                  <SelectValue placeholder="Select the radius" />
+                <SelectTrigger className="w-40 animate-slideIn4 text-md">
+                  <SelectValue placeholder="Radius" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectGroup>
@@ -138,8 +138,8 @@ function SearchPanel({ responseDataChange, loadingStatus }) {
               </Select>
           
               <Select name="sortDrop" id="sortDrop" onValueChange={setSortGlobal}>
-                <SelectTrigger className="w-52 animate-slideIn5 text-md">
-                  <SelectValue placeholder="Select the order" />
+                <SelectTrigger className="w-40 animate-slideIn5 text-md">
+                  <SelectValue placeholder="Order" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectGroup>
@@ -154,7 +154,7 @@ function SearchPanel({ responseDataChange, loadingStatus }) {
               
               <Input
                 type="number"
-                className="max-w-52 animate-slideIn6 md:text-md"
+                className="max-w-48 animate-slideIn6 md:text-md"
                 id="minPrice"
                 name="minPrice"
                 onChange={(e) => setMinPrice(e.target.value)}
@@ -162,17 +162,18 @@ function SearchPanel({ responseDataChange, loadingStatus }) {
               />
               <Input
                 type="number"
-                className="max-w-52 animate-slideIn7 md:text-md"
+                className="max-w-48 animate-slideIn7 md:text-md"
                 id="maxPrice"
                 name="maxPrice"
                 onChange={(e) => setMaxPrice(e.target.value)}
                 placeholder="Enter Maximum Price"
               />
-              <div className="flex gap-5 flex-wrap flex-col sm:flex-row justify-center">
-              <Button type="submit" className={`${(animateCount === true) ? '' : 'animate-slideIn8'} w-[120px] text-md`} disabled={loading}>
-                {loading && <Loader2 className="animate-spin" />}
-                Search</Button>
-              <Button onClick={(e) => saveQuery(e)} className='w-[120px] animate-slideIn10 text-md' type='button'>Notify me!</Button>
+              <div className="flex gap-4 flex-wrap flex-col sm:flex-row justify-center">
+                <Button type="submit" className={`${(animateCount === true) ? '' : 'animate-slideIn8'} w-[120px] text-md`} disabled={loading}>
+                  {loading && <Loader2 className="animate-spin" />}
+                  Search
+                </Button>
+                {queryData.funda?.length > 0 ? <Button onClick={(e) => saveQuery(e)} className='w-[120px] animate-slideIn10 text-md' type='button'>Notify me!</Button> : ''}
               </div>
             </>
           ) : (<></>)}

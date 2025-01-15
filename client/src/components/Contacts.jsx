@@ -17,7 +17,7 @@ export default function Contacts() {
   return (
     <div className='relative min-h-screen flex flex-col items-center justify-center w-full overflow-hidden bg-[url("/second_bg1.png")] bg-cover' id='Contacts'>
       <div ref={contact1} className={`absolute top-3 px-7 py-5 bg-white/10 backdrop-blur-sm rounded-xl border border-white/30 md:shadow-lg transition-all ease-in duration-700 ${isVisibleContact1 ? 'opacity-100' : 'opacity-0 translate-y-20'}`}>
-          <h1 className='text-gray-800 text-4xl font-bold mb-2 text-center'>Contact Me!</h1>
+          <h1 className='text-slate-900 text-4xl font-bold mb-2 text-center'>Contact Me!</h1>
       </div>
       <div className='py-4 px-6 md:px-2 lg:px-10 xl:px-14 2xl:px-30 w-full flex justify-center items-center gap-3'>
         <div className='container bg-slate-900 p-10 rounded-lg shadow-2xl w-full max-lg:flex-wrap flex max-lg:mt-32 lg:gap-20 gap-10 justify-evenly items-end text-indigo-300 text-md'>
@@ -58,7 +58,18 @@ export default function Contacts() {
                 Shamil
               </h3>
             </div>
-            <Button className='mt-9 w-full py-2.5 text-center rounded-lg bg-gradient-to-r from-indigo-500 to-indigo-800 text-white font-medium md:text-lg pointer-events-none'>shamo.iskandarov@gmail.com</Button>
+            <div className='mt-9 w-full flex gap-2 items-center justify-between'>
+              <Button className='w-10/12 text-center rounded-lg bg-gradient-to-r from-indigo-800 to-indigo-700 text-white font-medium md:text-lg pointer-events-none'>
+                shamo.iskandarov@gmail.com
+              </Button>
+              <a href="https://github.com/wamo007" target="_blank" className='w-1/12 place-items-center'>
+                <img src={assets.github} width={30} alt="My Github Page" />
+              </a>
+              <a href="https://az.linkedin.com/in/shamil-iskandarov-326225293" target="_blank" className='w-1/12 place-items-center'>
+                <img src={assets.linkedin} width={30} alt="My LinkedIn Page. LinkedIn icon by Icons8.com" />
+              </a>
+            </div>
+            
           </div>
         </div>
       </div>

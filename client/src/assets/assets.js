@@ -15,6 +15,8 @@ import passKey from './key.svg'
 import mail from './mail.svg'
 import person from './person.svg'
 import notes from './notes.svg'
+import github from './github.svg'
+import linkedin from './linkedin.svg'
 
 export const assets = {
     logo,
@@ -33,5 +35,7 @@ export const assets = {
     passKey,
     mail,
     person,
-    notes
+    notes,
+    github,
+    linkedin
 }

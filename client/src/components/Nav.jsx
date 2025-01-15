@@ -138,7 +138,7 @@ export default function Nav () {
             <div className='container mx-auto flex justify-between items-center py-4 px-6 md:px-2 lg:px-10 xl:px-14 2xl:px-30'>
                 <Link className='flex justify-between items-center gap-3' to='/'>
                     <img src={assets.logo} alt="Website Logo" width={50} />
-                    <div className="brand text-gray-900 text-center font-bold text-2xl">HUURADAR</div>
+                    <div className="brand text-slate-900 text-center font-bold text-2xl">HUURADAR</div>
                 </Link>
                 <ul className='hidden md:flex gap-7 md:gap-6 xl:gap-9 text-gray-900 text-xl font-semibold md:text-[19px]'>
                     <a href='/#Header' className='cursor-pointer hover:text-gray-700'>Home</a>
@@ -152,7 +152,7 @@ export default function Nav () {
                 ) : (
                     <ul className="hidden md:flex justify-between items-center gap-3 [&_*]:text-center [&_*]:font-bold [&_*]:text-xl">
                         { userData ? (
-                            <div className={`${isHome ? '[&_*]:text-gray-900 hover:[&_*]:text-blue-950' : '[&_*]:text-white hover:[&_*]:text-slate-200'} relative group flex justify-center items-center`}>
+                            <div className={`${isHome ? '[&_*]:text-slate-900 hover:[&_*]:text-blue-950' : '[&_*]:text-white hover:[&_*]:text-slate-200'} relative group flex justify-center items-center`}>
                                 <Link to='/account' className={
                                     `${isHome ? buttonVariants({ variant: 'outline' }) : buttonVariants({ variant: '' })} w-auto min-w-[200px] z-10 overflow-hidden
                                     `}>{userData.name}
@@ -166,10 +166,10 @@ export default function Nav () {
                             </div>
                         ) : (
                             <>
-                                <li className={isHome ? '*:text-white hover:*:text-slate-200' : '*:text-gray-900 hover:*:text-blue-950'}><Link to='/login' className={
+                                <li className={isHome ? '*:text-white hover:*:text-slate-200' : '*:text-slate-900 hover:*:text-blue-950'}><Link to='/login' className={
                                     `${isHome ? buttonVariants({ variant: '' }) : buttonVariants({ variant: 'outline' })} w-[120px]
                                     `}>Log in</Link></li>
-                                <li className={isHome ? '*:text-gray-900 hover:*:text-blue-950' : '*:text-white hover:*:text-slate-200'}><Link to='/registration' className={
+                                <li className={isHome ? '*:text-slate-900 hover:*:text-blue-950' : '*:text-white hover:*:text-slate-200'}><Link to='/registration' className={
                                     `${isHome ? buttonVariants({ variant: 'outline' }) : buttonVariants({ variant: '' })} w-[120px]
                                     `}>Sign up</Link></li>
                             </>

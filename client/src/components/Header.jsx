@@ -15,8 +15,8 @@ export default function Header() {
             <h2 className="text-left text-5xl max-[340px]:text-3xl max-[440px]:text-4xl md:text-[66px] inline-block max-w-md sm:max-w-2xl font-medium pt-20">Find your rentable apartment <span className="font-semibold">faster</span></h2>
             <p className="text-2xl max-[340px]:text-lg max-[440px]:text-xl md:text-[35px] max-w-md max-[440px]:max-w-sm md:max-w-lg pt-3 leading-tight">Get notified about new rentable apartments faster than others!</p>
             <div className="md:space-x-6 mt-11 max-[340px]:mt-8 max-[440px]:mt-9 md:mt-13 lg:mt-14">
-                <a href="#About" className="hidden md:inline-block border-2 border-gray-800 text-3xl px-8 py-3 rounded text-gray-800 hover:text-gray-700">Learn More</a>
-                <Link to="demo" className="bg-gray-800 border-2 border-gray-800 px-8 py-3 rounded text-white text-3xl max-[340px]:text-2xl hover:text-slate-200">Search now</Link>
+                <a href="#About" className="hidden md:inline-block border-2 border-gray-800 text-3xl px-8 py-3 rounded text-gray-800 hover:text-gray-700 hover:animate-pulse">Learn More</a>
+                <Link to="demo" className="bg-gray-800 border-2 border-gray-800 px-8 py-3 rounded text-white text-3xl max-[340px]:text-2xl hover:text-slate-200 hover:animate-pulse7">Search now</Link>
             </div>
         </div>
     </div>

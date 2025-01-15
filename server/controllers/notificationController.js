@@ -101,14 +101,12 @@ const compareQuery = async () => {
                 try {
                     const emailNewEntriesTemplatePath = path.join(__dirname, '../config', 'NewEntries.html')
                     let emailNewEntriesTemplate = fs.readFileSync(emailNewEntriesTemplatePath, 'utf-8')
-                    
-                    const placeholderImg = 'https://i.ibb.co/T1SrZ3X/placeholder.png'
 
                     const mailEntries = newEntries.map((entry) => {
                         return `
                             <div style="padding: 10px; margin-bottom: 10px; border-radius: 10px; background-color: whitesmoke;">
                               <a href="${entry.link}">
-                                <img src="${(entry.img.split(' ')[0].includes('data:image/')) ? 'https://i.ibb.co/T1SrZ3X/placeholder.png' : entry.img }" alt="${entry.heading}" style="width: 180px; height: 120px; border-radius: 10px; object-fit: cover;">
+                                <img src="${entry.img.split(' ')[0]}" alt="${entry.heading}" style="width: 180px; height: 120px; border-radius: 10px; object-fit: cover;">
                               </a>
                               <div>
                                 <a href="${entry.link}" style="text-decoration: none; color: black;">

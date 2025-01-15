@@ -68,8 +68,10 @@ export default {
 			slideIn7: 'slideIn7 1s ease-in-out forwards',
 			slideIn8: 'slideIn8 1.2s ease-in-out forwards',
 			slideIn10: 'slideIn10 1.4s ease-in-out forwards',
+			slideInSpin10: 'slideInSpin10 1.0s ease-in-out forwards',
 			shake: 'shake 0.6s cubic-bezier(.36,.07,.19,.97) both',
-			listOpen: 'listOpen 0.5s ease-in-out forwards'
+			listOpen: 'listOpen 0.5s ease-in-out forwards',
+			pulse7: 'pulse7 2s cubic-bezier(0.4, 0, 0.6, 1) infinite'
 		},
 		keyframes: {
 			typewriter: {
@@ -110,6 +112,11 @@ export default {
 				'100%': {
 					opacity: '1',
 					transform: 'translateY(0rem)'
+				}
+			},
+			pulse7: {
+				'50%': {
+					opacity: '0.7'
 				}
 			},
 			slideIn4: {
@@ -170,6 +177,22 @@ export default {
 				'100%': {
 					opacity: '1',
 					transform: 'translateX(0)'
+				}
+			},
+			slideInSpin10: {
+				'0%': {
+					opacity: '0',
+					transform: 'translateX(-20rem) rotate(350deg)',	
+				},
+				'60%': {
+					transform: 'translateX(3rem) rotate(370deg)',
+				},
+				'80%': {
+					transform: 'translateX(-2rem) rotate(355deg)',
+				},
+				'100%': {
+					opacity: '1',
+					transform: 'translateX(0) rotate(360deg)'
 				}
 			}
 		}

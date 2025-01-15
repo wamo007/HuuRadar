@@ -17,18 +17,18 @@ export default function About() {
             <p className='text-gray-700 max-w-80 text-center'>Finding rentals was never easier!</p>
             <p className='text-gray-700 max-w-80 text-center'>Start in just <span className='font-semibold'>three</span> steps!</p>
         </div>
-        <div ref={about2} className={`flex flex-wrap max-lg:mb-36 max-xl:mb-16 mt-40 xl:mt-36 justify-center xl:justify-between items-center gap-8 md:gap-12 lg:gap-16 xl:gap-20 *:bg-white *:text-gray-800 *:max-w-80 *:flex *:flex-col *:gap-3 *:h-[410px] transform-style-3d [&_*]:transform-style-3d perspective-1000 transition-all *:transition-all ease-in duration-700 ${isVisibleAbout2 ? 'opacity-100' : 'opacity-0 -translate-x-20'}`}>
-            <div className='p-3 rounded-lg shadow-2xl sm:hover:translate-z-16 md:hover:translate-z-44 xl:hover:translate-x-20'>
+        <div  className='flex flex-wrap max-lg:mb-36 max-xl:mb-16 mt-40 xl:mt-36 justify-center xl:justify-between items-center gap-8 md:gap-12 lg:gap-16 xl:gap-20 *:bg-white *:text-gray-800 *:max-w-80 *:flex *:flex-col *:gap-3 *:h-[410px] transform-style-3d [&_*]:transform-style-3d perspective-1000 transition-all *:transition-all *:ease-in'>
+            <div ref={about2} className={`p-3 rounded-lg shadow-2xl sm:hover:translate-z-16 md:hover:translate-z-44 xl:hover:translate-x-20 ${isVisibleAbout2 ? 'opacity-100' : 'opacity-0 -translate-x-28'}`}>
                 <img src={assets.moreplace} alt="" className='rounded-lg' />
                 <h2 className='text-4xl font-semibold text-center'>1. Sign Up</h2>
                 <p className='text-2xl text-center'>Register with your email and verify your account.</p>
             </div>
-            <div className='p-3 rounded-lg shadow-2xl sm:hover:translate-z-16 md:hover:translate-z-44'>
+            <div ref={about2} className={`p-3 rounded-lg shadow-2xl sm:hover:translate-z-16 md:hover:translate-z-44 ${isVisibleAbout2 ? 'opacity-100' : 'opacity-0 translate-y-28'}`}>
                 <img src={assets.moreplace} alt="" className='rounded-lg' />
                 <h2 className='text-4xl font-semibold text-center'>2. Search</h2>
                 <p className='text-2xl text-center'>Select the city and some optional parameters and initiate the search.</p>
             </div>
-            <div className='p-3 rounded-lg shadow-2xl sm:hover:translate-z-16 md:hover:translate-z-44 xl:hover:-translate-x-20'>
+            <div ref={about2} className={`p-3 rounded-lg shadow-2xl sm:hover:translate-z-16 md:hover:translate-z-44 xl:hover:-translate-x-20  ${isVisibleAbout2 ? 'opacity-100' : 'opacity-0 translate-x-28'}`}>
                 <img src={assets.moreplace} alt="" className='rounded-lg' />
                 <h2 className='text-4xl font-semibold text-center'>3. Get Notified!</h2>
                 <div className='text-2xl text-center'>

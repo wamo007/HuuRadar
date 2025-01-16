@@ -98,7 +98,7 @@ export default function Demo() {
           <div className="flex md:items-center w-full overflow-hidden" id='Demo'>
             <div className='w-full text-left mx-auto py-4 sm:px-2 md:px-2 lg:px-10 xl:px-14 2xl:px-30'>
               {(responseData.funda || responseData.paparius || responseData.rentola) ? (
-                <div className='*:grid *:grid-cols-[repeat(auto-fill,_204px)] max-[408px]:*:grid-cols-[repeat(auto-fill,_180px)] *:justify-center *:justify-items-center *:items-center lg:*:gap-20 md:*:gap-16'>
+                <div className='*:grid *:grid-cols-[repeat(auto-fill,_204px)] max-[25.5rem]:*:grid-cols-[repeat(auto-fill,_180px)] *:justify-center *:justify-items-center *:items-center lg:*:gap-20 md:*:gap-16'>
                   {(responseData.funda?.length > 0 ) ? (
                     <div className="fundaResults transition-all *:transition-all *:ease-in">
                       <div className="logo place-items-center">
@@ -107,9 +107,9 @@ export default function Demo() {
                       </div>
                       <Tab className='fundaTab' responseData={responseData.funda.slice(0, visibleItems.funda)} />
                       {responseData.funda.length > visibleItems.funda && (
-                        <div className='relative p-3 w-[204px] h-[304px] bg-white md:rounded-lg md:shadow-2xl max-md:border max-md:border-slate-400 max-[408px]:w-[180px]'>
+                        <div className='relative p-3 w-[12.75rem] h-[19rem] bg-white md:rounded-lg md:shadow-2xl max-md:border max-md:border-slate-400 max-[25.5rem]:w-[11.25rem]'>
                           <PlaceholderTab />
-                          <div className='absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 bg-white/10 backdrop-blur-sm md:rounded-lg border border-white/30 md:shadow-lg max-[408px]:w-[180px] w-[204px] h-[304px]'>
+                          <div className='absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 bg-white/10 backdrop-blur-sm md:rounded-lg border border-white/30 md:shadow-lg max-[25.5rem]:w-[11.25rem] w-[12.75rem] h-[19rem]'>
                             <Button className='relative top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 z-10 bg-gray-900' onClick={() => handleSeeMore('funda')}>
                               See More...
                             </Button>
@@ -133,9 +133,9 @@ export default function Demo() {
                         </div>
                         <Tab className='papariusTab' responseData={responseData.paparius.slice(0, visibleItems.paparius)} />
                         {responseData.paparius.length > visibleItems.paparius && (
-                          <div className='relative p-3 w-[204px] h-[304px] bg-white md:rounded-lg md:shadow-2xl max-md:border max-md:border-slate-400 max-[408px]:w-[180px]'>
+                          <div className='relative p-3 w-[12.75rem] h-[19rem] bg-white md:rounded-lg md:shadow-2xl max-md:border max-md:border-slate-400 max-[25.5rem]:w-[11.25rem]'>
                             <PlaceholderTab />
-                            <div className='absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 bg-white/10 backdrop-blur-sm md:rounded-lg border border-white/30 shadow-lg w-[204px] h-[304px]'>
+                            <div className='absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 bg-white/10 backdrop-blur-sm md:rounded-lg border border-white/30 shadow-lg max-[25.5rem]:w-[11.25rem] w-[12.75rem] h-[19rem]'>
                               <Button className='relative top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 z-10 bg-gray-900' onClick={() => handleSeeMore('paparius')}>
                                 See More...
                               </Button>
@@ -161,9 +161,9 @@ export default function Demo() {
                         </div>
                         <Tab className='rentolaTab' responseData={responseData.rentola.slice(0, visibleItems.rentola)} />
                         {responseData.rentola.length > visibleItems.rentola && (
-                          <div className='relative p-3 w-[204px] h-[304px] bg-white md:rounded-lg md:shadow-2xl max-md:border max-md:border-slate-400 max-[408px]:w-[180px]'>
+                          <div className='relative p-3 w-[12.75rem] h-[19rem] bg-white md:rounded-lg md:shadow-2xl max-md:border max-md:border-slate-400 max-[25.5rem]:w-[11.25rem]'>
                             <PlaceholderTab />
-                            <div className='absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 bg-white/10 backdrop-blur-sm md:rounded-lg border border-white/30 shadow-lg w-[204px] h-[304px]'>
+                            <div className='absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 bg-white/10 backdrop-blur-sm md:rounded-lg border border-white/30 shadow-lg max-[25.5rem]:w-[11.25rem] w-[12.75rem] h-[19rem]'>
                               <Button className='relative top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 z-10 bg-gray-900' onClick={() => handleSeeMore('rentola')}>
                                 See More...
                               </Button>

@@ -84,18 +84,19 @@ export default function Contacts() {
                 Shamil
               </h3>
             </div>
-            <div className='mt-9 w-full flex gap-1 sm:gap-2 items-center justify-between'>
-              <Button className='w-9/12 sm:w-10/12 text-center rounded-lg bg-gradient-to-r from-indigo-800 to-indigo-700 text-white font-medium md:text-lg max-[420px]:text-[12px] pointer-events-none'>
+            <div className='mt-9 w-full flex flex-wrap sm:flex-nowrap gap-2 items-center justify-center sm:justify-between'>
+              <Button className='min-w-52 w-9/12 sm:w-10/12 text-center rounded-lg bg-gradient-to-r from-indigo-800 to-indigo-700 text-white font-medium sm:text-lg pointer-events-none'>
                 shamo.iskandarov@gmail.com
               </Button>
-              <a href="https://github.com/wamo007" target="_blank" className='w-1/12 place-items-center'>
-                <img src={assets.github} width={30} alt="My Github Page" />
-              </a>
-              <a href="https://az.linkedin.com/in/shamil-iskandarov-326225293" target="_blank" className='w-1/12 place-items-center'>
-                <img src={assets.linkedin} width={30} alt="My LinkedIn Page. LinkedIn icon by Icons8.com" />
-              </a>
+              <div className="w-3/12 sm:w-2/12 flex gap-2 items-center justify-center sm:justify-evenly">
+                <a href="https://github.com/wamo007" target="_blank">
+                  <img src={assets.github} width={30} alt="My Github Page" />
+                </a>
+                <a href="https://az.linkedin.com/in/shamil-iskandarov-326225293" target="_blank">
+                  <img src={assets.linkedin} width={30} alt="My LinkedIn Page. LinkedIn icon by Icons8.com" />
+                </a>
+              </div>
             </div>
-            
           </div>
         </div>
       </div>

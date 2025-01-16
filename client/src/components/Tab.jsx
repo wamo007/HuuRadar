@@ -14,10 +14,10 @@ function Tab({ responseData }) {
   return (
     <>
       {responseData.map((tab, index) => (
-        <div key={index} className='p-3 w-[204px] h-[304px] bg-white md:rounded-lg sm:shadow-xl hover:shadow-2xl shadow-slate-900 hover:scale-105 hover:z-10 max-md:border max-md:border-slate-900 max-[408px]:w-[180px]'>
+        <div key={index} className='p-3 w-[12.75rem] h-[19rem] bg-white md:rounded-lg sm:shadow-xl hover:shadow-2xl shadow-slate-900 hover:scale-105 hover:z-10 max-md:border max-md:border-slate-900 max-[25.5rem]:w-[11.25rem]'>
           <a href={tab.link} target="_blank">
             <LazyLoadImage src={imageCheck(tab.img)} srcSet={imageCheck(tab.img)} width={180} height={120} 
-            alt="Item Image" className='w-[180px] h-[120px] object-cover m-auto rounded-lg' />
+            alt="Item Image" className='w-[11.25rem] h-[7.5rem] object-cover m-auto rounded-lg' />
           </a>
           <div className='pt-1 h-[160px] flex flex-col justify-between'>
             <a href={tab.link}>

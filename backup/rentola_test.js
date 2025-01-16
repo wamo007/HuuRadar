@@ -17,7 +17,7 @@ let page
 
 const initialSetup = async () => {
     browser = await puppeteer.launch({ 
-        headless: true,
+        headless: false,
         args: ["--disable-notifications"],
     })
 

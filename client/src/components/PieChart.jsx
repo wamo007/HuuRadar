@@ -92,7 +92,10 @@ export function AveragePieChart({ responseData }) {
       const fundaAverage = averagePrices(responseData?.funda)
       const papariusAverage = averagePrices(responseData?.paparius)
       const rentolaAverage = averagePrices(responseData?.rentola)
-      const totalAverage = Math.round((fundaAverage + papariusAverage + rentolaAverage) / 3)
+
+      const averages = [fundaAverage, papariusAverage, rentolaAverage].filter(average => average > 0)
+      const totalAverage = 
+        averages.length > 0 ? Math.round(averages.reduce((sum, average) => sum + average, 0) / averages.length) : 0
 
       setChartData([
         { provider: "Funda", prices: fundaAverage, fill: "var(--color-funda)" },

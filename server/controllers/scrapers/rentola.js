@@ -45,22 +45,23 @@ const rentolaScraper = async (city, sortGlobal, minPrice, maxPrice) => {
     
     data = await page.evaluate(() => {
         return Array.from(document.querySelectorAll(
-          'div.search-results div[data-controller="thumbnail--main"]'
+          'ul div[data-testid="propertyTile"]'
           )).map((div) => {
             const link = div.querySelector("a").getAttribute('href')
             const img = div.querySelector("img")?.getAttribute('src') || ''
-            const heading = div.querySelector("div.location-label").textContent.trim()
-            const price = div.querySelector('div.fake-btn b').textContent.trim()
-            const size = div.querySelector('div.row div.prop-value')?.textContent.trim() || ''
+            const heading = div.querySelector("p").textContent.trim()
+            const address = div.querySelector("div.mb-4 p.line-clamp-3").textContent.trim()
+            const price = div.querySelector('div.p-4 div.mb-2 p.text-xl').textContent.trim()
+            const size = div.querySelector('span.mr-1')?.textContent.trim() || ''
     
             return {
                 provider: 'rentola',
                 link: `https://www.rentola.nl${link}`,
                 img,
-                heading: heading.split(' ').slice(0, -2).join(' '),
-                address: heading.split(' ').slice(-1).join(' '),
-                price: `${price} p/mo.`,
-                size: `${size.replace('\nm2','m')}²`,
+                heading,
+                address,
+                price: `${price.split(' ').slice(1, 2).join(' ')} ${price.split(' ').slice(0, 1).join(' ')} p/mo.`,
+                size: `${size} m²`,
                 seller: 'Rentola',
                 sellerLink: `https://www.rentola.nl${link}`
             }

@@ -173,7 +173,7 @@ function SearchPanel({ responseDataChange, loadingStatus }) {
                   {loading && <Loader2 className="animate-spin" />}
                   Search
                 </Button>
-                {queryData.funda?.length > 0 ? <Button onClick={(e) => saveQuery(e)} className='w-[120px] animate-slideIn10 text-md' type='button'>Notify me!</Button> : ''}
+                {(!loading) && (queryData.funda?.length > 0) ? <Button onClick={(e) => saveQuery(e)} className='w-[120px] animate-slideIn10 text-md' type='button'>Notify me!</Button> : ''}
               </div>
             </>
           ) : (<></>)}

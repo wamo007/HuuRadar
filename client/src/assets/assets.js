@@ -7,6 +7,8 @@ import right_arrow from './right_arrow.svg'
 import funda from './funda.png'
 import paparius from './paparius.png'
 import rentola from './rentola.png'
+import hAnywhere from './hAnywhere.png'
+import kamernet from './kamernet.png'
 import placeholder from './placeholder.png'
 import moreplace from './morePlaceHolder.jpg'
 import houses from './houses.png'
@@ -28,6 +30,8 @@ export const assets = {
     funda,
     paparius,
     rentola,
+    hAnywhere,
+    kamernet,
     placeholder,
     moreplace,
     houses,

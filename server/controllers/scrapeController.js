@@ -1,6 +1,8 @@
 const fundaScraper = require('./scrapers/funda')
+const hAnywhereScraper = require('./scrapers/hAnywhere')
 const papariusScraper = require('./scrapers/paparius')
 const rentolaScraper = require('./scrapers/rentola')
+const kamernetScraper = require('./scrapers/kamernet')
 
 const scrapeController = async (req, res) => {
     const city = req.body.city
@@ -25,8 +27,14 @@ const scrapeController = async (req, res) => {
         const paparius = await papariusScraper(city, radius, sortGlobal, minPrice, maxPrice)
         res.write(JSON.stringify({ paparius }) + '\n')
         
-        const rentola = await rentolaScraper(city,sortGlobal, minPrice, maxPrice)
+        const rentola = await rentolaScraper(city, sortGlobal, minPrice, maxPrice)
         res.write(JSON.stringify({ rentola }) + '\n')
+
+        const hAnywhere = await hAnywhereScraper(city, sortGlobal, minPrice, maxPrice)
+        res.write(JSON.stringify({ hAnywhere }) + '\n')
+        
+        const kamernet = await kamernetScraper(city, radius, sortGlobal, maxPrice)
+        res.write(JSON.stringify({ kamernet }) + '\n')
 
         res.end()
         

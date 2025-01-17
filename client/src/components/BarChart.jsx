@@ -32,8 +32,8 @@ export default function AverageBarChart({ responseData }) {
     { provider: "Funda", desktop: 0 },
     { provider: "Paparius", desktop: 0 },
     { provider: "Rentola", desktop: 0 },
-    { provider: "April", desktop: 0 },
-    { provider: "May", desktop: 0 },
+    { provider: "H.Anywhere", desktop: 0 },
+    { provider: "Kamernet", desktop: 0 },
     { provider: "June", desktop: 0 },
   ])
 
@@ -68,11 +68,15 @@ export default function AverageBarChart({ responseData }) {
       const fundaAverage = averagePrices(responseData?.funda)
       const papariusAverage = averagePrices(responseData?.paparius)
       const rentolaAverage = averagePrices(responseData?.rentola)
+      const hAnywhereAverage = averagePrices(responseData?.hAnywhere)
+      const kamernetAverage = averagePrices(responseData?.kamernet)
 
       setChartData([
         { provider: "Funda", desktop: fundaAverage },
         { provider: "Paparius", desktop: papariusAverage },
         { provider: "Rentola", desktop: rentolaAverage },
+        { provider: "H.Anywhere", desktop: hAnywhereAverage },
+        { provider: "Kamernet", desktop: kamernetAverage },
       ])
     }
   }, [responseData])

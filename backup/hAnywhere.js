@@ -1,17 +1,44 @@
-const { getBrowser } = require('./masterScraper')
+const puppeteer = require('puppeteer-extra')
+
+const { DEFAULT_INTERCEPT_RESOLUTION_PRIORITY } = require('puppeteer')
+const AdblockerPlugin = require('puppeteer-extra-plugin-adblocker')
+
 const HOUSING_ANYWHERE_URL = `https://housinganywhere.com`
 
-const requestHeaders = {
-    'user-agent':
-        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36',
-    Referer: 'https://www.google.com/',
+puppeteer.use(
+  AdblockerPlugin({
+    interceptResolutionPriority: DEFAULT_INTERCEPT_RESOLUTION_PRIORITY,
+    blockTrackers: true
+  })
+)
+
+let browser
+let page
+
+const initialSetup = async () => {
+    browser = await puppeteer.launch({ 
+        headless: false,
+        args: ["--disable-notifications"],
+    })
+
+    page = await browser.newPage()
+
+    await page.goto(HOUSING_ANYWHERE_URL, { waitUntil: 'networkidle2' })
+
+    try {
+        await page.waitForSelector('button[id="onetrust-pc-btn-handler"]', {timeout: 400})
+        await page.click('button[id="onetrust-pc-btn-handler"]')
+        await page.waitForSelector('button.save-preference-btn-handler', {timeout: 400})
+        await page.click('button.save-preference-btn-handler')
+    } catch (error) {
+        console.log('Privacy popup did not appear, skipping this step...')
+    }
+
 }
 
-const hAnywhereScraper = async (city, sortGlobal, minPrice, maxPrice) => {
+initialSetup()
 
-    const browser = await getBrowser()
-    const page = await browser.newPage()
-    await page.setExtraHTTPHeaders({ ...requestHeaders })
+const hAnywhereScraper = async (city, sortGlobal, minPrice, maxPrice) => {
 
     let data
     let initialUrl
@@ -33,6 +60,7 @@ const hAnywhereScraper = async (city, sortGlobal, minPrice, maxPrice) => {
     } else {
         initialUrl = `${HOUSING_ANYWHERE_URL}/s/${city}--Netherlands?sorting=${sortHA(sortGlobal)}&categories=shared-rooms%2Cprivate-rooms%2Cstudent-housing&priceMin=${minPrice}00&priceMax=${maxPrice}00`
     }
+    // await page.setViewport({ width: 600, height: 1000})
 
     await page.goto(initialUrl, {
         waitUntil: 'domcontentloaded'
@@ -91,13 +119,13 @@ const hAnywhereScraper = async (city, sortGlobal, minPrice, maxPrice) => {
         hAnywhereData.push(...data)
 
         if (currentPage < maxPage) {
-            await page.waitForSelector('button[aria-label="Go to next page"]')
+            await page.waitForSelector('button[aria-label="Go to next page"]', {timeout: 400})
             await page.click('button[aria-label="Go to next page"]')
         }
-
+        
         currentPage++
     }
-    await page.close()
+
     return hAnywhereData
 }
 

@@ -35,12 +35,12 @@ const chartConfig = {
     label: "Rentola",
     color: "hsl(var(--chart-3))",
   },
-  edge: {
-    label: "Edge",
+  hAnywhere: {
+    label: "H.Anywhere",
     color: "hsl(var(--chart-4))",
   },
-  other: {
-    label: "Other",
+  kamernet: {
+    label: "Kamernet",
     color: "hsl(var(--chart-5))",
   },
   other2: {
@@ -55,8 +55,8 @@ export function AveragePieChart({ responseData }) {
     { provider: "funda", prices: 0, fill: "var(--color-funda)" },
     { provider: "paparius", prices: 0, fill: "var(--color-paparius)" },
     { provider: "rentola", prices: 0, fill: "var(--color-rentola)" },
-    { provider: "edge", prices: 0, fill: "var(--color-edge)" },
-    { provider: "other", prices: 0, fill: "var(--color-other)" },
+    { provider: "hAnywhere", prices: 0, fill: "var(--color-hAnywhere)" },
+    { provider: "kamernet", prices: 0, fill: "var(--color-kamernet)" },
     { provider: "other2", prices: 0, fill: "var(--color-other2)" },
   ])
   const [totalAveragePrice, setTotalAveragePrice] = useState(0)
@@ -92,8 +92,10 @@ export function AveragePieChart({ responseData }) {
       const fundaAverage = averagePrices(responseData?.funda)
       const papariusAverage = averagePrices(responseData?.paparius)
       const rentolaAverage = averagePrices(responseData?.rentola)
+      const hAnywhereAverage = averagePrices(responseData?.hAnywhere)
+      const kamernetAverage = averagePrices(responseData?.kamernet)
 
-      const averages = [fundaAverage, papariusAverage, rentolaAverage].filter(average => average > 0)
+      const averages = [fundaAverage, papariusAverage, rentolaAverage, hAnywhereAverage, kamernetAverage].filter(average => average > 0)
       const totalAverage = 
         averages.length > 0 ? Math.round(averages.reduce((sum, average) => sum + average, 0) / averages.length) : 0
 
@@ -101,6 +103,8 @@ export function AveragePieChart({ responseData }) {
         { provider: "Funda", prices: fundaAverage, fill: "var(--color-funda)" },
         { provider: "Paparius", prices: papariusAverage, fill: "var(--color-paparius)" },
         { provider: "Rentola", prices: rentolaAverage, fill: "var(--color-rentola)" },
+        { provider: "H.Anywhere", prices: hAnywhereAverage, fill: "var(--color-hAnywhere)" },
+        { provider: "Kamernet", prices: kamernetAverage, fill: "var(--color-kamernet)" },
       ])
       setTotalAveragePrice(totalAverage)
     }
@@ -115,7 +119,7 @@ export function AveragePieChart({ responseData }) {
       <CardContent className="flex-1 pb-0">
         <ChartContainer
           config={chartConfig}
-          className="mx-auto aspect-square max-h-[250px] min-h-[200px]"
+          className="mx-auto aspect-square max-h-52 min-h-[200px]"
         >
           <PieChart>
             <ChartTooltip

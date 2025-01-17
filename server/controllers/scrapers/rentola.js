@@ -4,12 +4,13 @@ const RENTOLA_URL = `https://www.rentola.nl/en/`
 const rentolaScraper = async (city, sortGlobal, minPrice, maxPrice) => {
 
     const browser = await getBrowser()
-
     const page = await browser.newPage()
 
     let data
     let initialUrl
     let rentolaData = []
+
+    if (city === 'den-haag') city = 'the-hague'
 
     function sortRentola(sortingChosen) {
         const options = {

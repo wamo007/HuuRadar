@@ -169,11 +169,11 @@ function SearchPanel({ responseDataChange, loadingStatus }) {
                 placeholder="Enter Maximum Price"
               />
               <div className="flex gap-4 flex-wrap flex-col sm:flex-row justify-center">
-                <Button type="submit" className={`${(animateCount === true) ? '' : 'animate-slideIn8'} w-[120px] text-md`} disabled={loading}>
+                <Button type="submit" className={`${(animateCount === true) ? '' : 'animate-slideIn8'} w-[7.5rem] text-md`} disabled={loading}>
                   {loading && <Loader2 className="animate-spin" />}
                   Search
                 </Button>
-                {(!loading) && (queryData.funda?.length > 0) ? <Button onClick={(e) => saveQuery(e)} className='w-[120px] animate-slideIn10 text-md' type='button'>Notify me!</Button> : ''}
+                {(!loading) && (queryData.funda?.length > 0) ? <Button onClick={(e) => saveQuery(e)} className='w-[7.5rem] animate-slideIn10 text-md' type='button'>Notify me!</Button> : ''}
               </div>
             </>
           ) : (<></>)}

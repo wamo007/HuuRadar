@@ -7,6 +7,8 @@ const transporter = require('../config/nodeMailer')
 const fundaScraper = require('./scrapers/funda')
 const papariusScraper = require('./scrapers/paparius')
 const rentolaScraper = require('./scrapers/rentola')
+const hAnywhereScraper = require('./scrapers/hAnywhere')
+const kamernetScraper = require('./scrapers/kamernet')
 
 const saveQuery = async (req, res) => {
     try {
@@ -84,8 +86,10 @@ const compareQuery = async () => {
             const funda = await fundaScraper(city, radius, sortGlobal, minPrice, maxPrice)
             const paparius = await papariusScraper(city, radius, sortGlobal, minPrice, maxPrice)
             const rentola = await rentolaScraper(city,sortGlobal, minPrice, maxPrice)
+            const hAnywhere = await hAnywhereScraper(city,sortGlobal, minPrice, maxPrice)
+            const kamernet = await kamernetScraper(city,sortGlobal, minPrice, maxPrice)
             
-            const updatedData = [...funda, ...paparius, ...rentola]
+            const updatedData = [...funda, ...paparius, ...rentola, ...hAnywhere, ...kamernet]
 
             const newEntries = updatedData.filter(
                 (newEntry) => !query.queryData.some((oldEntry) => oldEntry.heading === newEntry.heading)

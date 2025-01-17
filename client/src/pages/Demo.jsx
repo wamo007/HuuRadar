@@ -12,23 +12,49 @@ export default function Demo() {
     
     const [responseData, setResponseData] = useState([])
     const [noResults, setNoResults] = useState({
-      paparius: false,
-      rentola: false,
       hAnywhere: false,
-      kamernet: false
+      kamernet: false,
+      paparius: false,
+      huurwoningen: false,
+      rentola: false
     })
     const [visibleItems, setVisibleItems] = useState({
       funda: 5,
-      paparius: 5,
-      rentola: 5,
       hAnywhere: 5,
-      kamernet: 5
+      kamernet: 5,
+      paparius: 5,
+      huurwoningen: 5,
+      rentola: 5
     })
     const [loadingStatus, setLoadingStatus] = useState(false)
     const [error, setError] = useState(null)
   
     useEffect(() => {
-      if ((responseData.funda?.length || responseData.paparius?.length) && !responseData.paparius?.length) {
+      if ((responseData.funda?.length) && !responseData.hAnywhere?.length) {
+        const hAnywhereTimer = setTimeout(() => {
+          setNoResults({ ...noResults, hAnywhere: true })
+        }, 30000)
+  
+        return () => clearTimeout(hAnywhereTimer)
+      } else {
+        setNoResults({ ...noResults, hAnywhere: false })
+      }
+    }, [responseData.hAnywhere])
+
+    useEffect(() => {
+      if ((responseData.funda?.length || responseData.hAnywhere?.length) && !responseData.kamernet?.length) {
+        const kamernetTimer = setTimeout(() => {
+          setNoResults({ ...noResults, kamernet: true })
+        }, 30000)
+  
+        return () => clearTimeout(kamernetTimer)
+      } else {
+        setNoResults({ ...noResults, kamernet: false })
+      }
+    }, [responseData.kamernet])
+
+    useEffect(() => {
+      if ((responseData.hAnywhere?.length || responseData.kamernet?.length) && !responseData.paparius?.length) {
         const papariusTimer = setTimeout(() => {
           setNoResults({ ...noResults, paparius: true })
         }, 30000)
@@ -38,42 +64,30 @@ export default function Demo() {
         setNoResults({ ...noResults, paparius: false })
       }
     }, [responseData.paparius])
+    
+    useEffect(() => {
+      if ((responseData.kamernet?.length || responseData.paparius?.length) && !responseData.huurwoningen?.length) {
+        const huurwoningenTimer = setTimeout(() => {
+          setNoResults({ ...noResults, huurwoningen: true })
+        }, 30000)
+  
+        return () => clearTimeout(huurwoningenTimer)
+      } else {
+        setNoResults({ ...noResults, huurwoningen: false })
+      }
+    }, [responseData.huurwoningen])
   
     useEffect(() => {
-      if ((responseData.funda?.length || responseData.paparius?.length) && !responseData.rentola?.length && !responseData.hAnywhere?.length) {
+      if ((responseData.paparius?.length || responseData.huurwoningen?.length) && !responseData.rentola?.length) {
         const rentolaTimer = setTimeout(() => {
           setNoResults({ ...noResults, rentola: true })
-        }, 40000)
+        }, 30000)
   
         return () => clearTimeout(rentolaTimer)
       } else {
         setNoResults({ ...noResults, rentola: false })
       }
     }, [responseData.rentola])
-    
-    useEffect(() => {
-      if ((responseData.funda?.length || responseData.paparius?.length || !responseData.rentola?.length) && !responseData.hAnywhere?.length) {
-        const hAnywhereTimer = setTimeout(() => {
-          setNoResults({ ...noResults, hAnywhere: true })
-        }, 50000)
-  
-        return () => clearTimeout(hAnywhereTimer)
-      } else {
-        setNoResults({ ...noResults, hAnywhere: false })
-      }
-    }, [responseData.hAnywhere])
-    
-    useEffect(() => {
-      if ((responseData.funda?.length || responseData.paparius?.length || !responseData.rentola?.length || !responseData.hAnywhere?.length) && !responseData.kamernet?.length) {
-        const kamernetTimer = setTimeout(() => {
-          setNoResults({ ...noResults, kamernet: true })
-        }, 50000)
-  
-        return () => clearTimeout(kamernetTimer)
-      } else {
-        setNoResults({ ...noResults, kamernet: false })
-      }
-    }, [responseData.kamernet])
   
     const handleResponseDataChange = useCallback((data, err) => {
       setResponseData(data)
@@ -125,7 +139,7 @@ export default function Demo() {
           </div>
           <div className="flex md:items-center w-full overflow-hidden" id='Demo'>
             <div className='w-full text-left mx-auto py-4 sm:px-2 md:px-2 lg:px-10 xl:px-14 2xl:px-30'>
-              {(responseData.funda || responseData.paparius || responseData.rentola || responseData.hAnywhere) ? (
+              {(responseData.funda || responseData.paparius || responseData.rentola || responseData.hAnywhere || responseData.kamernet) ? (
                 <div className='*:grid *:grid-cols-[repeat(auto-fill,_204px)] max-[408px]:*:grid-cols-[repeat(auto-fill,_180px)] *:justify-center *:justify-items-center *:items-center lg:*:gap-20 md:*:gap-16'>
                   {(responseData.funda?.length > 0 ) ? (
                     <div className="fundaResults transition-all *:transition-all *:ease-in">
@@ -150,65 +164,6 @@ export default function Demo() {
                       <h3 className='italic pt-4'>No Results on Funda for the last 3 days...</h3>
                     </>
                   )}
-
-                  {(responseData.paparius?.length > 0) ? (
-                    <>
-                      <hr className='w-3/4 h-1 mx-auto my-8 bg-gray-200 border-0 dark:bg-gray-700 mt-10'/>
-                      <div className="papariusResults transition-all *:transition-all *:ease-in">
-                        <div className="logo place-items-center">
-                          <img src={assets.paparius} alt="Paparius Logo Image" width={120} />
-                          <h3 className='pt-4'>Results on Paparius</h3>
-                        </div>
-                        <Tab className='papariusTab' responseData={responseData.paparius.slice(0, visibleItems.paparius)} />
-                        {responseData.paparius.length > visibleItems.paparius && (
-                          <div className='relative p-3 w-[12.75rem] h-[19rem] bg-white md:rounded-lg md:shadow-2xl max-md:border max-md:border-slate-400 max-[408px]:w-[11.25rem]'>
-                            <PlaceholderTab />
-                            <div className='absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 bg-white/10 backdrop-blur-sm md:rounded-lg border border-white/30 shadow-lg max-[408px]:w-[11.25rem] w-[12.75rem] h-[19rem]'>
-                              <Button className='relative top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 z-10 bg-gray-900' onClick={() => handleSeeMore('paparius')}>
-                                See More...
-                              </Button>
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    </>
-                  ) : (
-                    noResults.paparius && (
-                      <>
-                        <hr className='w-3/4 h-1 mx-auto my-8 bg-gray-200 border-0 dark:bg-gray-700 mt-10'/>
-                        <h3 className='italic pt-4'>No Results on Paparius for the last 3 days...</h3>
-                      </>
-                  ))}
-
-                  {(responseData.rentola?.length > 0 ) ? (
-                    <>
-                      <hr className='w-3/4 h-1 mx-auto my-8 bg-gray-200 border-0 dark:bg-gray-700 mt-10'/>
-                      <div className="rentolaResults transition-all *:transition-all *:ease-in">
-                        <div className="logo place-items-center">
-                          <img src={assets.rentola} alt="Rentola Logo Image" width={120} />
-                          <h3 className='pt-4'>Results on Rentola</h3>
-                        </div>
-                        <Tab className='rentolaTab' responseData={responseData.rentola.slice(0, visibleItems.rentola)} />
-                        {responseData.rentola.length > visibleItems.rentola && (
-                          <div className='relative p-3 w-[12.75rem] h-[19rem] bg-white md:rounded-lg md:shadow-2xl max-md:border max-md:border-slate-400 max-[408px]:w-[11.25rem]'>
-                            <PlaceholderTab />
-                            <div className='absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 bg-white/10 backdrop-blur-sm md:rounded-lg border border-white/30 shadow-lg max-[408px]:w-[11.25rem] w-[12.75rem] h-[19rem]'>
-                              <Button className='relative top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 z-10 bg-gray-900' onClick={() => handleSeeMore('rentola')}>
-                                See More...
-                              </Button>
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    </>
-                  ) : (
-                    noResults.rentola && (
-                    <>
-                      <hr className='w-3/4 h-1 mx-auto my-8 bg-gray-200 border-0 dark:bg-gray-700 mt-10'/>
-                      <h3 className='italic pt-4'>No Results on Rentola for the last 3 days...</h3>
-                    </>
-                    
-                  ))}
 
                   {(responseData.hAnywhere?.length > 0) ? (
                     <>
@@ -267,6 +222,96 @@ export default function Demo() {
                         <h3 className='italic pt-4'>No Results on Kamernet for the last 3 days...</h3>
                       </>
                   ))}
+
+                  {(responseData.paparius?.length > 0) ? (
+                    <>
+                      <hr className='w-3/4 h-1 mx-auto my-8 bg-gray-200 border-0 dark:bg-gray-700 mt-10'/>
+                      <div className="papariusResults transition-all *:transition-all *:ease-in">
+                        <div className="logo place-items-center">
+                          <img src={assets.paparius} alt="Paparius Logo Image" width={120} />
+                          <h3 className='pt-4'>Results on Paparius</h3>
+                        </div>
+                        <Tab className='papariusTab' responseData={responseData.paparius.slice(0, visibleItems.paparius)} />
+                        {responseData.paparius.length > visibleItems.paparius && (
+                          <div className='relative p-3 w-[12.75rem] h-[19rem] bg-white md:rounded-lg md:shadow-2xl max-md:border max-md:border-slate-400 max-[408px]:w-[11.25rem]'>
+                            <PlaceholderTab />
+                            <div className='absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 bg-white/10 backdrop-blur-sm md:rounded-lg border border-white/30 shadow-lg max-[408px]:w-[11.25rem] w-[12.75rem] h-[19rem]'>
+                              <Button className='relative top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 z-10 bg-gray-900' onClick={() => handleSeeMore('paparius')}>
+                                See More...
+                              </Button>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </>
+                  ) : (
+                    noResults.paparius && (
+                      <>
+                        <hr className='w-3/4 h-1 mx-auto my-8 bg-gray-200 border-0 dark:bg-gray-700 mt-10'/>
+                        <h3 className='italic pt-4'>No Results on Paparius for the last 3 days...</h3>
+                      </>
+                  ))}
+
+                  {(responseData.huurwoningen?.length > 0) ? (
+                    <>
+                      <hr className='w-3/4 h-1 mx-auto my-8 bg-gray-200 border-0 dark:bg-gray-700 mt-10'/>
+                      <div className="huurwoningenResults transition-all *:transition-all *:ease-in">
+                        <div className="logo place-items-center">
+                          <img src={assets.huurwoningen} alt="Huurwoningen Logo Image" width={120} />
+                          <h3 className='pt-4'>Results on Huurwoningen</h3>
+                        </div>
+                        <Tab className='huurwoningenTab' responseData={responseData.huurwoningen.slice(0, visibleItems.huurwoningen)} />
+                        {responseData.huurwoningen.length > visibleItems.huurwoningen && (
+                          <div className='relative p-3 w-[12.75rem] h-[19rem] bg-white md:rounded-lg md:shadow-2xl max-md:border max-md:border-slate-400 max-[408px]:w-[11.25rem]'>
+                            <PlaceholderTab />
+                            <div className='absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 bg-white/10 backdrop-blur-sm md:rounded-lg border border-white/30 shadow-lg max-[408px]:w-[11.25rem] w-[12.75rem] h-[19rem]'>
+                              <Button className='relative top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 z-10 bg-gray-900' onClick={() => handleSeeMore('huurwoningen')}>
+                                See More...
+                              </Button>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </>
+                  ) : (
+                    noResults.huurwoningen && (
+                      <>
+                        <hr className='w-3/4 h-1 mx-auto my-8 bg-gray-200 border-0 dark:bg-gray-700 mt-10'/>
+                        <h3 className='italic pt-4'>No Results on Huurwoningen for the last 3 days...</h3>
+                      </>
+                  ))}
+
+                  {(responseData.rentola?.length > 0 ) ? (
+                    <>
+                      <hr className='w-3/4 h-1 mx-auto my-8 bg-gray-200 border-0 dark:bg-gray-700 mt-10'/>
+                      <div className="rentolaResults transition-all *:transition-all *:ease-in">
+                        <div className="logo place-items-center">
+                          <img src={assets.rentola} alt="Rentola Logo Image" width={120} />
+                          <h3 className='pt-4'>Results on Rentola</h3>
+                        </div>
+                        <Tab className='rentolaTab' responseData={responseData.rentola.slice(0, visibleItems.rentola)} />
+                        {responseData.rentola.length > visibleItems.rentola && (
+                          <div className='relative p-3 w-[12.75rem] h-[19rem] bg-white md:rounded-lg md:shadow-2xl max-md:border max-md:border-slate-400 max-[408px]:w-[11.25rem]'>
+                            <PlaceholderTab />
+                            <div className='absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 bg-white/10 backdrop-blur-sm md:rounded-lg border border-white/30 shadow-lg max-[408px]:w-[11.25rem] w-[12.75rem] h-[19rem]'>
+                              <Button className='relative top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 z-10 bg-gray-900' onClick={() => handleSeeMore('rentola')}>
+                                See More...
+                              </Button>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </>
+                  ) : (
+                    noResults.rentola && (
+                    <>
+                      <hr className='w-3/4 h-1 mx-auto my-8 bg-gray-200 border-0 dark:bg-gray-700 mt-10'/>
+                      <h3 className='italic pt-4'>No Results on Rentola for the last 3 days...</h3>
+                    </>
+                    
+                  ))}
+
+                  
                 </div>
               ) : (
                 <></>

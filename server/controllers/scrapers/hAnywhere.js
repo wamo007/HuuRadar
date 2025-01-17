@@ -34,9 +34,23 @@ const hAnywhereScraper = async (city, sortGlobal, minPrice, maxPrice) => {
         initialUrl = `${HOUSING_ANYWHERE_URL}/s/${city}--Netherlands?sorting=${sortHA(sortGlobal)}&categories=shared-rooms%2Cprivate-rooms%2Cstudent-housing&priceMin=${minPrice}00&priceMax=${maxPrice}00`
     }
 
-    await page.goto(initialUrl, {
-        waitUntil: 'domcontentloaded'
-    })
+    try {
+        await page.goto(initialUrl, {
+            waitUntil: 'domcontentloaded',
+            timeout: 30000,
+        })
+    } catch (error) {
+        try {
+            await page.goto(initialUrl, {
+                waitUntil: 'domcontentloaded',
+                timeout: 30000,
+            })
+        } catch (error) {
+            console.error(`Navigation to ${initialUrl} failed:`, err.message);
+            await page.close()
+            return hAnywhereData
+        }
+    }  
 
     let maxPage = await page.evaluate(() => {
         const totalPages = Array.from(document.querySelectorAll('ul.MuiPagination-ul li button'))
@@ -76,13 +90,14 @@ const hAnywhereScraper = async (city, sortGlobal, minPrice, maxPrice) => {
                 }
 
                 return {
+                    provider: 'hAnywhere',
                     link: a.href,
                     img: img.substring(0, img.length - 20),
                     heading: `${heading.substring(0, heading.length - 1)} with ${housemates.substring(0, housemates.length - 1)} ${dateAvailable.toLowerCase()}`,
                     address: address.substring(0, address.length - 1),
                     price: `${filterPrice} p/mo ${bills}`,
                     size: size.substring(0, size.length - 1),
-                    seller,
+                    seller: `Seller: ${seller}`,
                     sellerLink: a.href
                 }
             })

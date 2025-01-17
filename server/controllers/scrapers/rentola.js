@@ -34,13 +34,23 @@ const rentolaScraper = async (city, sortGlobal, minPrice, maxPrice) => {
         initialUrl = `${RENTOLA_URL}for-rent?location=${city}&order=${sortRentola(sortGlobal)}&rent=${minPrice}-${maxPrice}`
     }
 
-    await page.goto(initialUrl, {
-        waitUntil: 'domcontentloaded',
-        timeout: 30000,
-    }).catch((err) => {
-        console.error(`Navigation to ${initialUrl} failed:`, err.message)
-        return rentolaData
-    })
+    try {
+        await page.goto(initialUrl, {
+            waitUntil: 'domcontentloaded',
+            timeout: 30000,
+        })
+    } catch (error) {
+        try {
+            await page.goto(initialUrl, {
+                waitUntil: 'domcontentloaded',
+                timeout: 30000,
+            })
+        } catch (error) {
+            console.error(`Navigation to ${initialUrl} failed:`, err.message);
+            await page.close()
+            return rentolaData
+        }
+    }  
 
     await autoScroll(page)
     

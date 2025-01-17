@@ -34,13 +34,23 @@ const fundaScraper = async (city, radius, sortGlobal, minPrice, maxPrice) => {
         initialUrl = `${FUNDA_URL}zoeken/huur?selected_area=%5B"${city.toLowerCase()},${radius}km"%5D&sort="${sortFunda(sortGlobal)}"&publication_date="3"&price="${minPrice}-${maxPrice}"&object_type=%5B"apartment","house"%5D`
     } 
 
-    await page.goto(initialUrl, {
-        waitUntil: 'networkidle2',
-        timeout: 30000,
-        }).catch((err) => {
-            console.error(`Navigation to ${initialUrl} failed:`, err.message);
-            return []
+    try {
+        await page.goto(initialUrl, {
+            waitUntil: 'domcontentloaded',
+            timeout: 30000,
         })
+    } catch (error) {
+        try {
+            await page.goto(initialUrl, {
+                waitUntil: 'domcontentloaded',
+                timeout: 30000,
+            })
+        } catch (error) {
+            console.error(`Navigation to ${initialUrl} failed:`, err.message);
+            await page.close()
+            return fundaData
+        }
+    }  
 
     let maxPage = await page.evaluate(() => {
         const totalPages = Array.from(document.querySelectorAll('a[href*="?page="]'))
@@ -125,7 +135,7 @@ const fundaScraper = async (city, radius, sortGlobal, minPrice, maxPrice) => {
                             address,
                             price: `${filterPrice.substring(0, filterPrice.length - 6)} p/mo`,
                             size,
-                            seller,
+                            seller: `Seller: ${seller}`,
                             sellerLink
                         }
                     })

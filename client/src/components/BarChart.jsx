@@ -30,11 +30,11 @@ export default function AverageBarChart({ responseData }) {
 
   const [chartData, setChartData] = useState([
     { provider: "Funda", desktop: 0 },
-    { provider: "Paparius", desktop: 0 },
-    { provider: "Rentola", desktop: 0 },
     { provider: "H.Anywhere", desktop: 0 },
     { provider: "Kamernet", desktop: 0 },
-    { provider: "June", desktop: 0 },
+    { provider: "Paparius", desktop: 0 },
+    { provider: "Huurwoningen", desktop: 0 },
+    { provider: "Rentola", desktop: 0 },
   ])
 
   const averagePrices = (provider) => {
@@ -70,13 +70,15 @@ export default function AverageBarChart({ responseData }) {
       const rentolaAverage = averagePrices(responseData?.rentola)
       const hAnywhereAverage = averagePrices(responseData?.hAnywhere)
       const kamernetAverage = averagePrices(responseData?.kamernet)
+      const huurwoningenAverage = averagePrices(responseData?.huurwoningen)
 
       setChartData([
         { provider: "Funda", desktop: fundaAverage },
-        { provider: "Paparius", desktop: papariusAverage },
-        { provider: "Rentola", desktop: rentolaAverage },
         { provider: "H.Anywhere", desktop: hAnywhereAverage },
         { provider: "Kamernet", desktop: kamernetAverage },
+        { provider: "Paparius", desktop: papariusAverage },
+        { provider: "Huurwoningen", desktop: huurwoningenAverage },
+        { provider: "Rentola", desktop: rentolaAverage },
       ])
     }
   }, [responseData])
@@ -101,7 +103,7 @@ export default function AverageBarChart({ responseData }) {
               tickLine={false}
               tickMargin={10}
               axisLine={false}
-              tickFormatter={(value) => value}
+              tickFormatter={(value) => value.slice(0, 8)}
             />
             <ChartTooltip
               cursor={false}

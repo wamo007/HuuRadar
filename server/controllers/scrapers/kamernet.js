@@ -49,9 +49,23 @@ const kamernetScraper  = async (city, radius, sortGlobal, maxPrice) => {
 
     initialUrl = `${KAMERNET_URL}/en/for-rent/properties-${city}?searchview=1&maxRent=${maxPriceKamernet(maxPrice)}&radius=${radiusKamernet(radius)}&pageNo=1&sort=${sortKamernet(sortGlobal)}`
 
-    await page.goto(initialUrl, {
-        waitUntil: 'domcontentloaded'
-    })
+    try {
+        await page.goto(initialUrl, {
+            waitUntil: 'domcontentloaded',
+            timeout: 30000,
+        })
+    } catch (error) {
+        try {
+            await page.goto(initialUrl, {
+                waitUntil: 'domcontentloaded',
+                timeout: 30000,
+            })
+        } catch (error) {
+            console.error(`Navigation to ${initialUrl} failed:`, err.message);
+            await page.close()
+            return kamernetData
+        }
+    }  
     
     while (true) {
 
@@ -79,6 +93,7 @@ const kamernetScraper  = async (city, radius, sortGlobal, maxPrice) => {
                 let filterPrice = `${price.substring(0, 1)} ${price.substring(1, price.length)}`
 
                 return {
+                    provider: 'kamernet',
                     link: a.href,
                     img,
                     heading: `${propertyType}, ${furnished}`,

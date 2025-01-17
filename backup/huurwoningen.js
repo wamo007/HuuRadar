@@ -1,63 +1,71 @@
-const { getBrowser } = require('./masterScraper')
-const PAPARIUS_URL = `https://www.pararius.com`
+const puppeteer = require('puppeteer-extra')
 
-const papariusScraper = async (city, radius, sortGlobal, minPrice, maxPrice) => {
+const { DEFAULT_INTERCEPT_RESOLUTION_PRIORITY } = require('puppeteer')
+const AdblockerPlugin = require('puppeteer-extra-plugin-adblocker')
 
-    const browser = await getBrowser()
+const HUURWONINGEN_URL = 'https://www.huurwoningen.nl'
 
-    const page = await browser.newPage()
+puppeteer.use(
+  AdblockerPlugin({
+    interceptResolutionPriority: DEFAULT_INTERCEPT_RESOLUTION_PRIORITY,
+    blockTrackers: true
+  })
+)
+
+let browser
+let page
+
+const initialSetup = async () => {
+    browser = await puppeteer.launch({ 
+        headless: false,
+        args: ["--disable-notifications"],
+    })
+
+    page = await browser.newPage()
+
+    await page.goto(HUURWONINGEN_URL, { waitUntil: 'networkidle2' })
+
+}
+
+initialSetup()
+
+const huurwoningenScraper  = async (city, sortGlobal, minPrice, maxPrice) => {
 
     let data
-    let radiusPaparius
     let initialUrl
-    let papariusData = []
-    let currentPage = 1
+    let huurwoningenData = []
 
-    function sortPaparius(sortingChosen) {
+    function sortHuurwoningen(sortingChosen) {
         const options = {
-            'new': '',
-            'old': '',
-            'cheap': '/sort-price-low',
-            'pricy': '/sort-price-high',
+            'new': 'published_at&direction=desc',
+            'old': 'published_at&direction=desc',
+            'cheap': 'price&direction=asc',
+            'pricy': 'price&direction=desc',
         }
         return options[sortingChosen.toLowerCase()] ?? 'Sorting type unknown... How???'
     }
 
-    if (radius === '0') {
-        radiusPaparius = ''
-    } else {
-        radiusPaparius = `/radius-${radius}`
-    }
-
     if (!minPrice && !maxPrice) {
-        initialUrl = `${PAPARIUS_URL}/apartments/${city.toLowerCase()}${radiusPaparius}${sortPaparius(sortGlobal)}/since-3`
+        minPrice = '0'
+        maxPrice = '60000'
+        initialUrl = `${HUURWONINGEN_URL}/in/${city}/?price=${minPrice}-${maxPrice}&since=3&sort=${sortHuurwoningen(sortGlobal)}`
     } else if (!minPrice) {
         minPrice = '0'
-        initialUrl = `${PAPARIUS_URL}/apartments/${city.toLowerCase()}/${minPrice}-${maxPrice}/${radiusPaparius}${sortPaparius(sortGlobal)}/since-3`
+        initialUrl = `${HUURWONINGEN_URL}/in/${city}/?price=${minPrice}-${maxPrice}&since=3&sort=${sortHuurwoningen(sortGlobal)}`
     } else if (!maxPrice || maxPrice === 0) {
         maxPrice = '60000'
-        initialUrl = `${PAPARIUS_URL}/apartments/${city.toLowerCase()}/${minPrice}-${maxPrice}/${radiusPaparius}${sortPaparius(sortGlobal)}/since-3`
+        initialUrl = `${HUURWONINGEN_URL}/in/${city}/?price=${minPrice}-${maxPrice}&since=3&sort=${sortHuurwoningen(sortGlobal)}`
     } else {
-        initialUrl = `${PAPARIUS_URL}/apartments/${city.toLowerCase()}/${minPrice}-${maxPrice}/${radiusPaparius}${sortPaparius(sortGlobal)}/since-3`
+        initialUrl = `${HUURWONINGEN_URL}/in/${city}/?price=${minPrice}-${maxPrice}&since=3&sort=${sortHuurwoningen(sortGlobal)}`
     }
-
-    try {
-        await page.goto(initialUrl, {
-            waitUntil: 'domcontentloaded',
-            timeout: 30000,
-        })
-    } catch (error) {
-        try {
-            await page.goto(initialUrl, {
-                waitUntil: 'domcontentloaded',
-                timeout: 30000,
-            })
-        } catch (error) {
+    
+    await page.goto(initialUrl, {
+        waitUntil: 'domcontentloaded',
+        timeout: 30000,
+        }).catch((err) => {
             console.error(`Navigation to ${initialUrl} failed:`, err.message);
-            await page.close()
-            return papariusData
-        }
-    }  
+            return []
+        })
 
     let maxPage = await page.evaluate(() => {
         const totalPages = Array.from(document.querySelectorAll('ul.pagination__list li a'))
@@ -69,7 +77,7 @@ const papariusScraper = async (city, radius, sortGlobal, minPrice, maxPrice) => 
     })
         
     while (currentPage <= maxPage) {
-        const changingUrl = `${initialUrl}/page-${currentPage}`
+        const changingUrl = `${initialUrl}&page=${currentPage}`
         await page.goto(changingUrl, {
             waitUntil: 'domcontentloaded'
         })
@@ -86,8 +94,6 @@ const papariusScraper = async (city, radius, sortGlobal, minPrice, maxPrice) => 
                 const address = section.querySelector('div[class^="listing-search-item__sub-title"]').textContent.trim()
                 const price = section.querySelector('div.listing-search-item__price').textContent.trim()
                 const size = section.querySelector('li.illustrated-features__item.illustrated-features__item--surface-area')?.textContent.trim() || ''
-                const seller = section.querySelector('div.listing-search-item__info a')?.textContent.trim() || ''
-                const sellerLink = section.querySelector('div.listing-search-item__info a')?.getAttribute('href') || ''
 
                 let filterPrice = ''
 
@@ -98,24 +104,24 @@ const papariusScraper = async (city, radius, sortGlobal, minPrice, maxPrice) => 
                 }
 
                 return {
-                    provider: 'paparius',
-                    link: `https://www.pararius.com${link}`,
+                    provider: 'huurwoningen',
+                    link: `${HUURWONINGEN_URL}${link}`,
                     img: img.substring(0, img.length - 20),
                     heading,
                     address,
                     price: filterPrice,
                     size,
-                    seller: `Seller: ${seller}`,
-                    sellerLink: `https://www.pararius.com${sellerLink}`
+                    seller: 'No info',
+                    sellerLink: `${HUURWONINGEN_URL}${link}`
                 }
             })
         })
 
-        papariusData.push(...data)
+        huurwoningenData.push(...data)
         currentPage++
     }
     await page.close()
-    return papariusData
+    return huurwoningenData
 }
 
 async function autoScroll(page) {
@@ -137,4 +143,4 @@ async function autoScroll(page) {
     })
 }
 
-module.exports = papariusScraper
+module.exports = huurwoningenScraper

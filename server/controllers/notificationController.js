@@ -9,6 +9,7 @@ const papariusScraper = require('./scrapers/paparius')
 const rentolaScraper = require('./scrapers/rentola')
 const hAnywhereScraper = require('./scrapers/hAnywhere')
 const kamernetScraper = require('./scrapers/kamernet')
+const huurwoningenScraper = require('./scrapers/huurwoningen')
 
 const saveQuery = async (req, res) => {
     try {
@@ -84,12 +85,13 @@ const compareQuery = async () => {
             const { city, radius, sortGlobal, minPrice, maxPrice } = query
 
             const funda = await fundaScraper(city, radius, sortGlobal, minPrice, maxPrice)
-            const paparius = await papariusScraper(city, radius, sortGlobal, minPrice, maxPrice)
-            const rentola = await rentolaScraper(city,sortGlobal, minPrice, maxPrice)
             const hAnywhere = await hAnywhereScraper(city,sortGlobal, minPrice, maxPrice)
             const kamernet = await kamernetScraper(city,sortGlobal, minPrice, maxPrice)
+            const paparius = await papariusScraper(city, radius, sortGlobal, minPrice, maxPrice)
+            const huurwoningen = await huurwoningenScraper(city, sortGlobal, minPrice, maxPrice)
+            const rentola = await rentolaScraper(city,sortGlobal, minPrice, maxPrice)
             
-            const updatedData = [...funda, ...paparius, ...rentola, ...hAnywhere, ...kamernet]
+            const updatedData = [...funda, ...hAnywhere, ...kamernet, ...paparius, ...huurwoningen, ...rentola]
 
             const newEntries = updatedData.filter(
                 (newEntry) => !query.queryData.some((oldEntry) => oldEntry.heading === newEntry.heading)

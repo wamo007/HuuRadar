@@ -20,7 +20,7 @@ function Tab({ responseData }) {
             alt="Item Image" className='w-[11.25rem] h-[7.5rem] object-cover m-auto rounded-lg' />
           </a>
           <div className='pt-1 h-[160px] flex flex-col justify-between'>
-            <a href={tab.link}>
+            <a href={tab.link} target="_blank" >
               <h2 className='line-clamp-2 font-bold'>{tab.heading || 'Unknown Name'}</h2>
               <h3 className='line-clamp-1 font-medium'>{tab.address || 'Unknown Address'}</h3>
             </a>
@@ -28,7 +28,7 @@ function Tab({ responseData }) {
               <h3>{tab.price || 'Unknown Price'}</h3>
               <h4>Size: {tab.size || 'N/A'}</h4>
               <a href={tab.sellerLink} target="_blank" className='line-clamp-1'>
-                Seller: {tab.seller || 'Unknown Seller'}
+                {tab.seller || 'Unknown Seller'}
               </a>
             </div>
           </div>

@@ -9,6 +9,7 @@ import paparius from './paparius.png'
 import rentola from './rentola.png'
 import hAnywhere from './hAnywhere.png'
 import kamernet from './kamernet.png'
+import huurwoningen from './huurwoningen.png'
 import placeholder from './placeholder.png'
 import moreplace from './morePlaceHolder.jpg'
 import houses from './houses.png'
@@ -32,6 +33,7 @@ export const assets = {
     rentola,
     hAnywhere,
     kamernet,
+    huurwoningen,
     placeholder,
     moreplace,
     houses,

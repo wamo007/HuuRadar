@@ -10,6 +10,10 @@ const querySchema = new Schema({
     type: String,
     required: true
   },
+  providers: {
+    type: Array,
+    required: true
+  },
   city: {
     type: String,
     required: true

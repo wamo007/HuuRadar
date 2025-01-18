@@ -11,15 +11,44 @@ import {
 } from "@/components/ui/select"
 import { toast } from "react-toastify"
 import { useContext, useState } from 'react'
+import { Checkbox } from "@/components/ui/checkbox"
 import { Loader2 } from "lucide-react"
 import { ComboboxCity } from "./ui/combobox"
 import { userContent } from "@/context/UserContext"
 import axios from "axios"
 
+const providers = [
+  {
+    id: "funda",
+    label: "Funda",
+  },
+  {
+    id: "hAnywhere",
+    label: "Housing Anywhere",
+  },
+  {
+    id: "kamernet",
+    label: "Kamernet",
+  },
+  {
+    id: "paparius",
+    label: "Paparius",
+  },
+  {
+    id: "huurwoningen",
+    label: "Huurwoningen",
+  },
+  {
+    id: "rentola",
+    label: "Rentola",
+  },
+];
+
 function SearchPanel({ responseDataChange, loadingStatus }) {
   const [city, setCity] = useState('')
   const [radius, setRadius] = useState('0')
   const [sortGlobal, setSortGlobal] = useState('new')
+  const [selectedProviders, setSelectedProviders] = useState(providers.map((provider) => provider.id))
   const [minPrice, setMinPrice] = useState('')
   const [maxPrice, setMaxPrice] = useState('')
   const [queryData, setQueryData] = useState([])
@@ -27,6 +56,14 @@ function SearchPanel({ responseDataChange, loadingStatus }) {
   const [animateCount, setAnimateCount] = useState(false)
 
   const { backendUrl, loggedIn, userData } = useContext(userContent)
+
+  const handleProviderChange = (providerId, checked) => {
+    if (checked) {
+      setSelectedProviders((prev) => [...prev, providerId])
+    } else {
+      setSelectedProviders((prev) => prev.filter((id) => id !== providerId))
+    }
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -41,7 +78,7 @@ function SearchPanel({ responseDataChange, loadingStatus }) {
       const response = await fetch(backendUrl + '/api/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ city, radius, sortGlobal, minPrice, maxPrice }),
+        body: JSON.stringify({ city, radius, selectedProviders, sortGlobal, minPrice, maxPrice }),
       })
       
       const reader = response.body.getReader()
@@ -98,7 +135,7 @@ function SearchPanel({ responseDataChange, loadingStatus }) {
         const name = userData.name
         const email = userData.email
         const { data } = await axios.post(backendUrl + '/api/save-query', 
-          { name, email, city, radius, sortGlobal, minPrice, maxPrice, responseData: JSON.stringify(queryData) })
+          { name, email, city, radius, selectedProviders, sortGlobal, minPrice, maxPrice, responseData: JSON.stringify(queryData) })
 
           if (data.success) {
             toast.success(data.message)
@@ -115,7 +152,7 @@ function SearchPanel({ responseDataChange, loadingStatus }) {
 
   return (
     <>
-      <div className="">
+      <div>
         <form onSubmit={handleSubmit} className="flex flex-wrap flex-col sm:flex-row gap-4 justify-center md:justify-start items-center animate-slideIn4">
 
           <ComboboxCity selectedCity={city} onCityChange={setCity}/>
@@ -137,21 +174,39 @@ function SearchPanel({ responseDataChange, loadingStatus }) {
                 </SelectContent>
               </Select>
           
-              <Select name="sortDrop" id="sortDrop" onValueChange={setSortGlobal}>
+              {/* <Select name="sortDrop" id="sortDrop" onValueChange={setSortGlobal}> */}
+              <Select>
                 <SelectTrigger className="w-40 animate-slideIn5 text-md">
-                  <SelectValue placeholder="Order" />
+                  <SelectValue placeholder="Providers" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectGroup>
-                  <SelectLabel>Order</SelectLabel>
-                    <SelectItem value="new">Newest First</SelectItem>
+                  <SelectLabel>Providers</SelectLabel>
+                    {/* <SelectItem value="new">Newest First</SelectItem>
                     <SelectItem value="old">Oldest First</SelectItem>
                     <SelectItem value="cheap">Cheapest First</SelectItem>
-                    <SelectItem value="pricy">Priciest First</SelectItem>
+                    <SelectItem value="pricy">Priciest First</SelectItem> */}
+                    <div className="" >
+                      {providers.map((provider, index) => (
+                        <div key={index} className="flex items-center space-x-2 py-2.5">
+                          <Checkbox 
+                            id={provider.id} 
+                            checked={selectedProviders.includes(provider.id)}
+                            onCheckedChange={(checked) => handleProviderChange(provider.id, checked)}
+                          />
+                          <label
+                            htmlFor={provider.id}
+                            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                          >
+                            {provider.label}
+                          </label>
+                        </div>
+                      ))}
+                    </div>
                   </SelectGroup>
                 </SelectContent>
               </Select>
-              
+
               <Input
                 type="number"
                 className="max-w-48 animate-slideIn6 md:text-md"
@@ -173,7 +228,7 @@ function SearchPanel({ responseDataChange, loadingStatus }) {
                   {loading && <Loader2 className="animate-spin" />}
                   Search
                 </Button>
-                {(!loading) && (queryData.funda?.length > 0) ? <Button onClick={(e) => saveQuery(e)} className='w-[7.5rem] animate-slideIn10 text-md' type='button'>Notify me!</Button> : ''}
+                {(!loading) && (Object.keys(queryData).length > 0) ? <Button onClick={(e) => saveQuery(e)} className='w-[7.5rem] animate-slideIn10 text-md' type='button'>Notify me!</Button> : ''}
               </div>
             </>
           ) : (<></>)}

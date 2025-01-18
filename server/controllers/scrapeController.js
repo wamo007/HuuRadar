@@ -8,6 +8,7 @@ const huurwoningenScraper = require('./scrapers/huurwoningen')
 const scrapeController = async (req, res) => {
     const city = req.body.city
     const radius = req.body.radius
+    const selectedProviders = req.body.selectedProviders
     const sortGlobal = req.body.sortGlobal
     const minPrice = req.body.minPrice
     const maxPrice = req.body.maxPrice
@@ -17,31 +18,27 @@ const scrapeController = async (req, res) => {
         .send({ error: 'Please, provide information about the city.' })
     }
 
-    console.log(`Processing the request for ${city}, ${radius}, ${sortGlobal}, ${minPrice} - ${maxPrice}. Time: ${new Date()}`)
+    const scrapers = {
+        funda: fundaScraper,
+        hAnywhere: hAnywhereScraper,
+        paparius: papariusScraper,
+        rentola: rentolaScraper,
+        kamernet: kamernetScraper,
+        huurwoningen: huurwoningenScraper,
+    }
+
+    console.log(`Processing the request for ${city}, ${radius} km, ${selectedProviders}, ${minPrice} - ${maxPrice}. Time: ${new Date()}`)
 
     res.setHeader('Content-Type', 'application/json')
 
     try {
-        const funda = await fundaScraper(city, radius, sortGlobal, minPrice, maxPrice)
-        res.write(JSON.stringify({ funda }) + '\n')
-        
-        const hAnywhere = await hAnywhereScraper(city, sortGlobal, minPrice, maxPrice)
-        res.write(JSON.stringify({ hAnywhere }) + '\n')
-        
-        const kamernet = await kamernetScraper(city, radius, sortGlobal, maxPrice)
-        res.write(JSON.stringify({ kamernet }) + '\n')
-
-        const paparius = await papariusScraper(city, radius, sortGlobal, minPrice, maxPrice)
-        res.write(JSON.stringify({ paparius }) + '\n')
-
-        const huurwoningen = await huurwoningenScraper(city, sortGlobal, minPrice, maxPrice)
-        res.write(JSON.stringify({ huurwoningen }) + '\n')
-
-        const rentola = await rentolaScraper(city, sortGlobal, minPrice, maxPrice)
-        res.write(JSON.stringify({ rentola }) + '\n')
+        for (const providerId of selectedProviders) {
+            const scraper = scrapers[providerId]
+            const data = await scraper(city, radius, sortGlobal, minPrice, maxPrice)
+            res.write(JSON.stringify({ [providerId]: data }) + '\n')
+        }
 
         res.end()
-        
 
         console.log(`The request for ${city} has been completed on ${new Date()}`)
     } catch (error) {

@@ -13,7 +13,7 @@ const huurwoningenScraper = require('./scrapers/huurwoningen')
 
 const saveQuery = async (req, res) => {
     try {
-        const { name, email, city, radius, sortGlobal, minPrice, maxPrice, responseData } = req.body
+        const { name, email, city, radius, selectedProviders, sortGlobal, minPrice, maxPrice, responseData } = req.body
         
         if (!city || !responseData) {
             return res.json({
@@ -56,6 +56,7 @@ const saveQuery = async (req, res) => {
         const query = new Query({
             name,
             email,
+            providers: selectedProviders,
             city,
             radius,
             sortGlobal,
@@ -77,21 +78,28 @@ const saveQuery = async (req, res) => {
     }
 }
 
+const scrapers = {
+    funda: fundaScraper,
+    hAnywhere: hAnywhereScraper,
+    paparius: papariusScraper,
+    rentola: rentolaScraper,
+    kamernet: kamernetScraper,
+    huurwoningen: huurwoningenScraper,
+}
+
 const compareQuery = async () => {
     try{
         const queries = await Query.find({})
 
         for (const query of queries) {
-            const { city, radius, sortGlobal, minPrice, maxPrice } = query
-
-            const funda = await fundaScraper(city, radius, sortGlobal, minPrice, maxPrice)
-            const hAnywhere = await hAnywhereScraper(city,sortGlobal, minPrice, maxPrice)
-            const kamernet = await kamernetScraper(city,sortGlobal, minPrice, maxPrice)
-            const paparius = await papariusScraper(city, radius, sortGlobal, minPrice, maxPrice)
-            const huurwoningen = await huurwoningenScraper(city, sortGlobal, minPrice, maxPrice)
-            const rentola = await rentolaScraper(city,sortGlobal, minPrice, maxPrice)
+            const { city, radius, providers, sortGlobal, minPrice, maxPrice } = query
+            let updatedData = []
             
-            const updatedData = [...funda, ...hAnywhere, ...kamernet, ...paparius, ...huurwoningen, ...rentola]
+            for (const providerId of providers) {
+                const scraper = scrapers[providerId]
+                const data = await scraper(city, radius, sortGlobal, minPrice, maxPrice)
+                updatedData = [...updatedData, ...data]
+            }
 
             const newEntries = updatedData.filter(
                 (newEntry) => !query.queryData.some((oldEntry) => oldEntry.heading === newEntry.heading)
@@ -198,6 +206,6 @@ const compareQuery = async () => {
 
 // compareQuery()
 
-// cron.schedule('*/15 * * * *', compareQuery)
+cron.schedule('*/15 * * * *', compareQuery)
 
 module.exports = saveQuery

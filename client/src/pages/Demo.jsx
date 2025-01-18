@@ -1,5 +1,5 @@
 import { assets } from '../assets/assets'
-import { useState, useCallback, useEffect, useContext } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import Tab from '../components/Tab.jsx'
 import SearchPanel from '../components/Search.jsx'
 import Nav from '@/components/Nav'
@@ -7,11 +7,13 @@ import { Button } from '@/components/ui/button'
 import PlaceholderTab from '@/components/PlaceholderTab'
 import AverageBarChart from '@/components/BarChart'
 import { AveragePieChart } from '@/components/PieChart'
+import Checkmark from '@/components/ui/checkmark'
 
 export default function Demo() {
     
     const [responseData, setResponseData] = useState([])
     const [noResults, setNoResults] = useState({
+      funda: false,
       hAnywhere: false,
       kamernet: false,
       paparius: false,
@@ -29,6 +31,18 @@ export default function Demo() {
     const [loadingStatus, setLoadingStatus] = useState(false)
     const [error, setError] = useState(null)
   
+    useEffect(() => {
+      if ((responseData.hAnywhere?.length) && !responseData.funda?.length) {
+        const fundaTimer = setTimeout(() => {
+          setNoResults({ ...noResults, funda: true })
+        }, 30000)
+  
+        return () => clearTimeout(fundaTimer)
+      } else {
+        setNoResults({ ...noResults, funda: false })
+      }
+    }, [responseData.funda])
+
     useEffect(() => {
       if ((responseData.funda?.length) && !responseData.hAnywhere?.length) {
         const hAnywhereTimer = setTimeout(() => {
@@ -109,17 +123,23 @@ export default function Demo() {
             {(responseData.funda || responseData.paparius || responseData.rentola || responseData.hAnywhere || responseData.kamernet) ? (
               <>
                 <AverageBarChart responseData={responseData} />
-                <div className="flex py-14 px-1 mx-auto">
+                <div className="flex flex-col items-center justify-between px-1 mx-auto min-h-[250px] max-h-52 py-5">
                   {loadingStatus ? (
-                    <div className="w-full text-xl sm:text-2xl md:text-base xl:text-2xl tracking-wider font-semibold text-center 
-                      whitespace-nowrap overflow-hidden border-r-2 border-r-[rgba(255,255,255,.75)] animate-typewriterBlinkCursor">
-                      Loading the results...
-                    </div>
+                    <>
+                      <img src={assets.loadingBuilding} width={180} alt="loading gif" className='w-180' />
+                      <div className="w-full text-xl sm:text-2xl md:text-base xl:text-2xl tracking-wider font-semibold text-center 
+                        whitespace-nowrap overflow-hidden border-r-2 border-r-[rgba(255,255,255,.75)] animate-typewriterBlinkCursor">
+                        Loading the results...
+                      </div>
+                    </>
                   ) : (
-                    <div className="w-full text-xl sm:text-2xl md:text-base xl:text-2xl tracking-wider font-semibold text-center 
-                      whitespace-nowrap overflow-hidden border-r-2 border-r-[rgba(255,255,255,.75)] animate-typewriterBlinkCursor">
-                      Done! Check them out.
-                    </div>
+                    <>
+                      <Checkmark />
+                      <div className="w-full text-xl sm:text-2xl md:text-base xl:text-2xl tracking-wider font-semibold text-center 
+                        whitespace-nowrap overflow-hidden border-r-2 border-r-[rgba(255,255,255,.75)] animate-typewriterBlinkCursor">
+                        Done! Check them out.
+                      </div>
+                    </>
                   )}
                 </div>
                 <AveragePieChart responseData={responseData} />

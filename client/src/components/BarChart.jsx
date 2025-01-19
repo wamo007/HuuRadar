@@ -84,13 +84,13 @@ export default function AverageBarChart({ responseData }) {
   }, [responseData])
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Bar Chart - Average Prices</CardTitle>
+    <Card className="flex flex-col">
+      <CardHeader className="px-2">
+        <CardTitle>Provider's Average Price</CardTitle>
         <CardDescription>Top 6 providers</CardDescription>
       </CardHeader>
-      <CardContent>
-        <ChartContainer config={chartConfig} className="min-h-[200px] max-h-52 w-full">
+      <CardContent className="flex-1 pb-0">
+        <ChartContainer config={chartConfig} className="min-h-[10.875rem] max-h-52 w-full">
           <BarChart
             data={chartData}
             margin={{
@@ -103,7 +103,7 @@ export default function AverageBarChart({ responseData }) {
               tickLine={false}
               tickMargin={10}
               axisLine={false}
-              tickFormatter={(value) => value.slice(0, 8)}
+              tickFormatter={(value) => value.slice(0, 7)}
             />
             <ChartTooltip
               cursor={false}

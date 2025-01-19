@@ -68,7 +68,7 @@ export default {
 			slideIn6: 'slideIn6 0.9s ease-in-out forwards',
 			slideIn7: 'slideIn7 1s ease-in-out forwards',
 			slideIn8: 'slideIn8 1.2s ease-in-out forwards',
-			slideIn10: 'slideIn10 1.4s ease-in-out forwards',
+			slideUp5: 'slideUp5 1.0s ease-in-out forwards',
 			slideInSpin10: 'slideInSpin10 1.0s ease-in-out forwards',
 			shake: 'shake 0.6s cubic-bezier(.36,.07,.19,.97) both',
 			listOpen: 'listOpen 0.5s ease-in-out forwards',
@@ -170,14 +170,14 @@ export default {
 					transform: 'translateX(0)'
 				}
 			},
-			slideIn10: {
+			slideUp5: {
 				'0%': {
 					opacity: '0',
-					transform: 'translateX(-9rem)'
+					transform: 'translateY(-5rem)'
 				},
 				'100%': {
 					opacity: '1',
-					transform: 'translateX(0)'
+					transform: 'translateY(0)'
 				}
 			},
 			slideInSpin10: {

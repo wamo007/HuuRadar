@@ -154,7 +154,7 @@ export default function Nav () {
                         { userData ? (
                             <div className={`${isHome ? '[&_*]:text-slate-900 hover:[&_*]:text-blue-950' : '[&_*]:text-white hover:[&_*]:text-slate-200'} relative group flex justify-center items-center`}>
                                 <Link to='/account' className={
-                                    `${isHome ? buttonVariants({ variant: 'outline' }) : buttonVariants({ variant: '' })} w-auto min-w-[200px] z-10 ml-8 overflow-hidden
+                                    `${isHome ? `${buttonVariants({ variant: 'outline' })} ml-8` : buttonVariants({ variant: '' })} w-auto min-w-[200px] z-10 overflow-hidden
                                     `}>{userData.name}
                                 </Link>
                                 <div className='absolute hidden group-hover:block top-0 z-8 pt-10 w-[140px] transition-all animate-listOpen'>

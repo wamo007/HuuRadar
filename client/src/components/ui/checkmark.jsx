@@ -6,7 +6,7 @@ function CircularProgress({ progress }) {
   const circleColor = useTransform(
     progress,
     [0, 95, 100],
-    ["#FFCC66", "#FFCC66", "#3B86F7"]
+    ["#111827", "#111827", "#111827"]
   );
 
   return (
@@ -21,7 +21,7 @@ function CircularProgress({ progress }) {
         transform="translate(60 85)"
         d="M3 50L45 92L134 3"
         fill="transparent"
-        stroke="#3B86F7"
+        stroke="#111827"
         strokeWidth={8}
         style={{ pathLength: checkmarkPathLength }}
       />

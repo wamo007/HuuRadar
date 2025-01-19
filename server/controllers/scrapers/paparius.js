@@ -13,14 +13,14 @@ const papariusScraper = async (city, radius, sortGlobal, minPrice, maxPrice) => 
     let papariusData = []
     let currentPage = 1
 
-    function sortPaparius(sortingChosen) {
+    function sortPaparius(sortingChosen = 'new') {
         const options = {
             'new': '',
             'old': '',
             'cheap': '/sort-price-low',
             'pricy': '/sort-price-high',
         }
-        return options[sortingChosen.toLowerCase()] ?? 'Sorting type unknown... How???'
+        return options[sortingChosen.toLowerCase()] ?? ''
     }
 
     if (radius === '0') {
@@ -33,12 +33,12 @@ const papariusScraper = async (city, radius, sortGlobal, minPrice, maxPrice) => 
         initialUrl = `${PAPARIUS_URL}/apartments/${city.toLowerCase()}${radiusPaparius}${sortPaparius(sortGlobal)}/since-3`
     } else if (!minPrice) {
         minPrice = '0'
-        initialUrl = `${PAPARIUS_URL}/apartments/${city.toLowerCase()}/${minPrice}-${maxPrice}/${radiusPaparius}${sortPaparius(sortGlobal)}/since-3`
+        initialUrl = `${PAPARIUS_URL}/apartments/${city.toLowerCase()}/${minPrice}-${maxPrice}${radiusPaparius}${sortPaparius(sortGlobal)}/since-3`
     } else if (!maxPrice || maxPrice === 0) {
         maxPrice = '60000'
-        initialUrl = `${PAPARIUS_URL}/apartments/${city.toLowerCase()}/${minPrice}-${maxPrice}/${radiusPaparius}${sortPaparius(sortGlobal)}/since-3`
+        initialUrl = `${PAPARIUS_URL}/apartments/${city.toLowerCase()}/${minPrice}-${maxPrice}${radiusPaparius}${sortPaparius(sortGlobal)}/since-3`
     } else {
-        initialUrl = `${PAPARIUS_URL}/apartments/${city.toLowerCase()}/${minPrice}-${maxPrice}/${radiusPaparius}${sortPaparius(sortGlobal)}/since-3`
+        initialUrl = `${PAPARIUS_URL}/apartments/${city.toLowerCase()}/${minPrice}-${maxPrice}${radiusPaparius}${sortPaparius(sortGlobal)}/since-3`
     }
 
     try {

@@ -7,32 +7,46 @@ const requestHeaders = {
     Referer: 'https://www.google.com/',
 }
 
-const hAnywhereScraper = async (city, sortGlobal, minPrice, maxPrice) => {
+const hAnywhereScraper = async (city, radius, sortGlobal, minPrice, maxPrice) => {
 
     const browser = await getBrowser()
     const page = await browser.newPage()
     await page.setExtraHTTPHeaders({ ...requestHeaders })
+    await page.setRequestInterception(true);
 
     let data
+    let queries
     let initialUrl
     let hAnywhereData = []
     let currentPage = 1
 
-    function sortHA(sortingChosen) {
+    function sortHA(sortingChosen = 'new') {
         const options = {
             'new': 'mostRecent',
             'old': 'mostRecent',
             'cheap': 'lowToHigh',
             'pricy': 'highToLow',
         }
-        return options[sortingChosen.toLowerCase()] ?? 'Sorting type unknown... How???'
+        return options[sortingChosen.toLowerCase()] ?? 'mostRecent'
     }
 
     if (!minPrice && !maxPrice) {
-        initialUrl = `${HOUSING_ANYWHERE_URL}/s/${city}--Netherlands?sorting=${sortHA(sortGlobal)}&categories=shared-rooms%2Cprivate-rooms%2Cstudent-housing`
+        queries = `/s/${city}--Netherlands?sorting=${sortHA(sortGlobal)}&categories=shared-rooms%2Cprivate-rooms%2Cstudent-housing`
     } else {
-        initialUrl = `${HOUSING_ANYWHERE_URL}/s/${city}--Netherlands?sorting=${sortHA(sortGlobal)}&categories=shared-rooms%2Cprivate-rooms%2Cstudent-housing&priceMin=${minPrice}00&priceMax=${maxPrice}00`
+        queries = `/s/${city}--Netherlands?sorting=${sortHA(sortGlobal)}&categories=shared-rooms%2Cprivate-rooms%2Cstudent-housing&priceMin=${minPrice}00&priceMax=${maxPrice}00`
     }
+
+    initialUrl = `${HOUSING_ANYWHERE_URL}${queries}`
+    
+    page.on('request', (request) => {
+        if (request.isNavigationRequest()) {
+            const url = new URL(request.url())
+            url.search = queries
+            request.continue({ url: url.toString() });
+        } else {
+        request.continue();
+        }
+    })
 
     try {
         await page.goto(initialUrl, {

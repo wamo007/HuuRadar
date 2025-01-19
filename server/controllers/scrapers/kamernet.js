@@ -7,7 +7,7 @@ const requestHeaders = {
     Referer: 'https://www.google.com/',
 }
 
-const kamernetScraper  = async (city, radius, sortGlobal, maxPrice) => {
+const kamernetScraper  = async (city, radius, sortGlobal, minPrice, maxPrice) => {
 
     const browser = await getBrowser()
     const page = await browser.newPage()
@@ -17,24 +17,24 @@ const kamernetScraper  = async (city, radius, sortGlobal, maxPrice) => {
     let initialUrl
     let kamernetData = []
 
-    function radiusKamernet(radiusChosen) {
+    function radiusKamernet(radiusChosen = '0') {
         const options = {
             '0': '1',
             '1': '2',
             '5': '4',
             '10': '5',
         }
-        return options[radiusChosen] ?? 'Radius type unknown... How???'
+        return options[radiusChosen] ?? '1'
     }
 
-    function sortKamernet(sortingChosen) {
+    function sortKamernet(sortingChosen = 'new') {
         const options = {
             'new': '1',
             'old': '1',
             'cheap': '2',
             'pricy': '4',
         }
-        return options[sortingChosen.toLowerCase()] ?? 'Sorting type unknown... How???'
+        return options[sortingChosen.toLowerCase()] ?? '1'
     }
 
     function maxPriceKamernet(maxPriceChosen) {

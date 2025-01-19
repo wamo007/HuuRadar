@@ -1,7 +1,7 @@
 const { getBrowser } = require('./masterScraper')
 const HUURWONINGEN_URL = 'https://www.huurwoningen.nl'
 
-const huurwoningenScraper  = async (city, sortGlobal, minPrice, maxPrice) => {
+const huurwoningenScraper  = async (city, radius, sortGlobal, minPrice, maxPrice) => {
 
     const browser = await getBrowser()
     const page = await browser.newPage()
@@ -11,14 +11,14 @@ const huurwoningenScraper  = async (city, sortGlobal, minPrice, maxPrice) => {
     let huurwoningenData = []
     let currentPage = 1
 
-    function sortHuurwoningen(sortingChosen) {
+    function sortHuurwoningen(sortingChosen = 'new') {
         const options = {
             'new': 'published_at&direction=desc',
             'old': 'published_at&direction=desc',
             'cheap': 'price&direction=asc',
             'pricy': 'price&direction=desc',
         }
-        return options[sortingChosen.toLowerCase()] ?? 'Sorting type unknown... How???'
+        return options[sortingChosen.toLowerCase()] ?? 'published_at&direction=desc'
     }
 
     if (!minPrice && !maxPrice) {
@@ -34,7 +34,7 @@ const huurwoningenScraper  = async (city, sortGlobal, minPrice, maxPrice) => {
     } else {
         initialUrl = `${HUURWONINGEN_URL}/in/${city}/?price=${minPrice}-${maxPrice}&since=3&sort=${sortHuurwoningen(sortGlobal)}`
     }
-    
+
     try {
         await page.goto(initialUrl, {
             waitUntil: 'domcontentloaded',

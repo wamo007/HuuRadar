@@ -27,7 +27,7 @@ const scrapeController = async (req, res) => {
         huurwoningen: huurwoningenScraper,
     }
 
-    console.log(`Processing the request for ${city}, ${radius} km, ${selectedProviders}, ${minPrice} - ${maxPrice}. Time: ${new Date()}`)
+    console.log(`Processing the request for ${city}, ${radius} km, ${selectedProviders}, ${sortGlobal}, ${minPrice} - ${maxPrice}. Time: ${new Date()}`)
 
     res.setHeader('Content-Type', 'application/json')
 

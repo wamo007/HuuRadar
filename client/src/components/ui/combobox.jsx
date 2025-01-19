@@ -25,7 +25,7 @@ const cities = [
   { value: "arnhem", label: "Arnhem" },
   { value: "breda", label: "Breda" },
   { value: "delft", label: "Delft" },
-  { value: "den-haag", label: "The Hague (Den Haag)" },
+  { value: "den-haag", label: "The Hague" },
   { value: "diemen", label: "Diemen" },
   { value: "eindhoven", label: "Eindhoven" },
   { value: "groningen", label: "Groningen" },
@@ -47,7 +47,7 @@ export function ComboboxCity({ selectedCity, onCityChange }) {
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-52 text-md justify-between hover:bg-inherit focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+          className="w-40 px-3 max-w-44 text-md font-normal justify-between hover:bg-inherit focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
         >
           {selectedCity
             ? cities.find((city) => city.value === selectedCity)?.label

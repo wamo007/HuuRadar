@@ -45,10 +45,10 @@ const providers = [
 ];
 
 function SearchPanel({ responseDataChange, loadingStatus }) {
+  const [selectedProviders, setSelectedProviders] = useState(providers.map((provider) => provider.id))
   const [city, setCity] = useState('')
   const [radius, setRadius] = useState('0')
   const [sortGlobal, setSortGlobal] = useState('new')
-  const [selectedProviders, setSelectedProviders] = useState(providers.map((provider) => provider.id))
   const [minPrice, setMinPrice] = useState('')
   const [maxPrice, setMaxPrice] = useState('')
   const [queryData, setQueryData] = useState([])
@@ -152,21 +152,53 @@ function SearchPanel({ responseDataChange, loadingStatus }) {
 
   return (
     <>
-      <div>
-        <form onSubmit={handleSubmit} className="flex flex-wrap flex-col sm:flex-row gap-4 justify-center md:justify-start items-center animate-slideIn4">
+      <>
+                
+        <Button onClick={(e) => saveQuery(e)} className={`${(!loading) && (Object.keys(queryData).length > 0) ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-5 md:translate-y-5 max-[585px]:-translate-y-12 pointer-events-none'} transition-all duration-500 ease-in-out absolute m-auto top-[5.5rem] md:-top-[4.7rem] max-[585px]:top-44 max-[419px]:top-[19.3rem] left-0 right-0 w-[7.5rem] text-md shadow-gray-400 shadow-lg hover:scale-105 hover:shadow-2xl`} type='button'>
+          Notify me!
+        </Button>
+        <form onSubmit={handleSubmit} className="flex flex-nowrap max-[833px]:flex-wrap max-[419px]:flex-col flex-row gap-1 lg:gap-3 w-full justify-center min-[833px]:justify-stretch items-center animate-slideIn4">
+          
+          <Select>
+            <SelectTrigger className="w-40 max-w-44 animate-slideIn4 transition-all duration-700 ease-in-out text-md">
+              <SelectValue placeholder="Providers" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+              <SelectLabel>Providers</SelectLabel>
+                <div className="" >
+                  {providers.map((provider, index) => (
+                    <div key={index} className="flex items-center space-x-2 py-2.5">
+                      <Checkbox 
+                        id={provider.id} 
+                        checked={selectedProviders.includes(provider.id)}
+                        onCheckedChange={(checked) => handleProviderChange(provider.id, checked)}
+                      />
+                      <label
+                        htmlFor={provider.id}
+                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                      >
+                        {provider.label}
+                      </label>
+                    </div>
+                  ))}
+                </div>
+              </SelectGroup>
+            </SelectContent>
+          </Select>
 
           <ComboboxCity selectedCity={city} onCityChange={setCity}/>
           
           {( city ) ? (
             <>
               <Select name="radiusDrop" id="radiusDrop" onValueChange={setRadius}>
-                <SelectTrigger className="w-40 animate-slideIn4 text-md">
+                <SelectTrigger className="min-w-[5.5rem] max-w-40 animate-slideIn4 transition-all duration-500 ease-in-out text-md">
                   <SelectValue placeholder="Radius" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectGroup>
                   <SelectLabel>Radius</SelectLabel>
-                    <SelectItem value="0">No Preference</SelectItem>
+                    <SelectItem value="0">0KM</SelectItem>
                     <SelectItem value="1">1KM</SelectItem>
                     <SelectItem value="5">5KM</SelectItem>
                     <SelectItem value="10">10KM</SelectItem>
@@ -174,66 +206,45 @@ function SearchPanel({ responseDataChange, loadingStatus }) {
                 </SelectContent>
               </Select>
           
-              {/* <Select name="sortDrop" id="sortDrop" onValueChange={setSortGlobal}> */}
-              <Select>
-                <SelectTrigger className="w-40 animate-slideIn5 text-md">
-                  <SelectValue placeholder="Providers" />
+              <Select name="sortDrop" id="sortDrop" onValueChange={setSortGlobal}>
+                <SelectTrigger className="min-w-[5.5rem] max-w-40 animate-slideIn5 text-md">
+                  <SelectValue placeholder="Sort" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectGroup>
-                  <SelectLabel>Providers</SelectLabel>
-                    {/* <SelectItem value="new">Newest First</SelectItem>
+                  <SelectLabel>Sort</SelectLabel>
+                    <SelectItem value="new">Newest First</SelectItem>
                     <SelectItem value="old">Oldest First</SelectItem>
                     <SelectItem value="cheap">Cheapest First</SelectItem>
-                    <SelectItem value="pricy">Priciest First</SelectItem> */}
-                    <div className="" >
-                      {providers.map((provider, index) => (
-                        <div key={index} className="flex items-center space-x-2 py-2.5">
-                          <Checkbox 
-                            id={provider.id} 
-                            checked={selectedProviders.includes(provider.id)}
-                            onCheckedChange={(checked) => handleProviderChange(provider.id, checked)}
-                          />
-                          <label
-                            htmlFor={provider.id}
-                            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                          >
-                            {provider.label}
-                          </label>
-                        </div>
-                      ))}
-                    </div>
+                    <SelectItem value="pricy">Priciest First</SelectItem>
                   </SelectGroup>
                 </SelectContent>
               </Select>
 
               <Input
                 type="number"
-                className="max-w-48 animate-slideIn6 md:text-md"
+                className="[@media_((min-width:419px)_and_(max-width:585px))]:min-w-40 min-w-[5.5rem] max-w-24 max-[419px]:max-w-40 xl:max-w-40 animate-slideIn6 md:text-md [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                 id="minPrice"
                 name="minPrice"
                 onChange={(e) => setMinPrice(e.target.value)}
-                placeholder="Enter Minimum Price"
+                placeholder="Min €"
               />
               <Input
                 type="number"
-                className="max-w-48 animate-slideIn7 md:text-md"
+                className="[@media_((min-width:419px)_and_(max-width:585px))]:min-w-40 min-w-[5.5rem] max-w-24 max-[419px]:max-w-40 xl:max-w-40 animate-slideIn7 md:text-md [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                 id="maxPrice"
                 name="maxPrice"
                 onChange={(e) => setMaxPrice(e.target.value)}
-                placeholder="Enter Maximum Price"
+                placeholder="Max €"
               />
-              <div className="flex gap-4 flex-wrap flex-col sm:flex-row justify-center">
-                <Button type="submit" className={`${(animateCount === true) ? '' : 'animate-slideIn8'} w-[7.5rem] text-md`} disabled={loading}>
-                  {loading && <Loader2 className="animate-spin" />}
-                  Search
-                </Button>
-                {(!loading) && (Object.keys(queryData).length > 0) ? <Button onClick={(e) => saveQuery(e)} className='w-[7.5rem] animate-slideIn10 text-md' type='button'>Notify me!</Button> : ''}
-              </div>
+              <Button type="submit" className={`${(animateCount === true) ? '' : 'animate-slideIn8'} w-[7.5rem] max-[585px]:w-40 text-md`} disabled={loading}>
+                {loading && <Loader2 className="animate-spin" />}
+                Search
+              </Button>
             </>
           ) : (<></>)}
         </form>
-      </div>
+      </>
     </>
   )
 }

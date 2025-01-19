@@ -119,7 +119,7 @@ export default function Demo() {
       <>
         <div className='relative bg-slate-100 min-h-screen w-full'>
           <Nav />
-          <div className='bg-white shadow-2xl-b-0 bg-clip-padding backdrop-filter backdrop-blur bg-opacity-50 backdrop-saturate-50 backdrop-contrast-125 rounded-t-lg flex lg:flex-nowrap flex-wrap justify-between items-center mx-auto py-4 w-11/12 px-6 md:px-2 lg:px-10 xl:px-14 2xl:px-30 text-center'>
+          <div className='bg-white shadow-2xl-b-0 bg-clip-padding backdrop-filter backdrop-blur bg-opacity-50 backdrop-saturate-50 backdrop-contrast-125 rounded-t-lg flex md:flex-nowrap flex-wrap justify-between items-center mx-auto py-4 w-11/12 max-w-7xl px-6 md:px-2 lg:px-10 xl:px-14 2xl:px-30 text-center'>
             {(responseData.funda || responseData.paparius || responseData.rentola || responseData.hAnywhere || responseData.kamernet) ? (
               <>
                 <AverageBarChart responseData={responseData} />
@@ -153,13 +153,15 @@ export default function Demo() {
               </div>
             )}
           </div>
-          <div className='bg-white shadow-xl bg-clip-padding backdrop-filter backdrop-blur bg-opacity-50 backdrop-saturate-50 backdrop-contrast-125 rounded-b-lg mx-auto justify-between items-center pb-4 px-6 md:px-2 lg:px-10 xl:px-14 2xl:px-30 w-11/12 mb-3'>
+          <div className='bg-white shadow-xl bg-clip-padding backdrop-filter backdrop-blur bg-opacity-50 backdrop-saturate-50 backdrop-contrast-125 rounded-b-lg mx-auto justify-between items-center pb-6 md:pb-4 px-6 md:px-2 lg:px-10 xl:px-14 2xl:px-30 w-11/12 max-w-7xl  mb-3'>
             <hr className='w-3/4 h-1 mx-auto bg-gray-200 border-0 dark:bg-gray-700 rounded-xl mb-3.5'/>
-            <SearchPanel responseDataChange={handleResponseDataChange} loadingStatus={setLoadingStatus} />
+            <div className='relative flex justify-center min-[833px]:justify-start w-full transition-all ease-in-out duration-500'>
+              <SearchPanel responseDataChange={handleResponseDataChange} loadingStatus={setLoadingStatus} />
+            </div>
           </div>
           <div className="flex md:items-center w-full overflow-hidden" id='Demo'>
-            <div className='w-full text-left mx-auto py-4 sm:px-2 md:px-2 lg:px-10 xl:px-14 2xl:px-30'>
-              {(responseData.funda || responseData.paparius || responseData.rentola || responseData.hAnywhere || responseData.kamernet) ? (
+            <div className='w-full text-left mx-auto pb-4 pt-7 sm:px-2 md:px-2 lg:px-10 xl:px-14 2xl:px-30'>
+              {(responseData.funda || responseData.paparius || responseData.rentola || responseData.hAnywhere || responseData.kamernet || responseData.huurwoningen) ? (
                 <div className='*:grid *:grid-cols-[repeat(auto-fill,_204px)] max-[408px]:*:grid-cols-[repeat(auto-fill,_180px)] *:justify-center *:justify-items-center *:items-center lg:*:gap-20 md:*:gap-16'>
                   {(responseData.funda?.length > 0 ) ? (
                     <div className="fundaResults transition-all *:transition-all *:ease-in">

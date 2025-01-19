@@ -114,14 +114,14 @@ export function AveragePieChart({ responseData }) {
 
   return (
     <Card className="flex flex-col">
-      <CardHeader className="items-center pb-0">
-        <CardTitle>Pie Chart - Total Average</CardTitle>
+      <CardHeader className="items-center pb-0 px-[2.125rem]">
+        <CardTitle>Total Average Price</CardTitle>
         <CardDescription>Top 6 providers</CardDescription>
       </CardHeader>
-      <CardContent className="flex-1 pb-0">
+      <CardContent className="place-content-center flex-1 pb-0">
         <ChartContainer
           config={chartConfig}
-          className="mx-auto aspect-square max-h-64 min-h-[200px]"
+          className="mx-auto aspect-square min-h-[10.875rem] max-h-64"
         >
           <PieChart>
             <ChartTooltip
@@ -168,7 +168,7 @@ export function AveragePieChart({ responseData }) {
           </PieChart>
         </ChartContainer>
       </CardContent>
-      <CardFooter className="flex-col gap-2 text-sm overflow-hidden lg:px-0">
+      <CardFooter className="flex-col gap-2 text-sm overflow-hidden ">
         {/* <div className="flex items-center gap-2 font-medium leading-none">
           Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
         </div> */}

@@ -18,14 +18,14 @@ const fundaScraper = async (city, radius, sortGlobal, minPrice, maxPrice) => {
     let fundaData = []
     let currentPage = 1
 
-    function sortFunda(sortingChosen) {
+    function sortFunda(sortingChosen = 'new') {
         const options = {
             'new': 'date_down',
             'old': 'date_up',
             'cheap': 'price_up',
             'pricy': 'price_down',
         }
-        return options[sortingChosen.toLowerCase()] ?? 'Sorting type unknown... How???'
+        return options[sortingChosen.toLowerCase()] ?? 'date_down'
     }
 
     if (!minPrice && !maxPrice) {

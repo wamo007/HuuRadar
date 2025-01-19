@@ -51,7 +51,7 @@ export function ComboboxCity({ selectedCity, onCityChange }) {
         >
           {selectedCity
             ? cities.find((city) => city.value === selectedCity)?.label
-            : "Select city..."}
+            : "City"}
           <ChevronsUpDown className="opacity-50" />
         </Button>
       </PopoverTrigger>

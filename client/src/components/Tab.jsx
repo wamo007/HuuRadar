@@ -1,7 +1,7 @@
 import { assets } from '../assets/assets'
 import { LazyLoadImage } from 'react-lazy-load-image-component'
 
-function Tab({ responseData }) {
+export default function Tab({ responseData }) {
 
   // const imageCheck = (image) => {
   //   if (!image.includes('.jpg')) {
@@ -37,5 +37,3 @@ function Tab({ responseData }) {
     </>
   )
 }
-
-export default Tab

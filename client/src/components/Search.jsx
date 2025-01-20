@@ -44,7 +44,7 @@ const providers = [
   },
 ];
 
-function SearchPanel({ responseDataChange, loadingStatus }) {
+function SearchPanel({ responseDataChange, loadingStatus, providerSet }) {
   const [selectedProviders, setSelectedProviders] = useState(providers.map((provider) => provider.id))
   const [city, setCity] = useState('')
   const [radius, setRadius] = useState('0')
@@ -73,6 +73,7 @@ function SearchPanel({ responseDataChange, loadingStatus }) {
     setLoading(true)
     loadingStatus(true)
     setAnimateCount(true)
+    providerSet(selectedProviders)
 
     try {
       const response = await fetch(backendUrl + '/api/', {
@@ -99,8 +100,8 @@ function SearchPanel({ responseDataChange, loadingStatus }) {
                   try {
                       const jsonData = JSON.parse(line)
                       responseData = { ...responseData, ...jsonData}
-                      setQueryData(responseData)
                       responseDataChange(responseData)
+                      setQueryData(responseData)
                   } catch (error) {
                       console.error("Error parsing chunk:", line, error)
                   }
@@ -237,7 +238,7 @@ function SearchPanel({ responseDataChange, loadingStatus }) {
                 onChange={(e) => setMaxPrice(e.target.value)}
                 placeholder="Max €"
               />
-              <Button type="submit" className={`${(animateCount === true) ? '' : 'animate-slideIn8'} w-[5.5rem] xl:w-40 max-[585px]:w-40 text-md shadow-gray-400 hover:scale-105 hover:shadow-2xl`} disabled={loading}>
+              <Button type="submit" className={`${(animateCount === true) ? '' : 'animate-slideIn8'} w-[5.5rem] xl:w-40 max-[585px]:w-40 text-md shadow-gray-400`} disabled={loading}>
                 {loading && <Loader2 className="animate-spin" />}
                 Search
               </Button>

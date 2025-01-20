@@ -1,5 +1,5 @@
 import { assets } from '../assets/assets'
-import { useState, useCallback, useEffect } from 'react'
+import { useState, useCallback, useEffect, memo, useMemo } from 'react'
 import Tab from '../components/Tab.jsx'
 import SearchPanel from '../components/Search.jsx'
 import Nav from '@/components/Nav'
@@ -8,340 +8,167 @@ import PlaceholderTab from '@/components/PlaceholderTab'
 import AverageBarChart from '@/components/BarChart'
 import { AveragePieChart } from '@/components/PieChart'
 import Checkmark from '@/components/ui/checkmark'
+ 
+const providers = [
+  { id: 'funda', label: 'Funda', logo: assets.funda },
+  { id: 'hAnywhere', label: 'Housing Anywhere', logo: assets.hAnywhere  },
+  { id: 'kamernet', label: 'Kamernet', logo: assets.kamernet },
+  { id: 'paparius', label: 'Paparius', logo: assets.paparius },
+  { id: 'huurwoningen', label: 'Huurwoningen', logo: assets.huurwoningen },
+  { id: 'rentola', label: 'Rentola', logo: assets.rentola },
+]
+
+const ProviderData = memo(({ provider, responseData, noResults }) => {
+  const { id, label, logo } = provider
+  const [visibleItems, setVisibleItems] = useState(5)
+
+  const handleSeeMore = () => {
+    setVisibleItems((prev) => prev + 5)
+  }
+
+  return (
+    <>
+      {responseData.length > 0 ? (
+        <>
+          <div className='*:grid *:grid-cols-[repeat(auto-fill,_204px)] max-[408px]:*:grid-cols-[repeat(auto-fill,_180px)] *:justify-center *:justify-items-center *:items-center lg:*:gap-20 md:*:gap-16'>
+            <div className="transition-all *:transition-all *:ease-in">
+              <div className="place-items-center">
+                <img src={logo} alt={`${label} logo`} width={120} />
+                <h3 className='pt-4 text-center'>Results on {label}</h3>
+              </div>
+              <Tab responseData={responseData.slice(0, visibleItems)} />
+              {responseData.length > visibleItems && (
+                <div className='relative p-3 w-[12.75rem] h-[19rem] bg-white md:rounded-lg md:shadow-2xl max-md:border max-md:border-slate-400 max-[408px]:w-[11.25rem]'>
+                  <PlaceholderTab />
+                  <div className='absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 bg-white/10 backdrop-blur-sm md:rounded-lg border border-white/30 md:shadow-lg max-[408px]:w-[11.25rem] w-[12.75rem] h-[19rem]'>
+                    <Button className='relative top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 z-10 bg-gray-900' onClick={handleSeeMore}>
+                      See More...
+                    </Button>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+          <hr className='w-3/4 h-1 mx-auto my-8 bg-gray-200 border-0 dark:bg-gray-700 mt-10' />
+        </>
+      ) : (
+        noResults && (
+          <>
+            <h3 className='text-center italic pt-4'>No Results on {label} for the last 3 days...</h3>
+            <hr className='w-3/4 h-1 mx-auto my-8 bg-gray-200 border-0 dark:bg-gray-700 mt-10' />
+          </>
+        )
+      )}
+    </>
+  )
+})
 
 export default function Demo() {
-    
-    const [responseData, setResponseData] = useState([])
-    const [noResults, setNoResults] = useState({
-      funda: false,
-      hAnywhere: false,
-      kamernet: false,
-      paparius: false,
-      huurwoningen: false,
-      rentola: false
-    })
-    const [visibleItems, setVisibleItems] = useState({
-      funda: 5,
-      hAnywhere: 5,
-      kamernet: 5,
-      paparius: 5,
-      huurwoningen: 5,
-      rentola: 5
-    })
-    const [loadingStatus, setLoadingStatus] = useState(false)
-    const [error, setError] = useState(null)
-  
-    useEffect(() => {
-      if ((responseData.hAnywhere?.length) && !responseData.funda?.length) {
-        const fundaTimer = setTimeout(() => {
-          setNoResults({ ...noResults, funda: true })
-        }, 30000)
-  
-        return () => clearTimeout(fundaTimer)
-      } else {
-        setNoResults({ ...noResults, funda: false })
-      }
-    }, [responseData.funda])
+  const [responseData, setResponseData] = useState({})
+  const [firstSearch, setFirstSearch] = useState(false)
+  const [noResults, setNoResults] = useState(
+    providers.reduce((prevProvider, currentProvider) => ({ ...prevProvider, [currentProvider.id]: false }), {})
+  )
+  const [selectedProviders, setSelectedProviders] = useState([])
+  const [loadingStatus, setLoadingStatus] = useState(false)
+  const [error, setError] = useState(null)
 
-    useEffect(() => {
-      if ((responseData.funda?.length) && !responseData.hAnywhere?.length) {
-        const hAnywhereTimer = setTimeout(() => {
-          setNoResults({ ...noResults, hAnywhere: true })
-        }, 30000)
-  
-        return () => clearTimeout(hAnywhereTimer)
-      } else {
-        setNoResults({ ...noResults, hAnywhere: false })
-      }
-    }, [responseData.hAnywhere])
-
-    useEffect(() => {
-      if ((responseData.funda?.length || responseData.hAnywhere?.length) && !responseData.kamernet?.length) {
-        const kamernetTimer = setTimeout(() => {
-          setNoResults({ ...noResults, kamernet: true })
-        }, 30000)
-  
-        return () => clearTimeout(kamernetTimer)
-      } else {
-        setNoResults({ ...noResults, kamernet: false })
-      }
-    }, [responseData.kamernet])
-
-    useEffect(() => {
-      if ((responseData.hAnywhere?.length || responseData.kamernet?.length) && !responseData.paparius?.length) {
-        const papariusTimer = setTimeout(() => {
-          setNoResults({ ...noResults, paparius: true })
-        }, 30000)
-  
-        return () => clearTimeout(papariusTimer)
-      } else {
-        setNoResults({ ...noResults, paparius: false })
-      }
-    }, [responseData.paparius])
-    
-    useEffect(() => {
-      if ((responseData.kamernet?.length || responseData.paparius?.length) && !responseData.huurwoningen?.length) {
-        const huurwoningenTimer = setTimeout(() => {
-          setNoResults({ ...noResults, huurwoningen: true })
-        }, 30000)
-  
-        return () => clearTimeout(huurwoningenTimer)
-      } else {
-        setNoResults({ ...noResults, huurwoningen: false })
-      }
-    }, [responseData.huurwoningen])
-  
-    useEffect(() => {
-      if ((responseData.paparius?.length || responseData.huurwoningen?.length) && !responseData.rentola?.length) {
-        const rentolaTimer = setTimeout(() => {
-          setNoResults({ ...noResults, rentola: true })
-        }, 30000)
-  
-        return () => clearTimeout(rentolaTimer)
-      } else {
-        setNoResults({ ...noResults, rentola: false })
-      }
-    }, [responseData.rentola])
-  
-    const handleResponseDataChange = useCallback((data, err) => {
-      setResponseData(data)
-      setError(err)
-    }, [])
-    
-    const handleSeeMore = (itemContainer) => {
-      setVisibleItems((prev) => ({
-        ...prev,
-        [itemContainer]: prev[itemContainer] + 5,
-      }))
+  // Give No Results for the provider once the loading is complete
+  useEffect(() => {
+    if (!loadingStatus) {
+      const newNoResults = { ...noResults };
+      providers.forEach(({ id }) => {
+        if (selectedProviders.includes(id) && !responseData[id]?.length) {
+          newNoResults[id] = true;
+        }
+      });
+      setNoResults(newNoResults);
     }
+  }, [loadingStatus, responseData, selectedProviders])
 
-    return (
-      <>
-        <div className='relative bg-slate-100 min-h-screen w-full'>
-          <Nav />
-          <div className='bg-white shadow-2xl-b-0 bg-clip-padding backdrop-filter backdrop-blur bg-opacity-50 backdrop-saturate-50 backdrop-contrast-125 rounded-t-lg flex md:flex-nowrap flex-wrap justify-between items-center mx-auto py-4 w-11/12 max-w-7xl px-6 md:px-2 lg:px-10 xl:px-14 2xl:px-30 text-center'>
-            {(responseData.funda || responseData.paparius || responseData.rentola || responseData.hAnywhere || responseData.kamernet) ? (
-              <>
-                <AverageBarChart responseData={responseData} />
-                <div className="flex flex-col items-center justify-between px-1 mx-auto min-h-[250px] max-h-52 py-5">
-                  {loadingStatus ? (
-                    <>
-                      <img src={assets.loadingBuilding} width={180} alt="loading gif" className='w-180' />
-                      <div className="w-full text-xl sm:text-2xl md:text-base xl:text-2xl tracking-wider font-semibold text-center 
-                        whitespace-nowrap overflow-hidden border-r-2 border-r-[rgba(255,255,255,.75)] animate-typewriterBlinkCursor">
-                        Loading the results...
-                      </div>
-                    </>
-                  ) : (
-                    <>
-                      <Checkmark />
-                      <div className="w-full text-xl sm:text-2xl md:text-base xl:text-2xl tracking-wider font-semibold text-center 
-                        whitespace-nowrap overflow-hidden border-r-2 border-r-[rgba(255,255,255,.75)] animate-typewriterBlinkCursor">
-                        Done! Check them out.
-                      </div>
-                    </>
-                  )}
-                </div>
-                <AveragePieChart responseData={responseData} />
-              </>
-            ) : (
-              <div className="flex mx-auto">
-                <div className="w-full text-sm sm:text-lg md:text-2xl  tracking-wider font-semibold text-center 
-                  whitespace-nowrap overflow-hidden border-r-2 border-r-[rgba(255,255,255,.75)] animate-typewriterBlinkCursor">
-                  Please initialize the search...
-                </div>
-              </div>
-            )}
-          </div>
-          <div className='bg-white shadow-xl bg-clip-padding backdrop-filter backdrop-blur bg-opacity-50 backdrop-saturate-50 backdrop-contrast-125 rounded-b-lg mx-auto justify-between items-center pb-6 md:pb-4 px-6 md:px-2 lg:px-10 xl:px-14 2xl:px-30 w-11/12 max-w-7xl  mb-3'>
-            <hr className='w-3/4 h-1 mx-auto bg-gray-200 border-0 dark:bg-gray-700 rounded-xl mb-3.5'/>
-            <div className='relative flex justify-center min-[833px]:justify-start w-full transition-all ease-in-out duration-500'>
-              <SearchPanel responseDataChange={handleResponseDataChange} loadingStatus={setLoadingStatus} />
-            </div>
-          </div>
-          <div className="flex md:items-center w-full overflow-hidden" id='Demo'>
-            <div className='w-full text-left mx-auto pb-4 pt-7 sm:px-2 md:px-2 lg:px-10 xl:px-14 2xl:px-30'>
-              {(responseData.funda || responseData.paparius || responseData.rentola || responseData.hAnywhere || responseData.kamernet || responseData.huurwoningen) ? (
-                <div className='*:grid *:grid-cols-[repeat(auto-fill,_204px)] max-[408px]:*:grid-cols-[repeat(auto-fill,_180px)] *:justify-center *:justify-items-center *:items-center lg:*:gap-20 md:*:gap-16'>
-                  {(responseData.funda?.length > 0 ) ? (
-                    <div className="fundaResults transition-all *:transition-all *:ease-in">
-                      <div className="logo place-items-center">
-                        <img src={assets.funda} alt="Funda Logo Image" width={120} height={96} />
-                        <h3 className='pt-4'>Results on Funda</h3>
-                      </div>
-                      <Tab className='fundaTab' responseData={responseData.funda.slice(0, visibleItems.funda)} />
-                      {responseData.funda.length > visibleItems.funda && (
-                        <div className='relative p-3 w-[12.75rem] h-[19rem] bg-white md:rounded-lg md:shadow-2xl max-md:border max-md:border-slate-400 max-[408px]:w-[11.25rem]'>
-                          <PlaceholderTab />
-                          <div className='absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 bg-white/10 backdrop-blur-sm md:rounded-lg border border-white/30 md:shadow-lg max-[408px]:w-[11.25rem] w-[12.75rem] h-[19rem]'>
-                            <Button className='relative top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 z-10 bg-gray-900' onClick={() => handleSeeMore('funda')}>
-                              See More...
-                            </Button>
-                          </div>
-                        </div>
-                      )}
+  const handleResponseDataChange = useCallback((data, err) => {
+    setResponseData(data)
+    setFirstSearch(true)
+    setError(err)
+  }, [])
+
+  // First in First out the providers that have data
+  const fifoProviders = useMemo(() => {
+    return providers
+      .filter((provider) => selectedProviders.includes(provider.id))
+      .sort((a, b) => {
+        const hasDataA = responseData[a.id]?.length > 0
+        const hasDataB = responseData[b.id]?.length > 0
+        if (hasDataA && !hasDataB) return -1
+        if (!hasDataA && hasDataB) return 1
+        return 0
+      })
+  }, [selectedProviders, responseData])
+
+  return (
+    <>
+      <div className='relative bg-slate-100 min-h-screen w-full'>
+        <Nav />
+        <div className='bg-white shadow-2xl-b-0 bg-clip-padding backdrop-filter backdrop-blur bg-opacity-50 backdrop-saturate-50 backdrop-contrast-125 rounded-t-lg flex md:flex-nowrap flex-wrap justify-between items-center mx-auto py-4 w-11/12 max-w-7xl px-6 md:px-2 lg:px-10 xl:px-14 2xl:px-30 text-center'>
+          {firstSearch ? (
+            <>
+              <AverageBarChart responseData={responseData} />
+              <div className="flex flex-col items-center justify-between px-1 mx-auto min-h-[250px] max-h-52 py-5">
+                {loadingStatus ? (
+                  <>
+                    <img src={assets.loadingBuilding} width={180} alt="loading gif" className='w-180' />
+                    <div className="w-full text-xl sm:text-2xl md:text-base xl:text-2xl tracking-wider font-semibold text-center 
+                      whitespace-nowrap overflow-hidden border-r-2 border-r-[rgba(255,255,255,.75)] animate-typewriterBlinkCursor">
+                      Loading the results...
                     </div>
-                  ) : (
-                    <>
-                      <h3 className='italic pt-4'>No Results on Funda for the last 3 days...</h3>
-                    </>
-                  )}
-
-                  {(responseData.hAnywhere?.length > 0) ? (
-                    <>
-                      <hr className='w-3/4 h-1 mx-auto my-8 bg-gray-200 border-0 dark:bg-gray-700 mt-10'/>
-                      <div className="hAnywhereResults transition-all *:transition-all *:ease-in">
-                        <div className="logo place-items-center">
-                          <img src={assets.hAnywhere} alt="hAnywhere Logo Image" width={120} />
-                          <h3 className='pt-4 text-center'>Results on Housing Anywhere</h3>
-                        </div>
-                        <Tab className='hAnywhereTab' responseData={responseData.hAnywhere.slice(0, visibleItems.hAnywhere)} />
-                        {responseData.hAnywhere.length > visibleItems.hAnywhere && (
-                          <div className='relative p-3 w-[12.75rem] h-[19rem] bg-white md:rounded-lg md:shadow-2xl max-md:border max-md:border-slate-400 max-[408px]:w-[11.25rem]'>
-                            <PlaceholderTab />
-                            <div className='absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 bg-white/10 backdrop-blur-sm md:rounded-lg border border-white/30 shadow-lg max-[408px]:w-[11.25rem] w-[12.75rem] h-[19rem]'>
-                              <Button className='relative top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 z-10 bg-gray-900' onClick={() => handleSeeMore('hAnywhere')}>
-                                See More...
-                              </Button>
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    </>
-                  ) : (
-                    noResults.hAnywhere && (
-                      <>
-                        <hr className='w-3/4 h-1 mx-auto my-8 bg-gray-200 border-0 dark:bg-gray-700 mt-10'/>
-                        <h3 className='italic pt-4'>No Results on Housing Anywhere for the last 3 days...</h3>
-                      </>
-                  ))}
-
-                  {(responseData.kamernet?.length > 0) ? (
-                    <>
-                      <hr className='w-3/4 h-1 mx-auto my-8 bg-gray-200 border-0 dark:bg-gray-700 mt-10'/>
-                      <div className="kamernetResults transition-all *:transition-all *:ease-in">
-                        <div className="logo place-items-center">
-                          <img src={assets.kamernet} alt="Kamernet Logo Image" width={120} />
-                          <h3 className='pt-4'>Results on Kamernet</h3>
-                        </div>
-                        <Tab className='kamernetTab' responseData={responseData.kamernet.slice(0, visibleItems.kamernet)} />
-                        {responseData.kamernet.length > visibleItems.kamernet && (
-                          <div className='relative p-3 w-[12.75rem] h-[19rem] bg-white md:rounded-lg md:shadow-2xl max-md:border max-md:border-slate-400 max-[408px]:w-[11.25rem]'>
-                            <PlaceholderTab />
-                            <div className='absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 bg-white/10 backdrop-blur-sm md:rounded-lg border border-white/30 shadow-lg max-[408px]:w-[11.25rem] w-[12.75rem] h-[19rem]'>
-                              <Button className='relative top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 z-10 bg-gray-900' onClick={() => handleSeeMore('kamernet')}>
-                                See More...
-                              </Button>
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    </>
-                  ) : (
-                    noResults.kamernet && (
-                      <>
-                        <hr className='w-3/4 h-1 mx-auto my-8 bg-gray-200 border-0 dark:bg-gray-700 mt-10'/>
-                        <h3 className='italic pt-4'>No Results on Kamernet for the last 3 days...</h3>
-                      </>
-                  ))}
-
-                  {(responseData.paparius?.length > 0) ? (
-                    <>
-                      <hr className='w-3/4 h-1 mx-auto my-8 bg-gray-200 border-0 dark:bg-gray-700 mt-10'/>
-                      <div className="papariusResults transition-all *:transition-all *:ease-in">
-                        <div className="logo place-items-center">
-                          <img src={assets.paparius} alt="Paparius Logo Image" width={120} />
-                          <h3 className='pt-4'>Results on Paparius</h3>
-                        </div>
-                        <Tab className='papariusTab' responseData={responseData.paparius.slice(0, visibleItems.paparius)} />
-                        {responseData.paparius.length > visibleItems.paparius && (
-                          <div className='relative p-3 w-[12.75rem] h-[19rem] bg-white md:rounded-lg md:shadow-2xl max-md:border max-md:border-slate-400 max-[408px]:w-[11.25rem]'>
-                            <PlaceholderTab />
-                            <div className='absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 bg-white/10 backdrop-blur-sm md:rounded-lg border border-white/30 shadow-lg max-[408px]:w-[11.25rem] w-[12.75rem] h-[19rem]'>
-                              <Button className='relative top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 z-10 bg-gray-900' onClick={() => handleSeeMore('paparius')}>
-                                See More...
-                              </Button>
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    </>
-                  ) : (
-                    noResults.paparius && (
-                      <>
-                        <hr className='w-3/4 h-1 mx-auto my-8 bg-gray-200 border-0 dark:bg-gray-700 mt-10'/>
-                        <h3 className='italic pt-4'>No Results on Paparius for the last 3 days...</h3>
-                      </>
-                  ))}
-
-                  {(responseData.huurwoningen?.length > 0) ? (
-                    <>
-                      <hr className='w-3/4 h-1 mx-auto my-8 bg-gray-200 border-0 dark:bg-gray-700 mt-10'/>
-                      <div className="huurwoningenResults transition-all *:transition-all *:ease-in">
-                        <div className="logo place-items-center">
-                          <img src={assets.huurwoningen} alt="Huurwoningen Logo Image" width={120} />
-                          <h3 className='pt-4'>Results on Huurwoningen</h3>
-                        </div>
-                        <Tab className='huurwoningenTab' responseData={responseData.huurwoningen.slice(0, visibleItems.huurwoningen)} />
-                        {responseData.huurwoningen.length > visibleItems.huurwoningen && (
-                          <div className='relative p-3 w-[12.75rem] h-[19rem] bg-white md:rounded-lg md:shadow-2xl max-md:border max-md:border-slate-400 max-[408px]:w-[11.25rem]'>
-                            <PlaceholderTab />
-                            <div className='absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 bg-white/10 backdrop-blur-sm md:rounded-lg border border-white/30 shadow-lg max-[408px]:w-[11.25rem] w-[12.75rem] h-[19rem]'>
-                              <Button className='relative top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 z-10 bg-gray-900' onClick={() => handleSeeMore('huurwoningen')}>
-                                See More...
-                              </Button>
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    </>
-                  ) : (
-                    noResults.huurwoningen && (
-                      <>
-                        <hr className='w-3/4 h-1 mx-auto my-8 bg-gray-200 border-0 dark:bg-gray-700 mt-10'/>
-                        <h3 className='italic pt-4'>No Results on Huurwoningen for the last 3 days...</h3>
-                      </>
-                  ))}
-
-                  {(responseData.rentola?.length > 0 ) ? (
-                    <>
-                      <hr className='w-3/4 h-1 mx-auto my-8 bg-gray-200 border-0 dark:bg-gray-700 mt-10'/>
-                      <div className="rentolaResults transition-all *:transition-all *:ease-in">
-                        <div className="logo place-items-center">
-                          <img src={assets.rentola} alt="Rentola Logo Image" width={120} />
-                          <h3 className='pt-4'>Results on Rentola</h3>
-                        </div>
-                        <Tab className='rentolaTab' responseData={responseData.rentola.slice(0, visibleItems.rentola)} />
-                        {responseData.rentola.length > visibleItems.rentola && (
-                          <div className='relative p-3 w-[12.75rem] h-[19rem] bg-white md:rounded-lg md:shadow-2xl max-md:border max-md:border-slate-400 max-[408px]:w-[11.25rem]'>
-                            <PlaceholderTab />
-                            <div className='absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 bg-white/10 backdrop-blur-sm md:rounded-lg border border-white/30 shadow-lg max-[408px]:w-[11.25rem] w-[12.75rem] h-[19rem]'>
-                              <Button className='relative top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 z-10 bg-gray-900' onClick={() => handleSeeMore('rentola')}>
-                                See More...
-                              </Button>
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    </>
-                  ) : (
-                    noResults.rentola && (
-                    <>
-                      <hr className='w-3/4 h-1 mx-auto my-8 bg-gray-200 border-0 dark:bg-gray-700 mt-10'/>
-                      <h3 className='italic pt-4'>No Results on Rentola for the last 3 days...</h3>
-                    </>
-                    
-                  ))}
-
-                  
-                </div>
-              ) : (
-                <></>
-              )}
-              {error && <p style={{ color: 'red' }}>{error}</p>}
+                  </>
+                ) : (
+                  <>
+                    <Checkmark />
+                    <div className="w-full text-xl sm:text-2xl md:text-base xl:text-2xl tracking-wider font-semibold text-center 
+                      whitespace-nowrap overflow-hidden border-r-2 border-r-[rgba(255,255,255,.75)] animate-typewriterBlinkCursor">
+                      Done! Check them out.
+                    </div>
+                  </>
+                )}
+              </div>
+              <AveragePieChart responseData={responseData} />
+            </>
+          ) : (
+            <div className="flex mx-auto">
+              <div className="w-full text-sm sm:text-lg md:text-2xl  tracking-wider font-semibold text-center 
+                whitespace-nowrap overflow-hidden border-r-2 border-r-[rgba(255,255,255,.75)] animate-typewriterBlinkCursor">
+                Please initialize the search...
+              </div>
             </div>
+          )}
+        </div>
+        <div className='bg-white shadow-xl bg-clip-padding backdrop-filter backdrop-blur bg-opacity-50 backdrop-saturate-50 backdrop-contrast-125 rounded-b-lg mx-auto justify-between items-center pb-6 md:pb-4 px-6 md:px-2 lg:px-10 xl:px-14 2xl:px-30 w-11/12 max-w-7xl  mb-3'>
+          <hr className='w-3/4 h-1 mx-auto bg-gray-200 border-0 dark:bg-gray-700 rounded-xl mb-3.5' />
+          <div className='relative flex justify-center min-[833px]:justify-start w-full transition-all ease-in-out duration-500'>
+            <SearchPanel responseDataChange={handleResponseDataChange} loadingStatus={setLoadingStatus} providerSet={setSelectedProviders} />
           </div>
         </div>
-      </>
-    )
+        <div className="flex md:items-center w-full overflow-hidden" id='Demo'>
+          <div className='w-full text-left mx-auto pt-7'>
+            {Object.values(responseData).some((results) => results?.length) ? (
+              <>
+                {fifoProviders.map((provider) => (
+                  <ProviderData
+                    key={provider.id}
+                    provider={provider}
+                    responseData={responseData[provider.id] || []}
+                    noResults={noResults[provider.id]}
+                  />
+                ))}
+              </>
+            ) : (
+              <></>
+            )}
+            {error && <p style={{ color: 'red' }}>{error}</p>}
+          </div>
+        </div>
+      </div>
+    </>
+  )
 }

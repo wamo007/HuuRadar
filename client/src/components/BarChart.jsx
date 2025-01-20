@@ -74,7 +74,7 @@ export default function AverageBarChart({ responseData }) {
 
       setChartData([
         { provider: "Funda", desktop: fundaAverage },
-        { provider: "H.Anywhere", desktop: hAnywhereAverage },
+        { provider: "HAnywhere", desktop: hAnywhereAverage },
         { provider: "Kamernet", desktop: kamernetAverage },
         { provider: "Paparius", desktop: papariusAverage },
         { provider: "Huurwoningen", desktop: huurwoningenAverage },
@@ -103,7 +103,10 @@ export default function AverageBarChart({ responseData }) {
               tickLine={false}
               tickMargin={10}
               axisLine={false}
-              tickFormatter={(value) => value.slice(0, 7)}
+              interval={0}
+              angle={-20}
+              tick={{ dy: -5 }}
+              tickFormatter={(value) => value.slice(0, 9)}
             />
             <ChartTooltip
               cursor={false}

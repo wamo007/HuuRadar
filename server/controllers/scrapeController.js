@@ -5,6 +5,8 @@ const rentolaScraper = require('./scrapers/rentola')
 const kamernetScraper = require('./scrapers/kamernet')
 const huurwoningenScraper = require('./scrapers/huurwoningen')
 
+const sortProviders = ['funda', 'hAnywhere', 'kamernet', 'paparius', 'huurwoningen', 'rentola']
+
 const scrapeController = async (req, res) => {
     const city = req.body.city
     const radius = req.body.radius
@@ -21,13 +23,13 @@ const scrapeController = async (req, res) => {
     const scrapers = {
         funda: fundaScraper,
         hAnywhere: hAnywhereScraper,
-        paparius: papariusScraper,
-        rentola: rentolaScraper,
         kamernet: kamernetScraper,
+        paparius: papariusScraper,
         huurwoningen: huurwoningenScraper,
+        rentola: rentolaScraper,
     }
 
-    console.log(`Processing the request for ${city}, ${radius} km, ${selectedProviders}, ${sortGlobal}, ${minPrice} - ${maxPrice}. Time: ${new Date()}`)
+    console.log(`Processing the request for ${city}, ${radius} km, ${selectedProviders.sort((a, b) => sortProviders.indexOf(a) - sortProviders.indexOf(b))}, ${sortGlobal}, ${minPrice} - ${maxPrice}. Time: ${new Date()}`)
 
     res.setHeader('Content-Type', 'application/json')
 

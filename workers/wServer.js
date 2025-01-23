@@ -1,5 +1,5 @@
 const express = require('express')
-const bodyParser = require('body-parser')
+// const bodyParser = require('body-parser')
 const fundaScraper = require('./scrapers/funda')
 const hAnywhereScraper = require('./scrapers/hAnywhere')
 const papariusScraper = require('./scrapers/paparius')
@@ -30,6 +30,7 @@ app.post('/extractor', async (req, res) => {
       const scraper = scrapers[providerId]
       const data = await scraper(city, radius, sortGlobal, minPrice, maxPrice)
       results[providerId] = data
+      console.log('Scraping Complete!')
     }
     res.json(results)
   } catch (error) {

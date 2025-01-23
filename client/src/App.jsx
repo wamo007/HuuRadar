@@ -8,6 +8,7 @@ import 'react-toastify/dist/ReactToastify.css'
 import { Routes, Route } from 'react-router-dom'
 import ResetPassword from './pages/ResetPassword'
 import EmailVerify from './pages/EmailVerify'
+import Account from './pages/Account'
 
 function App() {
 
@@ -17,7 +18,8 @@ function App() {
       <ScrollToHashElement behavior="smooth" />
       <Routes>
         <Route path='/' element={<Home />} />
-        <Route path='/contacts' element={<Contacts />} />
+        <Route path='/account' element={<Account />} />
+        {/* <Route path='/contacts' element={<Contacts />} /> */}
         <Route path='/demo' element={<Demo />} />
         <Route path='/registration' element={<Login signType='Sign Up' />} />
         <Route path='/login' element={<Login signType='Login' />} />

@@ -21,13 +21,13 @@ export default function Tab({ responseData }) {
           </a>
           <div className='pt-1 h-[160px] flex flex-col justify-between'>
             <a href={tab.link} target="_blank" >
-              <h2 className='line-clamp-2 font-bold'>{tab.heading || 'Unknown Name'}</h2>
-              <h3 className='line-clamp-1 font-medium'>{tab.address || 'Unknown Address'}</h3>
+              <h2 className='line-clamp-2 font-bold hover:text-slate-500 max-md:underline underline-offset-2'>{tab.heading || 'Unknown Name'}</h2>
+              <h3 className='line-clamp-1 font-medium hover:text-slate-500'>{tab.address || 'Unknown Address'}</h3>
             </a>
             <div className="priceSection">
               <h3>{tab.price || 'Unknown Price'}</h3>
               <h4>Size: {tab.size || 'N/A'}</h4>
-              <a href={tab.sellerLink} target="_blank" className='line-clamp-1'>
+              <a href={tab.sellerLink} target="_blank" className='line-clamp-1 hover:text-slate-500'>
                 {tab.seller || 'Unknown Seller'}
               </a>
             </div>

@@ -22,6 +22,7 @@ export default function Nav () {
     const { pathname } = location
     const isHome = pathname === '/'
     const isDemo = pathname === '/demo'
+    const isAccount = pathname === '/account'
     const isLogin = pathname === '/login'
     const isRegistration = pathname === '/registration'
 
@@ -92,16 +93,16 @@ export default function Nav () {
         };
       }, [location, navigate])
 
-    useEffect(() => {
-      if (showMobileMenu) {
-          document.body.style.overflow = 'hidden'
-      } else {
-          document.body.style.overflow = 'auto'
-      }
-      return () => {
-          document.body.style.overflow = 'auto'
-      }
-    },[showMobileMenu])
+    // useEffect(() => {
+    //   if (showMobileMenu) {
+    //       document.body.style.overflow = 'hidden'
+    //   } else {
+    //       document.body.style.overflow = 'auto'
+    //   }
+    //   return () => {
+    //       document.body.style.overflow = 'auto'
+    //   }
+    // },[showMobileMenu])
 
     useEffect(() => {
         const handleScroll = () => {
@@ -122,6 +123,7 @@ export default function Nav () {
         if (scrollData.y > 50) {
             setShowNav(true)
             setNavColor(true)
+            if (showMobileMenu) setShowMobileMenu(false)
         } else {
             setShowNav(false)
             setNavColor(false)
@@ -134,32 +136,60 @@ export default function Nav () {
     }, [scrollData])
 
     return (
-        <nav className={`${isDemo ? 'sticky' : 'fixed'} top-0 ${showNav ? '-translate-y-full' : ''} ${navColor ? 'bg-slate-100 bg-clip-padding backdrop-filter backdrop-blur bg-opacity-50 backdrop-saturate-50 backdrop-contrast-125' : ''} mx-auto w-full transition-all duration-700 ease-out z-50`}>
+        <nav className={`${isDemo || isAccount ? 'sticky' : 'fixed'} top-0 ${showNav ? '-translate-y-full' : ''} ${navColor ? 'bg-slate-100 bg-clip-padding backdrop-filter backdrop-blur bg-opacity-50 backdrop-saturate-50 backdrop-contrast-125' : ''} mx-auto w-full transition-all duration-700 ease-out z-50`}>
             <div className='mx-auto flex justify-between items-center w-11/12 max-w-7xl py-4 px-6 md:px-2 lg:px-10 xl:px-14 2xl:px-30'>
                 <Link className='flex justify-between items-center gap-3' to='/'>
                     <img src={assets.logo} alt="Website Logo" width={50} />
                     <div className="brand text-slate-900 text-center font-bold text-2xl max-[419px]:text-xl">HUURADAR</div>
                 </Link>
                 <ul className='hidden md:flex gap-7 md:gap-3 min-[802px]:gap-6 xl:gap-9 text-gray-900 text-xl font-semibold md:text-[16px] min-[802px]:text-[19px]'>
-                    <a href='/#Header' className='cursor-pointer hover:text-gray-700'>Home</a>
-                    <a href='/#About' className='cursor-pointer hover:text-gray-700'>About</a>
-                    <a href='/#Contacts' className='cursor-pointer hover:text-gray-700'>Contact Me</a>
+                    <a href='/#Header' className='cursor-pointer hover:text-gray-700 group transition duration-300'>
+                        <span className="bg-left-bottom bg-gradient-to-r from-gray-900 to-gray-900 bg-[length:0%_2px] bg-no-repeat group-hover:bg-[length:100%_2px] transition-all duration-500 ease-out">
+                        Home
+                        </span>
+                    </a>
+                    <a href='/#About' className='cursor-pointer hover:text-gray-700 group transition duration-300'>
+                        <span className="bg-left-bottom bg-gradient-to-r from-gray-900 to-gray-900 bg-[length:0%_2px] bg-no-repeat group-hover:bg-[length:100%_2px] transition-all duration-500 ease-out">
+                        About
+                        </span>
+                    </a>
+                    <a href='/#Contacts' className='cursor-pointer hover:text-gray-700 group transition duration-300'>
+                        <span className="bg-left-bottom bg-gradient-to-r from-gray-900 to-gray-900 bg-[length:0%_2px] bg-no-repeat group-hover:bg-[length:100%_2px] transition-all duration-500 ease-out">
+                        Contact Me
+                        </span>
+                    </a>
                 </ul>
                 { isLogin || isRegistration ? (
-                    <li onClick={() => navigate(-1)} className={
-                        `${buttonVariants({ variant: '' })} cursor-pointer pointer-events-auto w-[120px] text-white hover:text-slate-200 hidden md:flex items-center gap-3 text-center font-extrabold text-xl tracking-wider`
-                        }>Back</li>
+                    <ul className="hidden -ml-12 md:flex justify-between items-center gap-3 [&_*]:text-center [&_*]:font-bold [&_*]:text-xl">
+                        { !isLogin && 
+                            <li onClick={() => navigate('/login')} className={
+                                `${buttonVariants({ variant: 'outline' })} cursor-pointer pointer-events-auto w-[120px] text-slate-900 hover:text-blue-950`}>
+                                Login
+                            </li> 
+                        }
+                        { !isRegistration && 
+                            <li onClick={() => navigate('/registration')} className={
+                                `${buttonVariants({ variant: 'outline' })} cursor-pointer pointer-events-auto w-[120px] text-slate-900 hover:text-blue-950`}>
+                                Sign Up
+                            </li> 
+                        }
+                        <li onClick={() => navigate(-1)} className={
+                            `${buttonVariants({ variant: '' })} cursor-pointer pointer-events-auto w-[120px] text-white hover:text-slate-200 tracking-wider`}>
+                            Back
+                        </li>
+                    </ul>
                 ) : (
                     <ul className="hidden md:flex justify-between items-center gap-3 [&_*]:text-center [&_*]:font-bold [&_*]:text-xl">
                         { userData ? (
-                            <div className={`${isHome ? '[&_*]:text-slate-900 hover:[&_*]:text-blue-950' : '[&_*]:text-white hover:[&_*]:text-slate-200'} relative group flex justify-center items-center`}>
-                                <Link to='/account' className={
-                                    `${isHome ? `${buttonVariants({ variant: 'outline' })} ml-8` : buttonVariants({ variant: '' })} w-auto min-w-[200px] z-10 overflow-hidden
+                            <div className={`${isHome ? '[&_*]:text-slate-900 hover:[&_*]:text-blue-950 *:ml-8' : '[&_*]:text-white hover:[&_*]:text-slate-200'} relative group flex justify-center items-center`}>
+                                <div className={
+                                    `${isHome ? `${buttonVariants({ variant: 'outline' })}` : buttonVariants({ variant: '' })} w-auto min-w-[200px] z-10 overflow-hidden
                                     `}>{userData.name}
-                                </Link>
+                                </div>
                                 <div className='absolute hidden group-hover:block top-0 z-8 pt-10 w-[140px] transition-all animate-listOpen'>
                                     <ul className={`list-none m-0 p-1 ${isHome ? 'bg-white hover:*:bg-gray-200': 'bg-gray-800 hover:*:bg-blue-900'} *:cursor-pointer rounded-b-xl [&_*]:text-lg`}>
                                         { !userData.accountVerified && <li onClick={sendVerificationOtp}>Verify email</li> }
+                                        { userData.accountVerified && <li onClick={() => navigate('/account')}>Account</li> }
                                         <li onClick={logout}>Logout</li>
                                     </ul>                              
                                 </div>    
@@ -180,21 +210,32 @@ export default function Nav () {
                 <img onClick={() => checkMobileMenu()} src={assets.menu_icon} className='md:hidden w-7 ' alt="" />
             </div>
             {/* ----------mobile----------- */}
-            <div className={`md:hidden ${showMobileMenu ? 'fixed w-full' : 'h-0 w-0'} right-0  overflow-hidden bg-slate-100 bg-clip-padding backdrop-filter backdrop-blur bg-opacity-90 backdrop-saturate-50 backdrop-contrast-125 transition-all`}>
-                <ul className='flex flex-col items-center gap-5 m-5 px-5 text-lg font-medium'>
-                    <Link onClick={() => setShowMobileMenu(false)} to={{pathname: '/', hash: '#Header'}} className='px-4 py-2 rounded-full inline-block'>Home</Link>
-                    <Link onClick={() => setShowMobileMenu(false)} to={{pathname: '/', hash: '#About'}} className='px-4 py-2 rounded-full inline-block'>About</Link>
-                    <Link onClick={() => setShowMobileMenu(false)} to={{pathname: '/', hash: '#Contacts'}} className='px-4 py-2 rounded-full inline-block'>Contact me</Link>
+            <div className={`md:hidden ${showMobileMenu ? 'fixed w-fit' : 'translate-x-10 h-0 w-0'} right-0 overflow-hidden rounded-bl-xl bg-white bg-clip-padding bg-opacity-95 transition-all`}>
+                <ul className='flex flex-col items-end gap-5 m-5 px-5 text-lg font-medium'>
+                    <a onClick={() => setShowMobileMenu(false)} href='/#Header' className='px-4 py-2 rounded-full inline-block'>Home</a>
+                    <a onClick={() => setShowMobileMenu(false)} href='/#About' className='px-4 py-2 rounded-full inline-block'>About</a>
+                    <a onClick={() => setShowMobileMenu(false)} href='/#Contacts' className='px-4 py-2 rounded-full inline-block'>Contact me</a>
                     { isLogin || isRegistration ? (
-                        <li onClick={() => checkMobileBack(false)} className='px-4 py-2 rounded-full inline-block cursor-pointer pointer-events-auto'>Back</li>
+                        <>
+                            { !isLogin && <Link to='/login' className='px-4 py-2 rounded-full inline-block'>Log in</Link> }
+                            { !isRegistration && <Link to='/registration' className='px-4 py-2 rounded-full inline-block'>Sign up</Link> }
+                            <li onClick={() => checkMobileBack(false)} className='px-4 py-2 rounded-full inline-block cursor-pointer pointer-events-auto'>
+                                Back
+                            </li>
+                        </>
+                      
                     ) : (
                         <>
                             { userData ? (
-                                <Link onClick={() => setShowMobileMenu(false)} to='/Account' className='px-4 py-2 rounded-full inline-block'>{userData.name}</Link>
+                                <>
+                                    <Link to='/account' className='px-4 py-2 rounded-full inline-block'>{userData.name}</Link>
+                                    { !userData.accountVerified && <li className='px-4 py-2 rounded-full inline-block' onClick={sendVerificationOtp}>Verify email</li> }
+                                    <li onClick={logout} className='px-4 py-2 rounded-full inline-block'>Logout</li>
+                                </>
                             ) : (
                                 <>
-                                    <Link onClick={() => setShowMobileMenu(false)} to='/login' className='px-4 py-2 rounded-full inline-block'>Log in</Link>
-                                    <Link onClick={() => setShowMobileMenu(false)} to='/registration' className='px-4 py-2 rounded-full inline-block'>Sign up</Link>
+                                    <Link to='/login' className='px-4 py-2 rounded-full inline-block'>Log in</Link>
+                                    <Link to='/registration' className='px-4 py-2 rounded-full inline-block'>Sign up</Link>
                                 </>
                             )}
                         </>
@@ -204,3 +245,8 @@ export default function Nav () {
         </nav>
     )
 }
+
+// // removed onClick={() => setShowMobileMenu(false)} 
+// <Link onClick={() => setShowMobileMenu(false)} to={{pathname: '/', hash: '#Header'}} className='px-4 py-2 rounded-full inline-block'>Home</Link>
+// <Link onClick={() => setShowMobileMenu(false)} to={{pathname: '/', hash: '#About'}} className='px-4 py-2 rounded-full inline-block'>About</Link>
+// <Link onClick={() => setShowMobileMenu(false)} to={{pathname: '/', hash: '#Contacts'}} className='px-4 py-2 rounded-full inline-block'>Contact me</Link>

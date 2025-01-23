@@ -1,51 +1,44 @@
-const axios = require('axios')
-// const https = require('https')
+const fundaScraper = require('./scrapers/funda')
+const hAnywhereScraper = require('./scrapers/hAnywhere')
+const papariusScraper = require('./scrapers/paparius')
+const rentolaScraper = require('./scrapers/rentola')
+const kamernetScraper = require('./scrapers/kamernet')
+const huurwoningenScraper = require('./scrapers/huurwoningen')
 
-// const sortProviders = ['funda', 'hAnywhere', 'kamernet', 'paparius', 'huurwoningen', 'rentola']
-
-const workerServers = [
-    { url: 'http://localhost:3001/extractor', scrapers: ['funda', 'hAnywhere'] },
-    { url: 'http://localhost:3002/extractor', scrapers: ['kamernet', 'paparius'] },
-    { url: 'http://localhost:3003/extractor', scrapers: ['huurwoningen', 'rentola'] },
-]
-
-// const httpsAgent = new https.Agent({
-//     rejectUnauthorized: true,
-// });
+const sortProviders = ['funda', 'hAnywhere', 'kamernet', 'paparius', 'huurwoningen', 'rentola']
 
 const scrapeController = async (req, res) => {
-    const { city, radius, selectedProviders, sortGlobal, minPrice, maxPrice } = req.body
+    const city = req.body.city
+    const radius = req.body.radius
+    const selectedProviders = req.body.selectedProviders
+    const sortGlobal = req.body.sortGlobal
+    const minPrice = req.body.minPrice
+    const maxPrice = req.body.maxPrice
 
     if (!city) {
         return res.status(400)
         .send({ error: 'Please, provide information about the city.' })
     }
 
-    console.log(`Processing the request for ${city}, ${radius} km, ${selectedProviders}, ${sortGlobal}, ${minPrice} - ${maxPrice}. Time: ${new Date()}`)
+    const scrapers = {
+        funda: fundaScraper,
+        hAnywhere: hAnywhereScraper,
+        kamernet: kamernetScraper,
+        paparius: papariusScraper,
+        huurwoningen: huurwoningenScraper,
+        rentola: rentolaScraper,
+    }
+
+    console.log(`Processing the request for ${city}, ${radius} km, ${selectedProviders.sort((a, b) => sortProviders.indexOf(a) - sortProviders.indexOf(b))}, ${sortGlobal}, ${minPrice} - ${maxPrice}. Time: ${new Date()}`)
 
     res.setHeader('Content-Type', 'application/json')
 
     try {
-        const promises = workerServers.map((worker) => {
-            const scrapersToRun = worker.scrapers.filter((scraper) => selectedProviders.includes(scraper));
-            if (scrapersToRun.length > 0) {
-              return axios.post(worker.url, {
-                scrapers: scrapersToRun,
-                city,
-                radius,
-                sortGlobal,
-                minPrice,
-                maxPrice,
-              });
-            }
-            return null;
-        }).filter(Boolean)
-
-        const results = await Promise.all(promises)
-
-        results.forEach((workerResponse) => {
-            res.write(JSON.stringify(workerResponse.data) + '\n');
-        })
+        for (const providerId of selectedProviders) {
+            const scraper = scrapers[providerId]
+            const data = await scraper(city, radius, sortGlobal, minPrice, maxPrice)
+            res.write(JSON.stringify({ [providerId]: data }) + '\n')
+        }
 
         res.end()
 

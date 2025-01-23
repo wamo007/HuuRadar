@@ -56,7 +56,7 @@ export default function Login({ signType }) {
   }
 
   return (
-    <div className='bg-cover bg-center md:items-center flex items-center justify-center w-full overflow-hidden bg-slate-100 min-h-screen'>
+    <div className='bg-cover bg-center md:items-center flex justify-center w-full overflow-hidden bg-slate-100 min-h-screen'>
       <Nav />
       <div className='flex items-center justify-center'>
         <div className='bg-slate-900 p-10 rounded-lg shadow-xl w-full sm:w-96 text-indigo-300 text-sm'>
@@ -97,7 +97,9 @@ export default function Login({ signType }) {
             </div>
             <Link to='/reset-password' className='text-indigo-500 cursor-pointer'>Forgot password?</Link>
 
-            <Button className='mt-4 w-full py-2.5 rounded-lg bg-gradient-to-r from-indigo-500 to-indigo-800 text-white font-medium' type='submit'>{signType === 'Sign Up' ? 'Sign Up' : 'Login'}</Button>
+            <Button className='hover:animate-pulse mt-4 w-full py-2.5 rounded-lg bg-gradient-to-r from-indigo-500 to-indigo-800 text-white font-medium' type='submit'>
+              {signType === 'Sign Up' ? 'Sign Up' : 'Login'}
+            </Button>
           </form>
 
           {signType === 'Sign Up' ? (

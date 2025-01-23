@@ -34,7 +34,11 @@ export default function About() {
                     <h2 className='text-4xl max-sm:text-2xl font-semibold text-center'>3. Get Notified!</h2>
                     <div className='text-2xl max-sm:text-xl text-center'>
                         <p>Click on "Notify me!" to get regular updates on your search terms!</p>
-                        <a href="#More" className='text-xl underline underline-offset-4 decoration-1 under font-light text-gray-700'>See more...</a>
+                        <a href="#More" className='text-xl max-md:underline underline-offset-4 hover:text-gray-700 group transition duration-300'>
+                            <span className="bg-left-bottom bg-gradient-to-r from-gray-900 to-gray-900 bg-[length:0%_2px] bg-no-repeat group-hover:bg-[length:100%_2px] transition-all duration-500 ease-out">
+                            See more...
+                            </span>
+                        </a>
                     </div>
                 </div>
             </div>

@@ -46,7 +46,7 @@ export default function Contacts() {
         <div ref={contact1} className={`px-7 py-5 bg-white/10 backdrop-blur-sm rounded-xl border border-white/30 md:shadow-lg transition-all ease-in duration-700 ${isVisibleContact1 ? 'opacity-100' : 'opacity-0 translate-y-20'}`}>
             <h1 className='text-slate-900 text-4xl max-sm:text-3xl font-bold text-center'>Contact Me!</h1>
         </div>
-        <div className='py-4 w-full flex justify-center items-center gap-3'>
+        <div className='py-0.5 w-full flex justify-center items-center gap-3'>
           <div ref={contact2} className={`container bg-slate-900 p-10 rounded-lg shadow-2xl w-full text-indigo-300 text-md transition-all ease-in duration-700 ${isVisibleContact2 ? 'opacity-100' : 'opacity-0 translate-x-20'}`}>
             <form onSubmit={submitHandler} className="w-full">
               <div className='mb-4 flex items-center gap-3 w-full px-5 py-2.5 rounded-lg bg-[#333A5C]'>
@@ -67,16 +67,16 @@ export default function Contacts() {
                   value={email} 
                   onChange={e => setEmail(e.target.value)} />
               </div>
-              <div className='mb-4 flex items-start gap-3 w-full h-64 px-5 py-2.5 rounded-lg bg-[#333A5C]'>
+              <div className='mb-4 flex items-start gap-3 w-full min-h-40 max-h-64 px-5 py-2.5 rounded-lg bg-[#333A5C]'>
                 <img src={assets.notes} className="mt-2.5" alt="" />
                 <Textarea 
                   type="text" 
                   placeholder='Your request/question/feedback...' 
-                  className='bg-transparent outline-none border-none rounded-lg resize-none h-full text-sm md:text-lg focus-visible:ring-0' 
+                  className='bg-transparent outline-none border-none rounded-lg resize-none max-h-64 min-h-36 text-sm md:text-lg focus-visible:ring-0' 
                   value={text} 
                   onChange={e => setText(e.target.value)} />
               </div>
-              <Button className='mt-4 w-full py-2.5 rounded-lg bg-gradient-to-r from-indigo-500 to-indigo-800 text-white lg:text-base font-medium' type='submit'>
+              <Button className='hover:animate-pulse mt-4 w-full py-2.5 rounded-lg bg-gradient-to-r from-indigo-500 to-indigo-800 text-white lg:text-base font-medium' type='submit'>
                 Submit
               </Button>
             </form>
@@ -93,7 +93,7 @@ export default function Contacts() {
                   <a href="https://github.com/wamo007" target="_blank">
                     <img src={assets.github} width={30} alt="My Github Page" />
                   </a>
-                  <a href="https://az.linkedin.com/in/shamil-iskandarov-326225293" target="_blank">
+                  <a href="https://www.linkedin.com/in/shamil-iskandarov-326225293" target="_blank">
                     <img src={assets.linkedin} width={30} alt="My LinkedIn Page. LinkedIn icon by Icons8.com" />
                   </a>
                 </div>

@@ -1,6 +1,5 @@
 import Home from './pages/Home'
 import Login from './pages/SignForm'
-import Contacts from './components/Contacts'
 import Demo from './pages/Demo'
 import ScrollToHashElement from "@cascadia-code/scroll-to-hash-element"
 import { ToastContainer, toast } from 'react-toastify'
@@ -14,12 +13,11 @@ function App() {
 
   return (
     <>
-      <ToastContainer position='bottom-right' autoClose={3000} />
+      <ToastContainer pauseOnFocusLoss={false} position='bottom-right' autoClose={3000} />
       <ScrollToHashElement behavior="smooth" />
       <Routes>
         <Route path='/' element={<Home />} />
         <Route path='/account' element={<Account />} />
-        {/* <Route path='/contacts' element={<Contacts />} /> */}
         <Route path='/demo' element={<Demo />} />
         <Route path='/registration' element={<Login signType='Sign Up' />} />
         <Route path='/login' element={<Login signType='Login' />} />

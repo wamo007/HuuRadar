@@ -84,7 +84,7 @@ export default function AverageBarChart({ responseData }) {
   }, [responseData])
 
   return (
-    <Card className="flex flex-col">
+    <Card className="flex flex-col w-full md:w-1/3 h-[23.5rem]">
       <CardHeader className="px-2">
         <CardTitle>Provider's Average Price</CardTitle>
         <CardDescription>Top 6 providers</CardDescription>

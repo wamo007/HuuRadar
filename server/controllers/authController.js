@@ -436,16 +436,16 @@ const changeUserName = async (req, res) => {
     try {
         const { email, name } = req.body
 
-        if (!name) {
-            return res.json({
-                error: 'Fill in the new Name!'
-            })
-        }
-
         const user = await User.findOne({ email })
         if (!user) {
             return res.json({
                 error: 'User not found'
+            })
+        }
+
+        if (!name) {
+            return res.json({
+                error: 'Fill in the new Name!'
             })
         }
 
@@ -463,6 +463,13 @@ const changePassword = async (req, res) => {
     try {
         const { email, oldPassword, newPassword } = req.body
 
+        const user = await User.findOne({ email })
+        if (!user) {
+            return res.json({
+                error: 'User not found'
+            })
+        }
+
         if (!newPassword || !oldPassword) {
             return res.json({
                 error: 'Fill in the passwords!'
@@ -478,13 +485,6 @@ const changePassword = async (req, res) => {
         if (!newPassword.length < 6) {
             return res.json({
                 error: 'Password should be at least 6 characters long'
-            })
-        }
-
-        const user = await User.findOne({ email })
-        if (!user) {
-            return res.json({
-                error: 'User not found'
             })
         }
 

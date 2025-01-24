@@ -113,7 +113,7 @@ export function AveragePieChart({ responseData }) {
   }, [responseData])
 
   return (
-    <Card className="flex flex-col">
+    <Card className="flex flex-col w-full md:w-1/3 h-[23.5rem]">
       <CardHeader className="items-center pb-0 px-[2.125rem]">
         <CardTitle>Total Average Price</CardTitle>
         <CardDescription>Top 6 providers</CardDescription>

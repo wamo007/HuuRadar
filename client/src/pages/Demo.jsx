@@ -5,8 +5,8 @@ import SearchPanel from '../components/Search.jsx'
 import Nav from '@/components/Nav'
 import { Button } from '@/components/ui/button'
 import PlaceholderTab from '@/components/PlaceholderTab'
-import AverageBarChart from '@/components/BarChart'
-import { AveragePieChart } from '@/components/PieChart'
+import AverageBarChart from '@/components/ui/custom/BarChart'
+import { AveragePieChart } from '@/components/ui/custom/PieChart'
 import Checkmark from '@/components/ui/checkmark'
  
 const providers = [

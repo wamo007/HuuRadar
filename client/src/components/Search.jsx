@@ -13,7 +13,7 @@ import { toast } from "react-toastify"
 import { useContext, useState } from 'react'
 import { Checkbox } from "@/components/ui/checkbox"
 import { Loader2 } from "lucide-react"
-import { ComboboxCity } from "./ui/combobox"
+import { ComboboxCity } from "./ui/custom/ComboboxCity"
 import { userContent } from "@/context/UserContext"
 import axios from "axios"
 
@@ -155,7 +155,7 @@ function SearchPanel({ responseDataChange, loadingStatus, providerSet }) {
     <>
       <>
                 
-        <Button onClick={(e) => saveQuery(e)} className={`${(!loading) && (Object.keys(queryData).length > 0) ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-5 md:translate-y-5 max-[585px]:-translate-y-12 pointer-events-none'} transition-all duration-500 ease-in-out absolute m-auto top-[5.5rem] md:-top-[4.7rem] max-[585px]:top-44 max-[419px]:top-[19.3rem] left-0 right-0 w-[7.5rem] text-md shadow-gray-400 shadow-lg hover:scale-105 hover:shadow-2xl`} type='button'>
+        <Button onClick={(e) => saveQuery(e)} className={`${(!loading) && (Object.keys(queryData).length > 0) ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-5 md:translate-y-5 max-[602px]:-translate-y-12 pointer-events-none'} transition-all duration-500 ease-in-out absolute m-auto top-[5.5rem] md:-top-[4.7rem] max-[585px]:top-44 [@media_((min-width:585px)_and_(max-width:602px))]:top-[132px] max-[419px]:top-[19.3rem] left-0 right-0 w-[7.5rem] text-md shadow-gray-400 shadow-lg hover:scale-105 hover:shadow-2xl`} type='button'>
           Notify me!
         </Button>
         <form onSubmit={handleSubmit} className="flex flex-nowrap max-[833px]:flex-wrap max-[419px]:flex-col flex-row gap-1 lg:gap-3 w-full justify-center min-[833px]:justify-stretch items-center animate-slideIn4">
@@ -224,7 +224,7 @@ function SearchPanel({ responseDataChange, loadingStatus, providerSet }) {
 
               <Input
                 type="number"
-                className="[@media_((min-width:419px)_and_(max-width:585px))]:min-w-40 min-w-[5.5rem] max-w-24 max-[419px]:max-w-40 xl:max-w-40 animate-slideIn6 md:text-md [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                className="[@media_((min-width:419px)_and_(max-width:602px))]:min-w-40 min-w-[5.5rem] max-w-24 max-[419px]:max-w-40 xl:max-w-40 animate-slideIn6 md:text-md [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                 id="minPrice"
                 name="minPrice"
                 onChange={(e) => setMinPrice(e.target.value)}
@@ -232,13 +232,13 @@ function SearchPanel({ responseDataChange, loadingStatus, providerSet }) {
               />
               <Input
                 type="number"
-                className="[@media_((min-width:419px)_and_(max-width:585px))]:min-w-40 min-w-[5.5rem] max-w-24 max-[419px]:max-w-40 xl:max-w-40 animate-slideIn7 md:text-md [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                className="[@media_((min-width:419px)_and_(max-width:602px))]:min-w-40 min-w-[5.5rem] max-w-24 max-[419px]:max-w-40 xl:max-w-40 animate-slideIn7 md:text-md [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                 id="maxPrice"
                 name="maxPrice"
                 onChange={(e) => setMaxPrice(e.target.value)}
                 placeholder="Max €"
               />
-              <Button type="submit" className={`${(animateCount === true) ? '' : 'animate-slideIn8'} w-[5.5rem] xl:w-40 max-[585px]:w-40 text-md shadow-gray-400`} disabled={loading}>
+              <Button type="submit" className={`${(animateCount === true) ? '' : 'animate-slideIn8'} w-[5.5rem] xl:w-40 max-[602px]:w-40 text-md shadow-gray-400`} disabled={loading}>
                 {loading && <Loader2 className="animate-spin" />}
                 Search
               </Button>

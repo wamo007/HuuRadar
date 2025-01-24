@@ -1,14 +1,26 @@
-import { assets } from "@/assets/assets";
-import Nav from "@/components/Nav";
-import { Button } from "@/components/ui/button";
-import { userContent } from "@/context/UserContext";
-import { Input } from "@/components/ui/input";
-import { useContext, useState } from "react";
-import { toast } from "react-toastify";
-import axios from "axios";
+import { assets } from "@/assets/assets"
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import Nav from "@/components/Nav"
+import { Button } from "@/components/ui/button"
+import { userContent } from "@/context/UserContext"
+import { Input } from "@/components/ui/input"
+import { useContext, useState } from "react"
+import { toast } from "react-toastify"
+import axios from "axios"
+import { BarChartUser } from "@/components/ui/custom/BarChartUser"
+import { AreaChartUser } from "@/components/ui/custom/AreaChartUser"
 
 export default function Account() {
 
+  axios.defaults.withCredentials = true
   const { backendUrl, userData } = useContext(userContent)
   
   const [openChangeUser, setOpenChangeUser] = useState(false)
@@ -75,13 +87,13 @@ export default function Account() {
   }
 
   return (
-    <div className='relative bg-slate-100 min-h-screen w-full'>
+    <div className='relative bg-slate-100 min-h-screen overflow-auto w-full'>
       <Nav />
       <hr className='w-5/6 h-1 mx-auto bg-gray-200 rounded-xl border-0 dark:bg-gray-700' />
-      <div className='m-auto h-[85vh] overflow-hidden px-6 lg:px-10 xl:px-14 2xl:px-30'>
-        <div className="flex max-sm:flex-col items-center w-full py-4 sm:gap-2 lg:gap-6">
-          <div className="sm:min-h-[85vh] w-full sm:w-2/5 2xl:w-1/3 py-2 *:py-2 px-1">
-            <div className="*:py-2">
+      <div className='m-auto h-[85vh] pt-2 px-6 lg:px-10 xl:px-14 2xl:px-30'>
+        <div className="flex max-md:flex-col items-center w-full md:gap-2 lg:gap-6">
+          <div className="md:min-h-[85vh] w-full md:w-1/3 2xl:w-1/3 py-2 px-1">
+            <div className="*:py-2 py-2">
               <div className="flex max-lg:flex-wrap justify-between sm:text-md text-lg">
                 <div>Email:</div>
                 <div className="font-semibold underline underline-offset-2">
@@ -96,15 +108,15 @@ export default function Account() {
               </div>
             </div>
             <div>
-              <Button onClick={() => setOpenChangeUser(true)} className={`${openChangeUser ? 'scale-y-0 opacity-0 h-0' : 'scale-y-100'} w-full py-2.5 rounded-lg text-white font-medium transition-all ease-in-out duration-500`}>
+              <Button onClick={() => setOpenChangeUser(true)} className={`${openChangeUser ? 'scale-y-0 opacity-0 h-0' : ''} w-full py-2.5 rounded-lg text-white font-medium transition-all ease-in-out duration-500`}>
                 Change details
               </Button>
-              <hr className={`${!openChangeUser ? 'scale-y-300 opacity-0' : 'opacity-100'} w-full h-1 -mt-4 mx-auto rounded-xl bg-gray-200 border-0 dark:bg-gray-700 transition-all ease-in-out duration-500`} />
+              <hr className={`${!openChangeUser ? 'scale-y-300 opacity-0 hidden' : 'opacity-100'} w-full h-1 -mt-4 mx-auto rounded-xl bg-gray-200 border-0 dark:bg-gray-700 transition-all ease-in-out duration-500`} />
             </div>
-            <div>
-              <div className={`${openChangeUser ? 'opacity-100' : 'opacity-0'} sm:text-md text-lg transition-all ease-in-out duration-500`}>
-                <div className="py-2">What do you want to change?</div>
-                <div className={`${openChangeName || openChangePassword ? 'opacity-0 h-0 py-0 m-0 text-[0px] *:hidden' : 'py-2'} flex justify-between items-center transition-all ease-in-out duration-500`}>
+            <div className="pt-2">
+              <div className={`${openChangeUser ? 'opacity-100' : 'opacity-0 h-0'} sm:text-md text-lg transition-all ease-in-out duration-500`}>
+                <div className={`${openChangeUser ? 'opacity-100 py-2' : 'opacity-0 h-0 py-0'}`}>What do you want to change?</div>
+                <div className={`${openChangeName || openChangePassword ? 'opacity-0 h-0 py-0 m-0 text-[0px] *:hidden *:pointer-events-none' : 'py-2'} flex justify-between items-center transition-all ease-in-out duration-500`}>
                   <Button onClick={() => setOpenChangeName(true)} className='w-24'>Name</Button> OR <Button onClick={() => setOpenChangePassword(true)} className='w-24'>Password</Button>
                 </div>
                 <div className={`${openChangeName ? 'py-2' : 'scale-x-0 origin-left opacity-0 h-0 py-0'} relative flex items-center transition-all ease-in-out duration-500`}>
@@ -152,10 +164,40 @@ export default function Account() {
               </div>
             </div>
           </div>
-          <div className="max-sm:hidden min-h-[82vh] w-1 flex-shrink-0 mx-[1%] bg-gray-200 rounded-3xl dark:bg-gray-700"></div>
-          <hr className='sm:hidden w-full h-1 mx-auto my-4 bg-gray-200 border-0 dark:bg-gray-700' />
-          <div className="sm:min-h-[85vh] w-full sm:w-3/5 lg:w-full py-4 px-1 text-center z-10">
-            main
+          <div className="max-md:hidden min-h-[82vh] w-1 flex-shrink-0 mx-[1%] bg-gray-200 rounded-3xl dark:bg-gray-700"></div>
+          <hr className='md:hidden w-full h-1 mx-auto my-4 bg-gray-200 border-0 dark:bg-gray-700' />
+          <div className="md:min-h-[85vh] w-full md:w-2/3 lg:w-full py-4 px-1 gap-8 md:gap-2 flex flex-col justify-between text-center z-10">
+            <Select name="radiusDrop" id="radiusDrop" onValueChange={''}>
+              <SelectTrigger className="min-w-full animate-slideIn4 transition-all duration-500 ease-in-out text-md">
+                <SelectValue placeholder="Radius" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                <SelectLabel>Radius</SelectLabel>
+                  <SelectItem value="0">0KM</SelectItem>
+                  <SelectItem value="1">1KM</SelectItem>
+                  <SelectItem value="5">5KM</SelectItem>
+                  <SelectItem value="10">10KM</SelectItem>
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+            <div className="flex max-md:flex-wrap gap-8 md:gap-2">
+              <BarChartUser />
+              <div className="w-full md:w-1/2">
+                <ul>
+                  Latest Price per Provider:
+                  <li>Funda: ...</li>
+                  <li>Funda: ...</li>
+                  <li>Funda: ...</li>
+                  <li>Funda: ...</li>
+                  <li>Funda: ...</li>
+                  <li>Funda: ...</li>
+                </ul>
+              </div>
+            </div>
+            <div>
+              <AreaChartUser />
+            </div>
           </div>
         </div>
       </div>

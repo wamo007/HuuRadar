@@ -432,6 +432,81 @@ const resetPassword = async (req, res) => {
     }
 }
 
+const changeUserName = async (req, res) => {
+    try {
+        const { email, name } = req.body
+
+        if (!name) {
+            return res.json({
+                error: 'Fill in the new Name!'
+            })
+        }
+
+        const user = await User.findOne({ email })
+        if (!user) {
+            return res.json({
+                error: 'User not found'
+            })
+        }
+
+        user.name = name
+
+        await user.save()
+        return res.json({ success: true, message: 'Name has been successfully changed!' })
+    } catch (error) {
+        return res.json({
+            message: err.message
+        })
+    }
+}
+const changePassword = async (req, res) => {
+    try {
+        const { email, oldPassword, newPassword } = req.body
+
+        if (!newPassword || !oldPassword) {
+            return res.json({
+                error: 'Fill in the passwords!'
+            })
+        }
+
+        if (oldPassword === newPassword) {
+            return res.json({
+                error: 'The new password is the same as the old one!'
+            })
+        }
+
+        if (!newPassword.length < 6) {
+            return res.json({
+                error: 'Password should be at least 6 characters long'
+            })
+        }
+
+        const user = await User.findOne({ email })
+        if (!user) {
+            return res.json({
+                error: 'User not found'
+            })
+        }
+
+        const match = await comparePassword(oldPassword, user.password)
+        if (!match) {
+            return res.json({
+                error: 'Old password is incorrect'
+            })
+        }
+
+        const hashedPassword = await hashPassword(newPassword)
+        user.password = hashedPassword
+
+        await user.save()
+        return res.json({ success: true, message: 'Password has been successfully changed!' })
+    } catch (error) {
+        return res.json({
+            message: err.message
+        })
+    }
+}
+
 module.exports = {
     registerUser,
     loginUser,
@@ -442,4 +517,6 @@ module.exports = {
     sendResetOtp,
     verifyOtp,
     resetPassword,
+    changeUserName,
+    changePassword
 }

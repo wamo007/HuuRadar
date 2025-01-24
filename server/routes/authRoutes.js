@@ -1,6 +1,6 @@
 const { Router } = require('express')
 const cors = require('cors')
-const { registerUser, loginUser, logOutUser, sendVerifyOtp, verifyEmail, alreadyAuthenticated, sendResetOtp, resetPassword, verifyOtp } = require('../controllers/authController')
+const { registerUser, loginUser, logOutUser, sendVerifyOtp, verifyEmail, alreadyAuthenticated, sendResetOtp, resetPassword, verifyOtp, changeUserName, changePassword } = require('../controllers/authController')
 const userAuth = require('../middleware/userAuth')
 
 const authRouter = Router()
@@ -21,5 +21,7 @@ authRouter.get('/is-auth', userAuth, alreadyAuthenticated)
 authRouter.post('/send-reset-otp', sendResetOtp)
 authRouter.post('/verify-reset-otp', verifyOtp)
 authRouter.post('/reset-password', resetPassword)
+authRouter.post('/changeName', changeUserName)
+authRouter.post('/changePass', changePassword)
 
 module.exports = authRouter

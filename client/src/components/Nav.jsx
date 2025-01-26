@@ -136,24 +136,24 @@ export default function Nav ({ className }) {
     }, [scrollData])
 
     return (
-        <nav className={`${isDemo || isAccount ? 'sticky' : 'fixed'} top-0 ${showNav ? '-translate-y-full' : ''} ${navColor ? 'bg-slate-100 bg-clip-padding backdrop-filter backdrop-blur bg-opacity-50 backdrop-saturate-50 backdrop-contrast-125' : ''} mx-auto w-full transition-all duration-700 ease-out z-50 ${className}`}>
+        <nav className={`${isDemo || isAccount ? 'sticky' : 'fixed'} top-0 ${showNav ? '-translate-y-full' : ''} ${navColor ? 'bg-slate-100 bg-clip-padding backdrop-filter backdrop-blur bg-opacity-50 backdrop-saturate-50 backdrop-contrast-125' : ''} mx-auto w-full transition-all duration-700 ease-out z-50 h-[5.125rem] ${className}`}>
             <div className='mx-auto flex justify-between items-center w-11/12 max-w-7xl py-4 px-6 md:px-2 lg:px-10 xl:px-14 2xl:px-30'>
                 <Link className='flex justify-between items-center gap-3' to='/'>
                     <img src={assets.logo} alt="Website Logo" width={50} />
-                    <div className="brand text-primary text-center font-bold text-2xl max-[419px]:text-xl">HUURADAR</div>
+                    <div className={`text-primary ${isHome ? 'dark:text-primary' : 'dark:text-primary-foreground'} text-center font-bold text-2xl max-[419px]:text-xl`}>HUURADAR</div>
                 </Link>
-                <ul className='hidden md:flex gap-7 md:gap-3 min-[802px]:gap-6 xl:gap-9 text-gray-900 text-xl font-semibold md:text-[16px] min-[802px]:text-[19px]'>
-                    <a href='/#Header' className='cursor-pointer hover:text-gray-700 group transition duration-300'>
+                <ul className={`hidden ${isHome ? 'dark:text-primary' : 'dark:text-primary-foreground'} md:flex gap-7 md:gap-3 min-[802px]:gap-6 xl:gap-9 text-gray-900 text-xl font-semibold md:text-[16px] min-[802px]:text-[19px]`}>
+                    <a href='/#Header' className={`cursor-pointer hover:text-gray-700 ${isHome ? '' : 'dark:*:from-primary-foreground dark:*:to-primary-foreground dark:hover:text-primary-foreground/80'} group transition duration-300`}>
                         <span className="bg-left-bottom bg-gradient-to-r from-gray-900 to-gray-900 bg-[length:0%_2px] bg-no-repeat group-hover:bg-[length:100%_2px] transition-all duration-500 ease-out">
                         Home
                         </span>
                     </a>
-                    <a href='/#About' className='cursor-pointer hover:text-gray-700 group transition duration-300'>
+                    <a href='/#About' className={`cursor-pointer hover:text-gray-700 ${isHome ? '' : 'dark:*:from-primary-foreground dark:*:to-primary-foreground dark:hover:text-primary-foreground/80'} group transition duration-300`}>
                         <span className="bg-left-bottom bg-gradient-to-r from-gray-900 to-gray-900 bg-[length:0%_2px] bg-no-repeat group-hover:bg-[length:100%_2px] transition-all duration-500 ease-out">
                         About
                         </span>
                     </a>
-                    <a href='/#Contacts' className='cursor-pointer hover:text-gray-700 group transition duration-300'>
+                    <a href='/#Contacts' className={`cursor-pointer hover:text-gray-700 ${isHome ? '' : 'dark:*:from-primary-foreground dark:*:to-primary-foreground dark:hover:text-primary-foreground/80'} group transition duration-300`}>
                         <span className="bg-left-bottom bg-gradient-to-r from-gray-900 to-gray-900 bg-[length:0%_2px] bg-no-repeat group-hover:bg-[length:100%_2px] transition-all duration-500 ease-out">
                         Contact Me
                         </span>
@@ -163,31 +163,31 @@ export default function Nav ({ className }) {
                     <ul className="hidden -ml-12 md:flex justify-between items-center gap-3 [&_*]:text-center [&_*]:font-bold [&_*]:text-xl">
                         { !isLogin && 
                             <li onClick={() => navigate('/login')} className={
-                                `${buttonVariants({ variant: 'outline' })} cursor-pointer pointer-events-auto w-[120px] text-primary hover:text-primary/70 hover:bg-gray-200 dark:!text-primary`}>
+                                `${buttonVariants({ variant: 'outline' })} cursor-pointer pointer-events-auto w-[120px]`}>
                                 Login
                             </li> 
                         }
                         { !isRegistration && 
                             <li onClick={() => navigate('/registration')} className={
-                                `${buttonVariants({ variant: 'outline' })} cursor-pointer pointer-events-auto w-[120px] text-primaty hover:text-primary/70 hover:bg-gray-200 dark:!text-primary`}>
+                                `${buttonVariants({ variant: 'outline' })} cursor-pointer pointer-events-auto w-[120px]`}>
                                 Sign Up
                             </li> 
                         }
                         <li onClick={() => navigate(-1)} className={
-                            `${buttonVariants({ variant: '' })} cursor-pointer pointer-events-auto w-[120px] text-white hover:text-slate-200 tracking-wider`}>
+                            `${buttonVariants({ variant: '' })} cursor-pointer pointer-events-auto w-[120px]`}>
                             Back
                         </li>
                     </ul>
                 ) : (
                     <ul className="hidden md:flex justify-between items-center gap-3 [&_*]:text-center [&_*]:font-bold [&_*]:text-xl">
                         { userData ? (
-                            <div className={`${isHome ? '[&_*]:text-primary hover:[&_*]:text-blue-950 *:ml-8' : '[&_*]:text-white hover:[&_*]:text-slate-200'} relative group flex justify-center items-center`}>
+                            <div className={`${isHome ? '*:ml-8' : ''} relative group flex justify-center items-center`}>
                                 <div className={
-                                    `${isHome ? `${buttonVariants({ variant: 'outline' })}` : buttonVariants({ variant: '' })} w-auto min-w-[200px] z-10 overflow-hidden
+                                    `${isHome ? buttonVariants({ variant: 'outline' }) : `${buttonVariants({ variant: '' })} dark:border dark:border-input dark:text-primary dark:bg-background dark:hover:bg-accent dark:hover:text-accent-foreground`} w-auto min-w-[200px] z-10 overflow-hidden
                                     `}>{userData.name}
                                 </div>
                                 <div className='absolute hidden group-hover:block top-0 z-8 pt-10 w-[140px] transition-all animate-listOpen'>
-                                    <ul className={`list-none m-0 p-1 ${isHome ? 'bg-white hover:*:bg-gray-200': 'bg-gray-800 hover:*:bg-blue-900'} *:cursor-pointer rounded-b-xl [&_*]:text-lg`}>
+                                    <ul className={`list-none m-0 p-1 ${isHome ? 'bg-background hover:*:bg-gray-200': 'bg-gray-800 hover:*:bg-blue-900 text-primary-foreground dark:bg-background dark:hover:*:bg-gray-200 dark:text-primary'} *:cursor-pointer rounded-b-xl [&_*]:text-lg`}>
                                         { !userData.accountVerified && <li onClick={sendVerificationOtp}>Verify email</li> }
                                         { userData.accountVerified && <li onClick={() => navigate('/account')}>Account</li> }
                                         <li onClick={logout}>Logout</li>
@@ -196,11 +196,11 @@ export default function Nav ({ className }) {
                             </div>
                         ) : (
                             <>
-                                <li className={isHome ? '*:text-white hover:*:text-slate-200' : '*:text-primary hover:*:text-blue-950'}><Link to='/login' className={
-                                    `${isHome ? buttonVariants({ variant: '' }) : buttonVariants({ variant: 'outline' })} w-[120px] hover:text-primary/70 hover:bg-gray-200 dark:!text-primary 
+                                <li><Link to='/login' className={
+                                    `${buttonVariants({ variant: 'outline' })} w-[120px] 
                                     `}>Log in</Link></li>
-                                <li className={isHome ? '*:text-primary hover:*:text-blue-950' : '*:text-white hover:*:text-slate-200'}><Link to='/registration' className={
-                                    `${isHome ? buttonVariants({ variant: 'outline' }) : buttonVariants({ variant: '' })} w-[120px]
+                                <li><Link to='/registration' className={
+                                    `${buttonVariants({ variant: '' })} w-[120px]
                                     `}>Sign up</Link></li>
                             </>
                         )}

@@ -54,7 +54,7 @@ const ProviderData = memo(({ provider, responseData, noResults }) => {
       ) : (
         noResults && (
           <>
-            <h3 className='text-center italic pt-4'>No Results on {label} for the last 3 days...</h3>
+            <h3 className='text-center dark:text-muted italic pt-4'>No Results on {label} for the last 3 days...</h3>
             <hr className='w-3/4 h-1 mx-auto my-8 bg-gray-200 border-0 rounded-3xl mt-10' />
           </>
         )
@@ -108,7 +108,7 @@ export default function Demo() {
   return (
     <>
       <div className='relative bg-slate-100 dark:bg-gray-700 min-h-screen w-full'>
-        <Nav className='dark:[&_*]:text-primary-foreground' />
+        <Nav />
         <div className='bg-white dark:bg-primary dark:*:text-white shadow-2xl-b-0 bg-clip-padding backdrop-filter backdrop-blur bg-opacity-50 dark:bg-opacity-100 backdrop-saturate-50 backdrop-contrast-125 rounded-t-lg flex md:flex-nowrap flex-wrap justify-between items-center mx-auto py-4 w-11/12 max-w-7xl px-6 md:px-2 lg:px-10 xl:px-14 2xl:px-30 text-center'>
           {firstSearch ? (
             <>

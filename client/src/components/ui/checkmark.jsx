@@ -15,6 +15,7 @@ function CircularProgress({ progress }) {
       width="128"
       height="128"
       viewBox="0 0 258 258"
+      className="dark:[&_path]:stroke-gray-100"
     >
       {/* Check mark */}
       <motion.path
@@ -24,6 +25,7 @@ function CircularProgress({ progress }) {
         stroke="#111827"
         strokeWidth={8}
         style={{ pathLength: checkmarkPathLength }}
+        className="dark:stroke-gray-100"
       />
       {/* Circle */}
       <motion.path
@@ -34,6 +36,7 @@ function CircularProgress({ progress }) {
         style={{
           pathLength: circleLength,
         }}
+        className="dark:stroke-gray-100"
       />
     </motion.svg>
   );

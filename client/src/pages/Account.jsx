@@ -145,12 +145,12 @@ export default function Account() {
   }, [])
 
   return (
-    <div className='relative bg-slate-100 dark:bg-gray-700 min-h-screen overflow-auto w-full'>
-      <Nav className='dark:[&_*]:text-primary-foreground' />
-      <div className='m-auto px-6 lg:px-10 xl:px-14 2xl:px-30'>
+    <div className='relative bg-slate-100 dark:bg-gray-700 min-h-[100vh] overflow-auto w-full'>
+      <Nav />
+      <div className='m-auto px-6 lg:px-10 xl:px-14 2xl:px-30' style={{ height: 'calc(100vh - 6rem)' }}>
       <hr className='w-full h-1 mx-auto bg-gray-200 rounded-3xl border-0' />
-        <div className="grid grid-cols-1 md:grid-cols-[1fr_auto_2fr] xl:grid-cols-[0.7fr_auto_2.3fr] md:gap-6 w-full">
-          <div className="relative w-full py-2 pt-0 px-1">
+        <div className="grid grid-cols-1 min-[858px]:grid-cols-[1fr_auto_2fr] xl:grid-cols-[0.9fr_auto_2.1fr] min-[858px]:gap-6 w-full h-full">
+          <div className="relative w-full py-0 px-1">
             <div className="*:py-2 py-2 animate-slideIn6 dark:text-muted">
               <div className="flex max-lg:flex-wrap justify-between sm:text-md text-lg">
                 <div>Email:</div>
@@ -172,7 +172,7 @@ export default function Account() {
               <hr className={`${!openChangeUser ? 'scale-y-300 opacity-0 hidden' : 'opacity-100'} w-full h-1 -mt-4 mx-auto rounded-3xl bg-gray-200 border-0 transition-all ease-in-out duration-500`} />
             </div>
             <div className="pt-2">
-              <div className={`${openChangeUser ? 'opacity-100' : 'opacity-0 h-0 [&_*]:h-0 [&_*]:py-0 [&_*]:pointer-events-none'} sm:text-md text-lg transition-all ease-in-out duration-500 text-white`}>
+              <div className={`${openChangeUser ? 'opacity-100' : 'opacity-0 h-0 [&_*]:h-0 [&_*]:py-0 [&_*]:pointer-events-none'} sm:text-md text-lg transition-all ease-in-out duration-500 dark:text-white`}>
                 <div className={`${openChangeUser ? 'opacity-100 py-2' : 'opacity-0 h-0 py-0'}`}>What do you want to change?</div>
                 <div className={`${(openChangeName || openChangePassword) ? 'opacity-0 h-0 py-0 m-0 text-[0px] [&_*]:hidden [&_*]:pointer-events-none [&_*]:h-0 [&_*]:py-0' : 'py-2'} flex justify-between items-center transition-all ease-in-out duration-500`}>
                   <Button onClick={() => setOpenChangeName(true)} className='w-24'>Name</Button> OR <Button onClick={() => setOpenChangePassword(true)} className='w-24'>Password</Button>
@@ -183,7 +183,7 @@ export default function Account() {
                     <Input 
                       type="text"
                       placeholder={userData.name} 
-                      className='bg-transparent outline-none border-none rounded-lg md:text-md focus-visible:ring-0' 
+                      className='bg-transparent outline-none border-none rounded-lg min-[858px]:text-md focus-visible:ring-0 dark:text-primary' 
                       value={name} 
                       onChange={e => setName(e.target.value)} />
                   </div>
@@ -194,7 +194,7 @@ export default function Account() {
                     <Input 
                       type="password" 
                       placeholder='Old password'
-                      className='bg-transparent outline-none border-none rounded-lg md:text-md focus-visible:ring-0' 
+                      className='bg-transparent outline-none border-none rounded-lg min-[858px]:text-md focus-visible:ring-0 dark:text-primary' 
                       value={oldPassword} 
                       onChange={e => setOldPassword(e.target.value)} />
                   </div>
@@ -205,7 +205,7 @@ export default function Account() {
                     <Input 
                       type="password" 
                       placeholder='New password' 
-                      className='bg-transparent outline-none border-none rounded-lg md:text-md focus-visible:ring-0' 
+                      className='bg-transparent outline-none border-none rounded-lg min-[858px]:text-md focus-visible:ring-0 dark:text-primary' 
                       value={newPassword} 
                       onChange={e => setNewPassword(e.target.value)} />
                   </div>
@@ -220,14 +220,14 @@ export default function Account() {
                 </Button>
               </div>
             </div>
-            <div className="absolute bottom-3 w-full text-center">
+            <div className="min-[858px]:absolute min-[858px]:bottom-2 max-[858px]:hidden w-full text-center">
               <hr className='w-full h-1 mx-auto my-4 rounded-3xl bg-gray-200 border-0' />
               <div className="dark:text-white animate-slideUp6">You can donate to support the project!</div>
             </div>
           </div>
-          <div className="max-md:hidden w-1 bg-gray-200 rounded-3xl mt-[1.5vh]"></div>
-          <hr className='md:hidden rounded-3xl w-full h-1 mx-auto my-4 bg-gray-200 border-0' />
-          <div className="w-full py-2 pt-2.5 px-1 gap-2 flex flex-col text-center z-10">
+          <div className="max-[858px]:hidden w-1 bg-gray-200 rounded-3xl mt-[1.5vh]"></div>
+          <hr className='min-[858px]:hidden rounded-3xl w-full h-1 mx-auto my-4 bg-gray-200 border-0' />
+          <div className="relative w-full py-2 pt-2.5 px-1 gap-2 grid grid-rows-[2.5rem_auto_auto] max-lg:grid-flow-row text-center z-10">
             <Select name="radiusDrop" id="radiusDrop" onValueChange={handleQuerySelect}>
               <SelectTrigger className="dark:bg-gray-800 dark:border-gray-600 dark:text-white min-w-full animate-slideIn4 transition-all duration-500 ease-in-out text-md">
                 <SelectValue placeholder="Select query to show..." />
@@ -261,9 +261,13 @@ export default function Account() {
               <BarChartUser queryData={selectedQuery} />
               <PieChartUser queryData={selectedQuery}/>
             </div>
-            <div className="w-full">
+            <div className="w-full max-[858px]:mb-20">
               <AreaChartUser />
             </div>
+            <div className="max-[858px]:absolute max-[858px]:bottom-4 min-[858px]:hidden w-full text-center">
+            <hr className='w-full h-1 mx-auto my-4 rounded-3xl bg-gray-200 border-0' />
+            <div className="dark:text-white animate-slideUp6">You can donate to support the project!</div>
+          </div>
           </div>
         </div>
       </div>

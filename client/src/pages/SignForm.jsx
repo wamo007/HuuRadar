@@ -57,7 +57,7 @@ export default function Login({ signType }) {
 
   return (
     <div className='bg-cover bg-center md:items-center flex justify-center w-full overflow-hidden bg-slate-100 dark:bg-gray-700 min-h-screen'>
-      <Nav className='dark:[&_*]:text-primary-foreground' />
+      <Nav />
       <div className='flex items-center justify-center'>
         <div className='bg-primary border-gray-600 p-10 rounded-lg shadow-xl w-full sm:w-96 text-indigo-300 text-sm'>
           <h2 className='text-3xl font-semibold text-white text-center mb-3'>{signType === 'Sign Up' ? 'Create Account' : 'Sign In'}</h2>

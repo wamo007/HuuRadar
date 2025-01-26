@@ -85,7 +85,7 @@ export function BarChartUser({ queryData }) {
   }, [queryData])
 
   return (
-    <Card className='flex flex-col max-lg:justify-between w-full max-h-72 dark:bg-gray-800 dark:border-gray-600'>
+    <Card className='flex flex-col justify-between w-full dark:bg-gray-800 dark:border-gray-600'>
       <CardHeader className='max-lg:pt-3 px-3'>
         <CardTitle>Provider's Latest Average Price</CardTitle>
         {/* <CardDescription>January - June 2024</CardDescription> */}

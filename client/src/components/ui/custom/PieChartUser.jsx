@@ -113,7 +113,7 @@ export function PieChartUser({ queryData }) {
   }, [queryData])
 
   return (
-    <Card className="flex flex-col max-lg:justify-between w-full max-h-72 dark:bg-gray-800 dark:border-gray-600">
+    <Card className="flex flex-col w-full justify-between dark:bg-gray-800 dark:border-gray-600">
       <CardHeader className="items-center pb-0 px-[21px] max-lg:pt-3">
         <CardTitle>Total Average Price</CardTitle>
         {/* <CardDescription>Top 6 providers</CardDescription> */}

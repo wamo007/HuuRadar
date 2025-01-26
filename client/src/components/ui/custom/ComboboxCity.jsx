@@ -47,7 +47,7 @@ export function ComboboxCity({ selectedCity, onCityChange }) {
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-40 px-3 max-w-44 text-md font-normal justify-between hover:bg-inherit focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+          className="w-40 px-3 max-w-44 dark:bg-gray-800 dark:border-gray-600 dark:text-white text-md font-normal justify-between dark:hover:text-white dark:hover:bg-gray-800 hover:bg-inherit focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
         >
           {selectedCity
             ? cities.find((city) => city.value === selectedCity)?.label

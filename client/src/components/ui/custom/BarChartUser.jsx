@@ -1,7 +1,7 @@
 "use client";
 
 import { TrendingUp } from "lucide-react";
-import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
+import { Bar, BarChart, CartesianGrid, LabelList, XAxis } from "recharts";
 
 import {
   Card,
@@ -12,64 +12,121 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import {
+//   ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-
-const chartData = [
-  { month: "January", desktop: 186, mobile: 80 },
-  { month: "February", desktop: 305, mobile: 200 },
-  { month: "March", desktop: 237, mobile: 120 },
-  { month: "April", desktop: 73, mobile: 190 },
-  { month: "May", desktop: 209, mobile: 130 },
-  { month: "June", desktop: 214, mobile: 140 },
-];
+import { useState, useEffect } from "react";
 
 const chartConfig = {
   desktop: {
-    label: "Desktop",
-    color: "hsl(var(--chart-1))",
+    label: "in average €",
+    color: "#2563EB",
+    darkColor: "#60A5FA",
   },
-  mobile: {
-    label: "Mobile",
-    color: "hsl(var(--chart-2))",
-  },
-};
+}
 
-export function BarChartUser() {
+export function BarChartUser({ queryData }) {
+
+  const [chartData, setChartData] = useState([
+    { provider: "Funda", desktop: 0 },
+    { provider: "H.Anywhere", desktop: 0 },
+    { provider: "Kamernet", desktop: 0 },
+    { provider: "Paparius", desktop: 0 },
+    { provider: "Huurwoningen", desktop: 0 },
+    { provider: "Rentola", desktop: 0 },
+  ])
+
+  const averagePrices = (provider) => {
+    if (!provider) return 0
+
+    let validPrices = provider
+    .map((tab) => {
+      const price = tab.price.replace(/\s/g, "").match(/(\d+[,]*\d+)/g)
+
+      // if two prices are in one tab (1200 - 1900)
+      if (price && price.length === 2) {
+        const [low, high] = price.map((price) => parseFloat(price.replace(/,/g, "")))
+        return (low + high) / 2
+        
+      } else if (price && price.length === 1) {
+        return parseFloat(tab.price.replace(/\D/g, ""))
+      }
+      return NaN
+    })
+    .filter((price) => !isNaN(price))
+
+    if (validPrices.length > 0) {
+      const totalPrice = validPrices.reduce((sum, price) => sum + price)
+      return Math.round(totalPrice / validPrices.length)
+    }
+    return 0
+  }
+
+  useEffect(() => {
+    if (queryData) {
+      const fundaAverage = averagePrices(queryData?.funda)
+      const papariusAverage = averagePrices(queryData?.paparius)
+      const rentolaAverage = averagePrices(queryData?.rentola)
+      const hAnywhereAverage = averagePrices(queryData?.hAnywhere)
+      const kamernetAverage = averagePrices(queryData?.kamernet)
+      const huurwoningenAverage = averagePrices(queryData?.huurwoningen)
+
+      setChartData([
+        { provider: "Funda", desktop: fundaAverage },
+        { provider: "HAnywhere", desktop: hAnywhereAverage },
+        { provider: "Kamernet", desktop: kamernetAverage },
+        { provider: "Paparius", desktop: papariusAverage },
+        { provider: "Huurwoningen", desktop: huurwoningenAverage },
+        { provider: "Rentola", desktop: rentolaAverage },
+      ])
+    }
+  }, [queryData])
+
   return (
-    <Card className='w-full md:w-1/2 h-72'>
-      <CardHeader>
-        <CardTitle>Bar Chart - Multiple</CardTitle>
+    <Card className='flex flex-col max-lg:justify-between w-full max-h-72 dark:bg-gray-800 dark:border-gray-600'>
+      <CardHeader className='max-lg:pt-3 px-3'>
+        <CardTitle>Provider's Latest Average Price</CardTitle>
         {/* <CardDescription>January - June 2024</CardDescription> */}
       </CardHeader>
-      <CardContent className='pb-2'>
-        <ChartContainer config={chartConfig} className="max-h-36 w-full">
-          <BarChart accessibilityLayer data={chartData}>
+      <CardContent>
+        <ChartContainer config={chartConfig} className="min-h-[5.5rem] max-h-36 w-full">
+          <BarChart
+            data={chartData}
+            margin={{
+              top: 20,
+            }}
+          >
             <CartesianGrid vertical={false} />
             <XAxis
-              dataKey="month"
+              dataKey="provider"
               tickLine={false}
               tickMargin={10}
               axisLine={false}
-              tickFormatter={(value) => value.slice(0, 3)}
+              interval={0}
+              angle={-20}
+              tick={{ dy: -5 }}
+              tickFormatter={(value) => value.slice(0, 9)}
             />
             <ChartTooltip
               cursor={false}
-              content={<ChartTooltipContent indicator="dashed" />}
+              content={<ChartTooltipContent />}
             />
-            <Bar dataKey="desktop" fill="var(--color-desktop)" radius={4} />
-            <Bar dataKey="mobile" fill="var(--color-mobile)" radius={4} />
+            <Bar dataKey="desktop" fill="var(--color-desktop)" radius={8}>
+              <LabelList
+                position="top"
+                offset={12}
+                className="fill-foreground dark:fill-current"
+                fontSize={12}
+              />
+            </Bar>
           </BarChart>
         </ChartContainer>
       </CardContent>
-      <CardFooter className="flex-col items-start gap-2 text-sm">
-        <div className="flex gap-2 font-medium leading-none">
-          Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
-        </div>
-        <div className="leading-none text-muted-foreground">
-          Showing total visitors for the last 6 months
+      <CardFooter className="flex-col items-center gap-2 text-sm">
+        <div className="leading-none text-muted-foreground dark:text-muted">
+          Showing average prices
         </div>
       </CardFooter>
     </Card>

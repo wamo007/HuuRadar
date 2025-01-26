@@ -41,10 +41,10 @@ export default function Contacts() {
   }
   
   return (
-    <div className='relative min-h-screen w-full place-items-center overflow-hidden bg-[url("/second_bg1.png")] bg-cover' id='Contacts'>
+    <div className='relative min-h-screen w-full place-items-center overflow-hidden bg-[url("/second_bg.png")] dark:bg-gray-800 dark:bg-[url("/second_bg_dark.png")] bg-cover' id='Contacts'>
       <div className='py-4 w-11/12 max-w-7xl flex flex-col items-center justify-center gap-3'>
-        <div ref={contact1} className={`px-7 py-5 bg-white/10 backdrop-blur-sm rounded-xl border border-white/30 md:shadow-lg transition-all ease-in duration-700 ${isVisibleContact1 ? 'opacity-100' : 'opacity-0 translate-y-20'}`}>
-            <h1 className='text-slate-900 text-4xl max-sm:text-3xl font-bold text-center'>Contact Me!</h1>
+        <div ref={contact1} className={`px-7 py-5 bg-white/10 backdrop-blur-sm rounded-xl border border-white/30 dark:bg-black/10 dark:border-black/5 md:shadow-lg transition-all ease-in duration-700 ${isVisibleContact1 ? 'opacity-100' : 'opacity-0 translate-y-20'}`}>
+            <h1 className='text-slate-900 dark:text-white text-4xl max-sm:text-3xl font-bold text-center'>Contact Me!</h1>
         </div>
         <div className='py-0.5 w-full flex justify-center items-center gap-3'>
           <div ref={contact2} className={`container bg-slate-900 p-10 rounded-lg shadow-2xl w-full text-indigo-300 text-md transition-all ease-in duration-700 ${isVisibleContact2 ? 'opacity-100' : 'opacity-0 translate-x-20'}`}>

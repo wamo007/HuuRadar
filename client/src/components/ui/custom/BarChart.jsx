@@ -23,6 +23,7 @@ const chartConfig = {
   desktop: {
     label: "in average €",
     color: "#2563EB",
+    darkColor: "#60A5FA",
   },
 };
 
@@ -84,7 +85,7 @@ export default function AverageBarChart({ responseData }) {
   }, [responseData])
 
   return (
-    <Card className="flex flex-col w-full md:w-1/3 h-[23.5rem]">
+    <Card className="flex flex-col w-full md:w-1/3 h-[23.5rem] dark:bg-gray-800 dark:border-gray-600">
       <CardHeader className="px-2">
         <CardTitle>Provider's Average Price</CardTitle>
         <CardDescription>Top 6 providers</CardDescription>
@@ -116,7 +117,7 @@ export default function AverageBarChart({ responseData }) {
               <LabelList
                 position="top"
                 offset={12}
-                className="fill-foreground"
+                className="fill-foreground dark:fill-current"
                 fontSize={12}
               />
             </Bar>
@@ -124,10 +125,7 @@ export default function AverageBarChart({ responseData }) {
         </ChartContainer>
       </CardContent>
       <CardFooter className="flex-col items-center gap-2 text-sm">
-        {/* <div className="flex gap-2 font-medium leading-none">
-          Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
-        </div> */}
-        <div className="leading-none text-muted-foreground">
+        <div className="leading-none text-muted-foreground dark:text-muted">
           Showing average prices for the top 6 providers
         </div>
       </CardFooter>

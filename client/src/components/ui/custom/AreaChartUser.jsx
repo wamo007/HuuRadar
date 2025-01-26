@@ -154,14 +154,14 @@ export function AreaChartUser() {
     <Card className='w-full'>
       <CardHeader className="flex items-center gap-2 space-y-0 border-b py-2 sm:flex-row">
         <div className="grid flex-1 gap-1 text-center sm:text-left">
-          <CardTitle>Area Chart - Interactive</CardTitle>
-          <CardDescription>
-            Showing total visitors for the last 3 months
-          </CardDescription>
+          <CardTitle>Price History - COMING SOON</CardTitle>
+          {/* <CardDescription>
+            Price history for the last 3 months
+          </CardDescription> */}
         </div>
         <Select value={timeRange} onValueChange={setTimeRange}>
           <SelectTrigger
-            className="w-[160px] rounded-lg sm:ml-auto"
+            className="w-[160px] rounded-lg sm:ml-auto dark:border-gray-600 dark:bg-primary"
             aria-label="Select a value"
           >
             <SelectValue placeholder="Last 3 months" />

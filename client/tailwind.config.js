@@ -1,12 +1,12 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-    darkMode: ["class"],
+    darkMode: 'media',
     content: ["./index.html", "./src/**/*.{ts,tsx,js,jsx}"],
   theme: {
   	extend: {
 		boxShadow: {
 			'2xl-b-0': '0 0 50px -12px rgb(0 0 0 / 0.25)',
-		  },	
+		},	
   		borderRadius: {
   			lg: 'var(--radius)',
   			md: 'calc(var(--radius) - 2px)',
@@ -68,7 +68,7 @@ export default {
 			slideIn6: 'slideIn6 0.9s ease-in-out forwards',
 			slideIn7: 'slideIn7 1s ease-in-out forwards',
 			slideIn8: 'slideIn8 1.2s ease-in-out forwards',
-			slideUp5: 'slideUp5 1.0s ease-in-out forwards',
+			slideUp6: 'slideUp6 1.2s ease-in-out forwards',
 			slideInSpin10: 'slideInSpin10 1.0s ease-in-out forwards',
 			shake: 'shake 0.6s cubic-bezier(.36,.07,.19,.97) both',
 			listOpen: 'listOpen 0.5s ease-in-out forwards',
@@ -170,10 +170,10 @@ export default {
 					transform: 'translateX(0)'
 				}
 			},
-			slideUp5: {
+			slideUp6: {
 				'0%': {
 					opacity: '0',
-					transform: 'translateY(-5rem)'
+					transform: 'translateY(6rem)'
 				},
 				'100%': {
 					opacity: '1',

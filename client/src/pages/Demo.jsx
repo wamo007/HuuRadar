@@ -32,15 +32,15 @@ const ProviderData = memo(({ provider, responseData, noResults }) => {
         <>
           <div className='*:grid *:grid-cols-[repeat(auto-fill,_204px)] max-[408px]:*:grid-cols-[repeat(auto-fill,_180px)] *:justify-center *:justify-items-center *:items-center lg:*:gap-20 md:*:gap-16'>
             <div className="transition-all *:transition-all *:ease-in">
-              <div className="place-items-center">
+              <div className="place-items-center dark:place-content-center dark:w-[12.75rem] dark:h-[19rem] dark:bg-gray-500 dark:text-white dark:border dark:border-white/30 dark:md:rounded-lg dark:sm:shadow-xl">
                 <img src={logo} alt={`${label} logo`} width={120} />
                 <h3 className='pt-4 text-center'>Results on {label}</h3>
               </div>
               <Tab responseData={responseData.slice(0, visibleItems)} />
               {responseData.length > visibleItems && (
-                <div className='relative p-3 w-[12.75rem] h-[19rem] bg-white md:rounded-lg md:shadow-2xl max-md:border max-md:border-slate-400 max-[408px]:w-[11.25rem]'>
+                <div className='relative p-3 w-[12.75rem] h-[19rem] bg-white dark:bg-gray-500 md:rounded-lg md:shadow-2xl max-md:border max-md:border-slate-400 max-[408px]:w-[11.25rem]'>
                   <PlaceholderTab />
-                  <div className='absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 bg-white/10 backdrop-blur-sm md:rounded-lg border border-white/30 md:shadow-lg max-[408px]:w-[11.25rem] w-[12.75rem] h-[19rem]'>
+                  <div className='absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 bg-white/10 dark:bg-white/5 backdrop-blur-sm md:rounded-lg border border-white/30 md:shadow-lg max-[408px]:w-[11.25rem] w-[12.75rem] h-[19rem]'>
                     <Button className='relative top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 z-10 bg-gray-900' onClick={handleSeeMore}>
                       See More...
                     </Button>
@@ -49,13 +49,13 @@ const ProviderData = memo(({ provider, responseData, noResults }) => {
               )}
             </div>
           </div>
-          <hr className='w-3/4 h-1 mx-auto my-8 bg-gray-200 border-0 dark:bg-gray-700 mt-10' />
+          <hr className='w-3/4 h-1 mx-auto my-8 bg-gray-200 border-0 rounded-3xl mt-10' />
         </>
       ) : (
         noResults && (
           <>
             <h3 className='text-center italic pt-4'>No Results on {label} for the last 3 days...</h3>
-            <hr className='w-3/4 h-1 mx-auto my-8 bg-gray-200 border-0 dark:bg-gray-700 mt-10' />
+            <hr className='w-3/4 h-1 mx-auto my-8 bg-gray-200 border-0 rounded-3xl mt-10' />
           </>
         )
       )}
@@ -107,9 +107,9 @@ export default function Demo() {
 
   return (
     <>
-      <div className='relative bg-slate-100 min-h-screen w-full'>
-        <Nav />
-        <div className='bg-white shadow-2xl-b-0 bg-clip-padding backdrop-filter backdrop-blur bg-opacity-50 backdrop-saturate-50 backdrop-contrast-125 rounded-t-lg flex md:flex-nowrap flex-wrap justify-between items-center mx-auto py-4 w-11/12 max-w-7xl px-6 md:px-2 lg:px-10 xl:px-14 2xl:px-30 text-center'>
+      <div className='relative bg-slate-100 dark:bg-gray-700 min-h-screen w-full'>
+        <Nav className='dark:[&_*]:text-primary-foreground' />
+        <div className='bg-white dark:bg-primary dark:*:text-white shadow-2xl-b-0 bg-clip-padding backdrop-filter backdrop-blur bg-opacity-50 dark:bg-opacity-100 backdrop-saturate-50 backdrop-contrast-125 rounded-t-lg flex md:flex-nowrap flex-wrap justify-between items-center mx-auto py-4 w-11/12 max-w-7xl px-6 md:px-2 lg:px-10 xl:px-14 2xl:px-30 text-center'>
           {firstSearch ? (
             <>
               <AverageBarChart responseData={responseData} />
@@ -143,7 +143,7 @@ export default function Demo() {
             </div>
           )}
         </div>
-        <div className='bg-white shadow-xl bg-clip-padding backdrop-filter backdrop-blur bg-opacity-50 backdrop-saturate-50 backdrop-contrast-125 rounded-b-lg mx-auto justify-between items-center pb-6 md:pb-4 px-6 md:px-2 lg:px-10 xl:px-14 2xl:px-30 w-11/12 max-w-7xl  mb-3'>
+        <div className='bg-white dark:bg-primary shadow-xl bg-clip-padding backdrop-filter backdrop-blur bg-opacity-50 dark:bg-opacity-100 backdrop-saturate-50 backdrop-contrast-125 rounded-b-lg mx-auto justify-between items-center pb-6 md:pb-4 px-6 md:px-2 lg:px-10 xl:px-14 2xl:px-30 w-11/12 max-w-7xl  mb-3'>
           <hr className='w-3/4 h-1 mx-auto bg-gray-200 border-0 dark:bg-gray-700 rounded-xl mb-3.5' />
           <div className='relative flex justify-center min-[833px]:justify-start w-full transition-all ease-in-out duration-500'>
             <SearchPanel responseDataChange={handleResponseDataChange} loadingStatus={setLoadingStatus} providerSet={setSelectedProviders} />

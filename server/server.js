@@ -8,6 +8,7 @@ const userRouter = require('./routes/userRoutes')
 const feedbackRouter = require('./routes/feedbackRoutes')
 const cookieParser = require('cookie-parser')
 const path = require('path')
+const queryRouter = require('./routes/queryRoutes')
 
 const corsOptions = {
     credentials: true,
@@ -30,8 +31,8 @@ app.use(express.urlencoded({ parameterLimit: 100000, limit: '50mb', extended: tr
 app.use('/api', scrapeRouter)
 app.use('/api/auth', authRouter)
 app.use('/api/user', userRouter)
+app.use('/api/query', queryRouter)
 app.use('/api/feedback', feedbackRouter)
-// app.use('/fb', fbRouter)
 
 app.listen(PORT, () => {
     console.log(`HuuRadar - listening on port ${PORT}!`);

@@ -6,7 +6,7 @@ import { userContent } from '@/context/UserContext'
 import { toast } from 'react-toastify'
 import axios from 'axios'
 
-export default function Nav () {
+export default function Nav ({ className }) {
 
     const [showMobileMenu, setShowMobileMenu] = useState(false)
     const [scrollData, setScrollData] = useState({
@@ -136,11 +136,11 @@ export default function Nav () {
     }, [scrollData])
 
     return (
-        <nav className={`${isDemo || isAccount ? 'sticky' : 'fixed'} top-0 ${showNav ? '-translate-y-full' : ''} ${navColor ? 'bg-slate-100 bg-clip-padding backdrop-filter backdrop-blur bg-opacity-50 backdrop-saturate-50 backdrop-contrast-125' : ''} mx-auto w-full transition-all duration-700 ease-out z-50`}>
+        <nav className={`${isDemo || isAccount ? 'sticky' : 'fixed'} top-0 ${showNav ? '-translate-y-full' : ''} ${navColor ? 'bg-slate-100 bg-clip-padding backdrop-filter backdrop-blur bg-opacity-50 backdrop-saturate-50 backdrop-contrast-125' : ''} mx-auto w-full transition-all duration-700 ease-out z-50 ${className}`}>
             <div className='mx-auto flex justify-between items-center w-11/12 max-w-7xl py-4 px-6 md:px-2 lg:px-10 xl:px-14 2xl:px-30'>
                 <Link className='flex justify-between items-center gap-3' to='/'>
                     <img src={assets.logo} alt="Website Logo" width={50} />
-                    <div className="brand text-slate-900 text-center font-bold text-2xl max-[419px]:text-xl">HUURADAR</div>
+                    <div className="brand text-primary text-center font-bold text-2xl max-[419px]:text-xl">HUURADAR</div>
                 </Link>
                 <ul className='hidden md:flex gap-7 md:gap-3 min-[802px]:gap-6 xl:gap-9 text-gray-900 text-xl font-semibold md:text-[16px] min-[802px]:text-[19px]'>
                     <a href='/#Header' className='cursor-pointer hover:text-gray-700 group transition duration-300'>
@@ -163,13 +163,13 @@ export default function Nav () {
                     <ul className="hidden -ml-12 md:flex justify-between items-center gap-3 [&_*]:text-center [&_*]:font-bold [&_*]:text-xl">
                         { !isLogin && 
                             <li onClick={() => navigate('/login')} className={
-                                `${buttonVariants({ variant: 'outline' })} cursor-pointer pointer-events-auto w-[120px] text-slate-900 hover:text-blue-950`}>
+                                `${buttonVariants({ variant: 'outline' })} cursor-pointer pointer-events-auto w-[120px] text-primary hover:text-primary/70 hover:bg-gray-200 dark:!text-primary`}>
                                 Login
                             </li> 
                         }
                         { !isRegistration && 
                             <li onClick={() => navigate('/registration')} className={
-                                `${buttonVariants({ variant: 'outline' })} cursor-pointer pointer-events-auto w-[120px] text-slate-900 hover:text-blue-950`}>
+                                `${buttonVariants({ variant: 'outline' })} cursor-pointer pointer-events-auto w-[120px] text-primaty hover:text-primary/70 hover:bg-gray-200 dark:!text-primary`}>
                                 Sign Up
                             </li> 
                         }
@@ -181,7 +181,7 @@ export default function Nav () {
                 ) : (
                     <ul className="hidden md:flex justify-between items-center gap-3 [&_*]:text-center [&_*]:font-bold [&_*]:text-xl">
                         { userData ? (
-                            <div className={`${isHome ? '[&_*]:text-slate-900 hover:[&_*]:text-blue-950 *:ml-8' : '[&_*]:text-white hover:[&_*]:text-slate-200'} relative group flex justify-center items-center`}>
+                            <div className={`${isHome ? '[&_*]:text-primary hover:[&_*]:text-blue-950 *:ml-8' : '[&_*]:text-white hover:[&_*]:text-slate-200'} relative group flex justify-center items-center`}>
                                 <div className={
                                     `${isHome ? `${buttonVariants({ variant: 'outline' })}` : buttonVariants({ variant: '' })} w-auto min-w-[200px] z-10 overflow-hidden
                                     `}>{userData.name}
@@ -196,10 +196,10 @@ export default function Nav () {
                             </div>
                         ) : (
                             <>
-                                <li className={isHome ? '*:text-white hover:*:text-slate-200' : '*:text-slate-900 hover:*:text-blue-950'}><Link to='/login' className={
-                                    `${isHome ? buttonVariants({ variant: '' }) : buttonVariants({ variant: 'outline' })} w-[120px]
+                                <li className={isHome ? '*:text-white hover:*:text-slate-200' : '*:text-primary hover:*:text-blue-950'}><Link to='/login' className={
+                                    `${isHome ? buttonVariants({ variant: '' }) : buttonVariants({ variant: 'outline' })} w-[120px] hover:text-primary/70 hover:bg-gray-200 dark:!text-primary 
                                     `}>Log in</Link></li>
-                                <li className={isHome ? '*:text-slate-900 hover:*:text-blue-950' : '*:text-white hover:*:text-slate-200'}><Link to='/registration' className={
+                                <li className={isHome ? '*:text-primary hover:*:text-blue-950' : '*:text-white hover:*:text-slate-200'}><Link to='/registration' className={
                                     `${isHome ? buttonVariants({ variant: 'outline' }) : buttonVariants({ variant: '' })} w-[120px]
                                     `}>Sign up</Link></li>
                             </>

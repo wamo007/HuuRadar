@@ -12,11 +12,13 @@ import Nav from "@/components/Nav"
 import { Button } from "@/components/ui/button"
 import { userContent } from "@/context/UserContext"
 import { Input } from "@/components/ui/input"
-import { useContext, useState } from "react"
+import { useCallback, useContext, useEffect, useState } from "react"
 import { toast } from "react-toastify"
 import axios from "axios"
 import { BarChartUser } from "@/components/ui/custom/BarChartUser"
 import { AreaChartUser } from "@/components/ui/custom/AreaChartUser"
+import { Card, CardHeader, CardTitle } from "@/components/ui/card"
+import { PieChartUser } from "@/components/ui/custom/PieChartUser"
 
 export default function Account() {
 
@@ -29,6 +31,8 @@ export default function Account() {
   const [name, setName] = useState('')
   const [oldPassword, setOldPassword] = useState('')
   const [newPassword, setNewPassword] = useState('')
+  const [queries, setQueries] = useState([])
+  const [selectedQuery, setSelectedQuery] = useState([])
 
   const email = userData.email
 
@@ -86,14 +90,68 @@ export default function Account() {
     }
   }
 
+  const getQueries = async () => {
+    try {
+        const { data } = await axios.post(backendUrl + '/api/query/data/', 
+          { email }
+        )
+        if (data.success) {
+            setQueries(data.queries)
+        } else {
+            toast.error(data.error)
+        }
+    } catch (error) {
+        toast.error(error.message)
+    }
+  }
+
+  const deleteQuery = async (queryId) => {
+    try {
+      const { data } = await axios.delete(backendUrl + `/api/query/delete/${queryId}`)
+      if (data.success) {
+          toast.success(data.message)
+          await getQueries() // Refresh the queries list
+      } else {
+          toast.error(data.error)
+      }
+    } catch (error) {
+        toast.error(error.message)
+    }
+  }
+
+  useEffect(() => {
+    getQueries()
+  }, [email])
+
+  const convertQuery = (dataset) => {
+    const convertedQuery = {
+      funda: [],
+      paparius: [],
+      rentola: [],
+      hAnywhere: [],
+      kamernet: [],
+      huurwoningen: [],
+    }
+
+    dataset.forEach((set) => {
+      convertedQuery[set.provider].push(set)
+    })
+
+    return convertedQuery
+  }
+
+  const handleQuerySelect = useCallback(value => {
+    setSelectedQuery(convertQuery(value.queryData))
+  }, [])
+
   return (
-    <div className='relative bg-slate-100 min-h-screen overflow-auto w-full'>
-      <Nav />
-      <hr className='w-5/6 h-1 mx-auto bg-gray-200 rounded-xl border-0 dark:bg-gray-700' />
-      <div className='m-auto h-[85vh] pt-2 px-6 lg:px-10 xl:px-14 2xl:px-30'>
-        <div className="flex max-md:flex-col items-center w-full md:gap-2 lg:gap-6">
-          <div className="md:min-h-[85vh] w-full md:w-1/3 2xl:w-1/3 py-2 px-1">
-            <div className="*:py-2 py-2">
+    <div className='relative bg-slate-100 dark:bg-gray-700 min-h-screen overflow-auto w-full'>
+      <Nav className='dark:[&_*]:text-primary-foreground' />
+      <div className='m-auto px-6 lg:px-10 xl:px-14 2xl:px-30'>
+      <hr className='w-full h-1 mx-auto bg-gray-200 rounded-3xl border-0' />
+        <div className="grid grid-cols-1 md:grid-cols-[1fr_auto_2fr] xl:grid-cols-[0.7fr_auto_2.3fr] md:gap-6 w-full">
+          <div className="relative w-full py-2 pt-0 px-1">
+            <div className="*:py-2 py-2 animate-slideIn6 dark:text-muted">
               <div className="flex max-lg:flex-wrap justify-between sm:text-md text-lg">
                 <div>Email:</div>
                 <div className="font-semibold underline underline-offset-2">
@@ -108,15 +166,15 @@ export default function Account() {
               </div>
             </div>
             <div>
-              <Button onClick={() => setOpenChangeUser(true)} className={`${openChangeUser ? 'scale-y-0 opacity-0 h-0' : ''} w-full py-2.5 rounded-lg text-white font-medium transition-all ease-in-out duration-500`}>
+              <Button onClick={() => setOpenChangeUser(true)} className={`${openChangeUser ? 'scale-y-0 opacity-0 h-0' : ''} w-full py-2.5 rounded-lg text-white font-medium transition-all ease-in-out duration-500 animate-slideIn6`}>
                 Change details
               </Button>
-              <hr className={`${!openChangeUser ? 'scale-y-300 opacity-0 hidden' : 'opacity-100'} w-full h-1 -mt-4 mx-auto rounded-xl bg-gray-200 border-0 dark:bg-gray-700 transition-all ease-in-out duration-500`} />
+              <hr className={`${!openChangeUser ? 'scale-y-300 opacity-0 hidden' : 'opacity-100'} w-full h-1 -mt-4 mx-auto rounded-3xl bg-gray-200 border-0 transition-all ease-in-out duration-500`} />
             </div>
             <div className="pt-2">
-              <div className={`${openChangeUser ? 'opacity-100' : 'opacity-0 h-0'} sm:text-md text-lg transition-all ease-in-out duration-500`}>
+              <div className={`${openChangeUser ? 'opacity-100' : 'opacity-0 h-0 [&_*]:h-0 [&_*]:py-0 [&_*]:pointer-events-none'} sm:text-md text-lg transition-all ease-in-out duration-500 text-white`}>
                 <div className={`${openChangeUser ? 'opacity-100 py-2' : 'opacity-0 h-0 py-0'}`}>What do you want to change?</div>
-                <div className={`${openChangeName || openChangePassword ? 'opacity-0 h-0 py-0 m-0 text-[0px] *:hidden *:pointer-events-none' : 'py-2'} flex justify-between items-center transition-all ease-in-out duration-500`}>
+                <div className={`${(openChangeName || openChangePassword) ? 'opacity-0 h-0 py-0 m-0 text-[0px] [&_*]:hidden [&_*]:pointer-events-none [&_*]:h-0 [&_*]:py-0' : 'py-2'} flex justify-between items-center transition-all ease-in-out duration-500`}>
                   <Button onClick={() => setOpenChangeName(true)} className='w-24'>Name</Button> OR <Button onClick={() => setOpenChangePassword(true)} className='w-24'>Password</Button>
                 </div>
                 <div className={`${openChangeName ? 'py-2' : 'scale-x-0 origin-left opacity-0 h-0 py-0'} relative flex items-center transition-all ease-in-out duration-500`}>
@@ -129,7 +187,6 @@ export default function Account() {
                       value={name} 
                       onChange={e => setName(e.target.value)} />
                   </div>
-                  {/* <img src={assets.check} className="bg-slate-900 hover:bg-slate-800 p-[9px] rounded-lg absolute right-0 border-2 border-slate-900" alt="" /> */}
                 </div>
                 <div className={`${openChangePassword ? 'py-2' : 'scale-x-0 origin-right opacity-0 h-0 py-0'} relative flex items-center transition-all ease-in-out duration-500`}>
                   <div className='flex items-center gap-3 w-full px-5 py-1 rounded-lg bg-white border-2 border-slate-900'>
@@ -163,39 +220,48 @@ export default function Account() {
                 </Button>
               </div>
             </div>
+            <div className="absolute bottom-3 w-full text-center">
+              <hr className='w-full h-1 mx-auto my-4 rounded-3xl bg-gray-200 border-0' />
+              <div className="dark:text-white animate-slideUp6">You can donate to support the project!</div>
+            </div>
           </div>
-          <div className="max-md:hidden min-h-[82vh] w-1 flex-shrink-0 mx-[1%] bg-gray-200 rounded-3xl dark:bg-gray-700"></div>
-          <hr className='md:hidden w-full h-1 mx-auto my-4 bg-gray-200 border-0 dark:bg-gray-700' />
-          <div className="md:min-h-[85vh] w-full md:w-2/3 lg:w-full py-4 px-1 gap-8 md:gap-2 flex flex-col justify-between text-center z-10">
-            <Select name="radiusDrop" id="radiusDrop" onValueChange={''}>
-              <SelectTrigger className="min-w-full animate-slideIn4 transition-all duration-500 ease-in-out text-md">
-                <SelectValue placeholder="Radius" />
+          <div className="max-md:hidden w-1 bg-gray-200 rounded-3xl mt-[1.5vh]"></div>
+          <hr className='md:hidden rounded-3xl w-full h-1 mx-auto my-4 bg-gray-200 border-0' />
+          <div className="w-full py-2 pt-2.5 px-1 gap-2 flex flex-col text-center z-10">
+            <Select name="radiusDrop" id="radiusDrop" onValueChange={handleQuerySelect}>
+              <SelectTrigger className="dark:bg-gray-800 dark:border-gray-600 dark:text-white min-w-full animate-slideIn4 transition-all duration-500 ease-in-out text-md">
+                <SelectValue placeholder="Select query to show..." />
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
-                <SelectLabel>Radius</SelectLabel>
-                  <SelectItem value="0">0KM</SelectItem>
-                  <SelectItem value="1">1KM</SelectItem>
-                  <SelectItem value="5">5KM</SelectItem>
-                  <SelectItem value="10">10KM</SelectItem>
+                <SelectLabel>Your queries</SelectLabel>
+                  { queries.length > 0 ? (
+                    queries.map((query) => {
+                      const city = query.city.charAt(0).toUpperCase() + query.city.slice(1).toLowerCase()
+                      const providers = query.providers.map(provider => 
+                        provider.charAt(0).toUpperCase() + provider.slice(1)).join(", ")
+
+                      return (
+                        <SelectItem 
+                        key={query._id} 
+                        value={query}>
+                        {city}: {providers}
+                      </SelectItem>
+                      )
+                    })
+                  ) : (
+                    <SelectItem value="no-queries" disabled>
+                      No queries available
+                    </SelectItem>
+                  )}
                 </SelectGroup>
               </SelectContent>
             </Select>
-            <div className="flex max-md:flex-wrap gap-8 md:gap-2">
-              <BarChartUser />
-              <div className="w-full md:w-1/2">
-                <ul>
-                  Latest Price per Provider:
-                  <li>Funda: ...</li>
-                  <li>Funda: ...</li>
-                  <li>Funda: ...</li>
-                  <li>Funda: ...</li>
-                  <li>Funda: ...</li>
-                  <li>Funda: ...</li>
-                </ul>
-              </div>
+            <div className="grid grid-cols-1 md:grid-cols-[1fr_minmax(auto,_0.7fr)] gap-2">
+              <BarChartUser queryData={selectedQuery} />
+              <PieChartUser queryData={selectedQuery}/>
             </div>
-            <div>
+            <div className="w-full">
               <AreaChartUser />
             </div>
           </div>

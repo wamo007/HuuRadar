@@ -49,7 +49,7 @@ const chartConfig = {
   },
 }
 
-export function AveragePieChart({ responseData }) {
+export function PieChartUser({ queryData }) {
 
   const [chartData, setChartData] = useState([
     { provider: "funda", prices: 0, fill: "var(--color-funda)" },
@@ -88,13 +88,13 @@ export function AveragePieChart({ responseData }) {
   }
 
   useEffect(() => {
-    if (responseData) {
-      const fundaAverage = averagePrices(responseData?.funda)
-      const papariusAverage = averagePrices(responseData?.paparius)
-      const rentolaAverage = averagePrices(responseData?.rentola)
-      const hAnywhereAverage = averagePrices(responseData?.hAnywhere)
-      const kamernetAverage = averagePrices(responseData?.kamernet)
-      const huurwoningenAverage = averagePrices(responseData?.huurwoningen)
+    if (queryData) {
+      const fundaAverage = averagePrices(queryData?.funda)
+      const papariusAverage = averagePrices(queryData?.paparius)
+      const rentolaAverage = averagePrices(queryData?.rentola)
+      const hAnywhereAverage = averagePrices(queryData?.hAnywhere)
+      const kamernetAverage = averagePrices(queryData?.kamernet)
+      const huurwoningenAverage = averagePrices(queryData?.huurwoningen)
 
       const averages = [fundaAverage, hAnywhereAverage, kamernetAverage, papariusAverage, huurwoningenAverage, rentolaAverage].filter(average => average > 0)
       const totalAverage = 
@@ -110,18 +110,18 @@ export function AveragePieChart({ responseData }) {
       ])
       setTotalAveragePrice(totalAverage)
     }
-  }, [responseData])
+  }, [queryData])
 
   return (
-    <Card className="flex flex-col w-full md:w-1/3 h-[23.5rem] dark:bg-gray-800 dark:border-gray-600">
-      <CardHeader className="items-center pb-0 px-[2.125rem]">
+    <Card className="flex flex-col max-lg:justify-between w-full max-h-72 dark:bg-gray-800 dark:border-gray-600">
+      <CardHeader className="items-center pb-0 px-[21px] max-lg:pt-3">
         <CardTitle>Total Average Price</CardTitle>
-        <CardDescription>Top 6 providers</CardDescription>
+        {/* <CardDescription>Top 6 providers</CardDescription> */}
       </CardHeader>
       <CardContent className="place-content-center flex-1 pb-0">
         <ChartContainer
           config={chartConfig}
-          className="mx-auto aspect-square min-h-[10.875rem] max-h-64"
+          className="mx-auto aspect-square min-h-44 max-h-[12.5rem]"
         >
           <PieChart>
             <ChartTooltip
@@ -168,9 +168,9 @@ export function AveragePieChart({ responseData }) {
           </PieChart>
         </ChartContainer>
       </CardContent>
-      <CardFooter className="flex-col gap-2 text-sm overflow-hidden">
+      <CardFooter className="flex-col gap-2 text-sm overflow-hidden ">
         <div className="leading-none text-muted-foreground dark:text-muted">
-          Showing total average price for the selection
+          Showing total average price
         </div>
       </CardFooter>
     </Card>

@@ -126,7 +126,7 @@ const compareQuery = async () => {
 
                     const mailEntries = newEntries.map((entry) => {
                         return `
-                            <div style="padding: 10px; margin-bottom: 10px; border-radius: 10px; background-color: whitesmoke;">
+                            <div style="padding: 10px; margin-bottom: 20px; border-radius: 10px; background-color: whitesmoke;">
                               <a href="${entry.link}">
                                 <img src="${entry.img.split(' ')[0]}" alt="${entry.heading}" style="width: 180px; height: 120px; border-radius: 10px; object-fit: cover;">
                               </a>
@@ -206,6 +206,6 @@ const compareQuery = async () => {
 
 // compareQuery()
 
-// cron.schedule('*/15 * * * *', compareQuery)
+cron.schedule('*/15 * * * *', compareQuery)
 
 module.exports = saveQuery

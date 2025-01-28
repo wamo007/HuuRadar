@@ -27,6 +27,8 @@ import notes from './notes.svg'
 import smile from './smile.png'
 import github from './github.svg'
 import linkedin from './linkedin.svg'
+import signupvideo from './signup.webm'
+import searchvideo from './search.webm'
 
 export const assets = {
     logo,
@@ -57,5 +59,7 @@ export const assets = {
     notes,
     smile,
     github,
-    linkedin
+    linkedin,
+    signupvideo,
+    searchvideo,
 }

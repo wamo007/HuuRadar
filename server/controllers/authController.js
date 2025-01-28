@@ -39,11 +39,11 @@ const registerUser = async (req, res) => {
         await user.save()
 
         const token = jwt.sign({id: user._id}, 
-            process.env.JWT_SECRET, { expiresIn: '7d' })
+            process.env.JWT_SECRET, { expiresIn: '30d' })
 
         res.cookie('token', token, {
             httpOnly: true, 
-            secure: process.env.NODE_ENV === 'production', // change it to true later!
+            secure: process.env.NODE_ENV === 'production',
             sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'strict',
             maxAge: 7 * 24 * 60 * 60 * 1000
         })
@@ -56,7 +56,7 @@ const registerUser = async (req, res) => {
             .replace("{{name}}", user.name)
 
         const mailOptions = {
-            from: process.env.SENDER_EMAIL,
+            from: process.env.SUPPORT_EMAIL,
             to: email,
             subject: 'Welcome to HuuRadar!',
             html: emailWelcomeTemplate,
@@ -184,7 +184,7 @@ const sendVerifyOtp = async (req, res) => {
             .replace("{{name}}", user.name)
 
         const mailOptions = {
-            from: process.env.SENDER_EMAIL,
+            from: process.env.SUPPORT_EMAIL,
             to: user.email,
             subject: 'Account Verification OTP',
             html: emailVerifyTemplate,
@@ -306,7 +306,7 @@ const sendResetOtp = async (req, res) => {
             .replace("{{name}}", user.name)
 
         const mailOptions = {
-            from: process.env.SENDER_EMAIL,
+            from: process.env.SUPPORT_EMAIL,
             to: user.email,
             subject: 'Password Reset OTP',
             html: resetPasswordTemplate,

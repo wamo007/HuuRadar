@@ -87,7 +87,7 @@ export default function Contacts() {
               </h3>
               <div className='md:w-[49%] w-full flex flex-nowrap gap-2 items-center justify-between'>
                 <Button className='w-9/12 sm:w-10/12 text-center rounded-lg bg-gradient-to-r from-indigo-500 to-indigo-700 text-white font-medium text-base [@media_(max-width:440px)]:text-[13px] lg:text-sm xl:text-base pointer-events-none'>
-                  shamo.iskandarov@gmail.com
+                  support@huuradar.org
                 </Button>
                 <div className="w-3/12 sm:w-2/12 flex gap-2 items-center justify-center sm:justify-evenly [&_*]:w-7">
                   <a href="https://github.com/wamo007" target="_blank">

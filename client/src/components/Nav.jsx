@@ -207,7 +207,20 @@ export default function Nav ({ className }) {
                     </ul>
                 )}
                 
-                <img onClick={() => checkMobileMenu()} src={assets.menu_icon} className='md:hidden w-7 ' alt="" />
+                <svg
+                    onClick={() => checkMobileMenu()}
+                    className={`md:hidden w-7 text-primary ${isHome ? '' : 'dark:text-primary-foreground'}`}
+                    width="36"
+                    height="29"
+                    viewBox="0 0 36 29"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    >
+                    <rect width="35.9988" height="4" rx="2" fill="currentColor" />
+                    <rect x="13.0898" y="12.5" width="22.9083" height="4" rx="2" fill="currentColor" />
+                    <rect x="4.91016" y="25" width="31.0899" height="4" rx="2" fill="currentColor" />
+                </svg>
+
             </div>
             {/* ----------mobile----------- */}
             <div className={`md:hidden ${showMobileMenu ? 'fixed w-fit' : 'translate-x-10 h-0 w-0'} right-0 overflow-hidden rounded-bl-xl bg-white bg-clip-padding bg-opacity-95 transition-all`}>

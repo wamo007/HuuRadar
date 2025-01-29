@@ -25,7 +25,7 @@ feedbackRouter.post('/', async (req, res) => {
         }
 
         const mailOptions = {
-            from: process.env.SENDER_EMAIL,
+            from: process.env.SUPPORT_EMAIL,
             to: 'shamo.iskandarov@gmail.com',
             subject: `${name} (${email})`,
             text: text,

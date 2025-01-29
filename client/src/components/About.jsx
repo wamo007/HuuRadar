@@ -63,7 +63,7 @@ export default function About() {
                     onMouseEnter={() => handleVideoHover(videoRef3)}
                     onMouseLeave={() => handleVideoHoverOut(videoRef3)}>
                     <video ref={videoRef3} className='rounded-lg' muted loop>
-                        <source src={assets.signupvideo} type="video/webm" alt="Sign up tutorial" />
+                        <source src={assets.emailvideo} type="video/webm" alt="Sign up tutorial" />
                     </video>
                     <h2 className='text-4xl max-sm:text-2xl font-semibold text-center dark:text-white'>3. Get Notified!</h2>
                     <div className='text-2xl max-sm:text-xl text-center dark:text-gray-300'>

@@ -29,6 +29,7 @@ import github from './github.svg'
 import linkedin from './linkedin.svg'
 import signupvideo from './signup.webm'
 import searchvideo from './search.webm'
+import emailvideo from './email.webm'
 
 export const assets = {
     logo,
@@ -62,4 +63,5 @@ export const assets = {
     linkedin,
     signupvideo,
     searchvideo,
+    emailvideo,
 }

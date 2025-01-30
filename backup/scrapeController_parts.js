@@ -1,11 +1,11 @@
 const axios = require('axios')
 // const https = require('https')
 
-// const sortProviders = ['funda', 'hAnywhere', 'kamernet', 'paparius', 'huurwoningen', 'rentola']
+// const sortProviders = ['funda', 'hAnywhere', 'kamernet', 'pararius', 'huurwoningen', 'rentola']
 
 const workerServers = [
     { url: 'http://141.148.242.13:8089/extractor', scrapers: ['funda', 'rentola'] },
-    { url: 'http://localhost:4000/extractor', scrapers: ['kamernet', 'paparius'] },
+    { url: 'http://localhost:4000/extractor', scrapers: ['kamernet', 'pararius'] },
     { url: 'http://localhost:3001/extractor', scrapers: ['huurwoningen', 'hAnywhere'] },
 ]
 

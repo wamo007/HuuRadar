@@ -33,9 +33,10 @@ export function BarChartUser({ queryData }) {
     { provider: "Funda", desktop: 0 },
     { provider: "H.Anywhere", desktop: 0 },
     { provider: "Kamernet", desktop: 0 },
-    { provider: "Paparius", desktop: 0 },
+    { provider: "KamerNL", desktop: 0 },
+    { provider: "Pararius", desktop: 0 },
     { provider: "Huurwoningen", desktop: 0 },
-    { provider: "Rentola", desktop: 0 },
+    // { provider: "Rentola", desktop: 0 },
   ])
 
   const averagePrices = (provider) => {
@@ -67,19 +68,21 @@ export function BarChartUser({ queryData }) {
   useEffect(() => {
     if (queryData) {
       const fundaAverage = averagePrices(queryData?.funda)
-      const papariusAverage = averagePrices(queryData?.paparius)
-      const rentolaAverage = averagePrices(queryData?.rentola)
+      const parariusAverage = averagePrices(queryData?.pararius)
+      // const rentolaAverage = averagePrices(queryData?.rentola)
       const hAnywhereAverage = averagePrices(queryData?.hAnywhere)
       const kamernetAverage = averagePrices(queryData?.kamernet)
+      const kamerNLAverage = averagePrices(queryData?.kamerNL)
       const huurwoningenAverage = averagePrices(queryData?.huurwoningen)
 
       setChartData([
         { provider: "Funda", desktop: fundaAverage },
         { provider: "HAnywhere", desktop: hAnywhereAverage },
         { provider: "Kamernet", desktop: kamernetAverage },
-        { provider: "Paparius", desktop: papariusAverage },
+        { provider: "KamerNL", desktop: kamerNLAverage },
+        { provider: "Pararius", desktop: parariusAverage },
         { provider: "Huurwoningen", desktop: huurwoningenAverage },
-        { provider: "Rentola", desktop: rentolaAverage },
+        // { provider: "Rentola", desktop: rentolaAverage },
       ])
     }
   }, [queryData])

@@ -1,5 +1,5 @@
 const fundaScraper = require('./scrapers/funda')
-const papariusScraper = require('./scrapers/paparius')
+const parariusScraper = require('./scrapers/pararius')
 const rentolaScraper = require('./scrapers/rentola')
 
 const scrapeController = async (req, res) => {
@@ -22,20 +22,20 @@ const scrapeController = async (req, res) => {
         const funda = await fundaScraper(city, radius, sortGlobal, minPrice, maxPrice)
         res.write(JSON.stringify({ funda }) + '\n')
         
-        const paparius = await papariusScraper(city, radius, sortGlobal, minPrice, maxPrice)
-        res.write(JSON.stringify({ paparius }) + '\n')
+        const pararius = await parariusScraper(city, radius, sortGlobal, minPrice, maxPrice)
+        res.write(JSON.stringify({ pararius }) + '\n')
         
         const rentola = await rentolaScraper(city,sortGlobal, minPrice, maxPrice)
         res.write(JSON.stringify({ rentola }) + '\n')
 
         // await Promise.all([
         //     fundaScraper(city, radius, sortGlobal, minPrice, maxPrice),
-        //     papariusScraper(city, radius, sortGlobal, minPrice, maxPrice),
+        //     parariusScraper(city, radius, sortGlobal, minPrice, maxPrice),
         //     rentolaScraper(city, sortGlobal, minPrice, maxPrice),
         //     // hAnywhereScraper(city, sortGlobal, minPrice, maxPrice)
-        // ]).then(([ funda, paparius, rentola, hAnywhere ]) => {
+        // ]).then(([ funda, pararius, rentola, hAnywhere ]) => {
         //     res.status(200)
-        //     .json({ funda, paparius, rentola, hAnywhere })
+        //     .json({ funda, pararius, rentola, hAnywhere })
         res.end()
         
 

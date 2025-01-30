@@ -31,8 +31,12 @@ const providers = [
     label: "Kamernet",
   },
   {
-    id: "paparius",
-    label: "Paparius",
+    id: "kamerNL",
+    label: "KamerNL",
+  },
+  {
+    id: "pararius",
+    label: "Pararius",
   },
   {
     id: "huurwoningen",

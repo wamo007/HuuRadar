@@ -2,7 +2,7 @@ const express = require('express')
 // const bodyParser = require('body-parser')
 const fundaScraper = require('./scrapers/funda')
 const hAnywhereScraper = require('./scrapers/hAnywhere')
-const papariusScraper = require('./scrapers/paparius')
+const parariusScraper = require('./scrapers/pararius')
 const rentolaScraper = require('./scrapers/rentola')
 const kamernetScraper = require('./scrapers/kamernet')
 const huurwoningenScraper = require('./scrapers/huurwoningen')
@@ -16,7 +16,7 @@ const scrapers = {
   funda: fundaScraper,
   hAnywhere: hAnywhereScraper,
   kamernet: kamernetScraper,
-  paparius: papariusScraper,
+  pararius: parariusScraper,
   huurwoningen: huurwoningenScraper,
   rentola: rentolaScraper,
 }

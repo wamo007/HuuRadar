@@ -35,17 +35,17 @@ const chartConfig = {
     label: "Kamernet",
     color: "hsl(var(--chart-5))",
   },
-  paparius: {
-    label: "Paparius",
+  kamerNL: {
+    label: "KamerNL",
+    color: "hsl(var(--chart-3))",
+  },
+  pararius: {
+    label: "Pararius",
     color: "hsl(var(--chart-2))",
   },
   huurwoningen: {
     label: "Huurwoningen",
     color: "hsl(var(--chart-6))",
-  },
-  rentola: {
-    label: "Rentola",
-    color: "hsl(var(--chart-3))",
   },
 }
 
@@ -55,9 +55,10 @@ export function AveragePieChart({ responseData }) {
     { provider: "funda", prices: 0, fill: "var(--color-funda)" },
     { provider: "hAnywhere", prices: 0, fill: "var(--color-hAnywhere)" },
     { provider: "kamernet", prices: 0, fill: "var(--color-kamernet)" },
-    { provider: "paparius", prices: 0, fill: "var(--color-paparius)" },
+    { provider: "kamerNL", prices: 0, fill: "var(--color-kamerNL)" },
+    { provider: "pararius", prices: 0, fill: "var(--color-pararius)" },
     { provider: "huurwoningen", prices: 0, fill: "var(--color-huurwoningen)" },
-    { provider: "rentola", prices: 0, fill: "var(--color-rentola)" },
+    // { provider: "rentola", prices: 0, fill: "var(--color-rentola)" },
   ])
   const [totalAveragePrice, setTotalAveragePrice] = useState(0)
 
@@ -90,13 +91,14 @@ export function AveragePieChart({ responseData }) {
   useEffect(() => {
     if (responseData) {
       const fundaAverage = averagePrices(responseData?.funda)
-      const papariusAverage = averagePrices(responseData?.paparius)
-      const rentolaAverage = averagePrices(responseData?.rentola)
+      const parariusAverage = averagePrices(responseData?.pararius)
+      // const rentolaAverage = averagePrices(responseData?.rentola)
       const hAnywhereAverage = averagePrices(responseData?.hAnywhere)
       const kamernetAverage = averagePrices(responseData?.kamernet)
+      const kamerNLAverage = averagePrices(responseData?.kamerNL)
       const huurwoningenAverage = averagePrices(responseData?.huurwoningen)
 
-      const averages = [fundaAverage, hAnywhereAverage, kamernetAverage, papariusAverage, huurwoningenAverage, rentolaAverage].filter(average => average > 0)
+      const averages = [fundaAverage, hAnywhereAverage, kamernetAverage, parariusAverage, huurwoningenAverage, kamerNLAverage].filter(average => average > 0)
       const totalAverage = 
         averages.length > 0 ? Math.round(averages.reduce((sum, average) => sum + average, 0) / averages.length) : 0
 
@@ -104,9 +106,10 @@ export function AveragePieChart({ responseData }) {
         { provider: "Funda", prices: fundaAverage, fill: "var(--color-funda)" },
         { provider: "H.Anywhere", prices: hAnywhereAverage, fill: "var(--color-hAnywhere)" },
         { provider: "Kamernet", prices: kamernetAverage, fill: "var(--color-kamernet)" },
-        { provider: "Paparius", prices: papariusAverage, fill: "var(--color-paparius)" },
+        { provider: "KamerNL", prices: kamerNLAverage, fill: "var(--color-kamerNL)" },
+        { provider: "Pararius", prices: parariusAverage, fill: "var(--color-pararius)" },
         { provider: "Huurwoningen", prices: huurwoningenAverage, fill: "var(--color-huurwoningen)" },
-        { provider: "Rentola", prices: rentolaAverage, fill: "var(--color-rentola)" },
+        // { provider: "Rentola", prices: rentolaAverage, fill: "var(--color-rentola)" },
       ])
       setTotalAveragePrice(totalAverage)
     }

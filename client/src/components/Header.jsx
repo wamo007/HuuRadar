@@ -16,7 +16,7 @@ export default function Header() {
             <p className="text-2xl max-[360px]:text-lg max-sm:text-xl  md:text-3xl lg:text-[2.19rem] max-w-md max-sm:max-w-sm md:max-w-lg pt-3 leading-tight">Get notified about new rentable apartments faster than others!</p>
             <div className="md:space-x-6 mt-11 max-[360px]:mt-8 max-sm:mt-9 md:mt-13 lg:mt-14">
                 <a href="#About" className="hidden md:inline-block border-2 border-slate-900 text-3xl px-8 py-3 rounded text-slate-900 hover:text-slate-800 hover:animate-pulse">Learn More</a>
-                <Link to="demo" className="bg-slate-900 border-2 border-slate-900 px-8 py-3 rounded text-white text-3xl max-[360px]:text-xl max-sm:text-2xl hover:text-slate-200 hover:animate-pulse7">Search now</Link>
+                <Link to="search" className="bg-slate-900 border-2 border-slate-900 px-8 py-3 rounded text-white text-3xl max-[360px]:text-xl max-sm:text-2xl hover:text-slate-200 hover:animate-pulse7">Search now</Link>
             </div>
         </div>
     </div>

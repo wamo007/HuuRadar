@@ -5,11 +5,12 @@ const User = require('../models/user')
 const cron = require('node-cron')
 const transporter = require('../config/nodeMailer')
 const fundaScraper = require('./scrapers/funda')
-const papariusScraper = require('./scrapers/paparius')
+const parariusScraper = require('./scrapers/pararius')
 const rentolaScraper = require('./scrapers/rentola')
 const hAnywhereScraper = require('./scrapers/hAnywhere')
 const kamernetScraper = require('./scrapers/kamernet')
 const huurwoningenScraper = require('./scrapers/huurwoningen')
+const kamerNLScraper = require('./scrapers/kamerNL')
 
 const saveQuery = async (req, res) => {
     try {
@@ -81,9 +82,10 @@ const saveQuery = async (req, res) => {
 const scrapers = {
     funda: fundaScraper,
     hAnywhere: hAnywhereScraper,
-    paparius: papariusScraper,
+    pararius: parariusScraper,
     rentola: rentolaScraper,
     kamernet: kamernetScraper,
+    kamerNL: kamerNLScraper,
     huurwoningen: huurwoningenScraper,
 }
 
@@ -318,6 +320,6 @@ const compareQuery = async () => {
 
 // compareQuery()
 
-cron.schedule('*/30 * * * *', compareQuery)
+// cron.schedule('*/30 * * * *', compareQuery)
 
 module.exports = saveQuery

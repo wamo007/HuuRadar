@@ -8,6 +8,7 @@ import { Routes, Route } from 'react-router-dom'
 import ResetPassword from './pages/ResetPassword'
 import EmailVerify from './pages/EmailVerify'
 import Account from './pages/Account'
+import ProviderReviews from './pages/ProviderReviews'
 
 function App() {
 
@@ -17,8 +18,9 @@ function App() {
       <ScrollToHashElement behavior="smooth" />
       <Routes>
         <Route path='/' element={<Home />} />
+        <Route path='/provider-reviews' element={<ProviderReviews />} />
         <Route path='/account' element={<Account />} />
-        <Route path='/demo' element={<Demo />} />
+        <Route path='/search' element={<Demo />} />
         <Route path='/registration' element={<Login signType='Sign Up' />} />
         <Route path='/login' element={<Login signType='Login' />} />
         <Route path='/email-verify' element={<EmailVerify />} />

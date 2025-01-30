@@ -13,7 +13,8 @@ const providers = [
   { id: 'funda', label: 'Funda', logo: assets.funda },
   { id: 'hAnywhere', label: 'Housing Anywhere', logo: assets.hAnywhere  },
   { id: 'kamernet', label: 'Kamernet', logo: assets.kamernet },
-  { id: 'paparius', label: 'Paparius', logo: assets.paparius },
+  { id: 'kamerNL', label: 'KamerNL', logo: assets.kamerNL },
+  { id: 'pararius', label: 'Pararius', logo: assets.pararius },
   { id: 'huurwoningen', label: 'Huurwoningen', logo: assets.huurwoningen },
   { id: 'rentola', label: 'Rentola', logo: assets.rentola },
 ]
@@ -149,7 +150,7 @@ export default function Demo() {
             <SearchPanel responseDataChange={handleResponseDataChange} loadingStatus={setLoadingStatus} providerSet={setSelectedProviders} />
           </div>
         </div>
-        <div className="flex md:items-center w-full overflow-hidden" id='Demo'>
+        <div className="flex md:items-center w-full overflow-hidden" id='Search'>
           <div className='w-full text-left mx-auto pt-7'>
             {Object.values(responseData).some((results) => results?.length) ? (
               <>

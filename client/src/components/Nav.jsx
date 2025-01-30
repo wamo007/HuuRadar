@@ -21,8 +21,9 @@ export default function Nav ({ className }) {
     const location = useLocation()
     const { pathname } = location
     const isHome = pathname === '/'
-    const isDemo = pathname === '/demo'
+    const isDemo = pathname === '/search'
     const isAccount = pathname === '/account'
+    const isReviews = pathname === '/provider-reviews'
     const isLogin = pathname === '/login'
     const isRegistration = pathname === '/registration'
 
@@ -136,7 +137,7 @@ export default function Nav ({ className }) {
     }, [scrollData])
 
     return (
-        <nav className={`${isDemo || isAccount ? 'sticky' : 'fixed'} top-0 ${showNav ? '-translate-y-full' : ''} ${navColor ? 'bg-slate-100 bg-clip-padding backdrop-filter backdrop-blur bg-opacity-50 backdrop-saturate-50 backdrop-contrast-125' : ''} mx-auto w-full transition-all duration-700 ease-out z-50 h-[5.125rem] ${className}`}>
+        <nav className={`${isDemo || isAccount || isReviews ? 'sticky' : 'fixed'} top-0 ${showNav ? '-translate-y-full' : ''} ${navColor ? 'bg-slate-100 bg-clip-padding backdrop-filter backdrop-blur bg-opacity-50 backdrop-saturate-50 backdrop-contrast-125' : ''} mx-auto w-full transition-all duration-700 ease-out z-50 h-[5.125rem] ${className}`}>
             <div className='mx-auto flex justify-between items-center w-11/12 max-w-7xl py-4 px-6 md:px-2 lg:px-10 xl:px-14 2xl:px-30'>
                 <Link className='flex justify-between items-center gap-3' to='/'>
                     <img src={assets.logo} alt="Website Logo" width={50} />

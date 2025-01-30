@@ -1,19 +1,19 @@
 const { getBrowser } = require('./masterScraper')
-const PAPARIUS_URL = `https://www.pararius.com`
+const PARARIUS_URL = `https://www.pararius.com`
 
-const papariusScraper = async (city, radius, sortGlobal, minPrice, maxPrice) => {
+const parariusScraper = async (city, radius, sortGlobal, minPrice, maxPrice) => {
 
     const browser = await getBrowser()
 
     const page = await browser.newPage()
 
     let data
-    let radiusPaparius
+    let radiusPararius
     let initialUrl
-    let papariusData = []
+    let parariusData = []
     let currentPage = 1
 
-    function sortPaparius(sortingChosen = 'new') {
+    function sortPararius(sortingChosen = 'new') {
         const options = {
             'new': '',
             'old': '',
@@ -24,21 +24,21 @@ const papariusScraper = async (city, radius, sortGlobal, minPrice, maxPrice) => 
     }
 
     if (radius === '0') {
-        radiusPaparius = ''
+        radiusPararius = ''
     } else {
-        radiusPaparius = `/radius-${radius}`
+        radiusPararius = `/radius-${radius}`
     }
 
     if (!minPrice && !maxPrice) {
-        initialUrl = `${PAPARIUS_URL}/apartments/${city.toLowerCase()}${radiusPaparius}${sortPaparius(sortGlobal)}/since-3`
+        initialUrl = `${PARARIUS_URL}/apartments/${city.toLowerCase()}${radiusPararius}${sortPararius(sortGlobal)}/since-3`
     } else if (!minPrice) {
         minPrice = '0'
-        initialUrl = `${PAPARIUS_URL}/apartments/${city.toLowerCase()}/${minPrice}-${maxPrice}${radiusPaparius}${sortPaparius(sortGlobal)}/since-3`
+        initialUrl = `${PARARIUS_URL}/apartments/${city.toLowerCase()}/${minPrice}-${maxPrice}${radiusPararius}${sortPararius(sortGlobal)}/since-3`
     } else if (!maxPrice || maxPrice === 0) {
         maxPrice = '60000'
-        initialUrl = `${PAPARIUS_URL}/apartments/${city.toLowerCase()}/${minPrice}-${maxPrice}${radiusPaparius}${sortPaparius(sortGlobal)}/since-3`
+        initialUrl = `${PARARIUS_URL}/apartments/${city.toLowerCase()}/${minPrice}-${maxPrice}${radiusPararius}${sortPararius(sortGlobal)}/since-3`
     } else {
-        initialUrl = `${PAPARIUS_URL}/apartments/${city.toLowerCase()}/${minPrice}-${maxPrice}${radiusPaparius}${sortPaparius(sortGlobal)}/since-3`
+        initialUrl = `${PARARIUS_URL}/apartments/${city.toLowerCase()}/${minPrice}-${maxPrice}${radiusPararius}${sortPararius(sortGlobal)}/since-3`
     }
 
     try {
@@ -55,7 +55,7 @@ const papariusScraper = async (city, radius, sortGlobal, minPrice, maxPrice) => 
         } catch (error) {
             console.error(`Navigation to ${initialUrl} failed:`, err.message);
             await page.close()
-            return papariusData
+            return parariusData
         }
     }  
 
@@ -98,7 +98,7 @@ const papariusScraper = async (city, radius, sortGlobal, minPrice, maxPrice) => 
                 }
 
                 return {
-                    provider: 'paparius',
+                    provider: 'pararius',
                     link: `https://www.pararius.com${link}`,
                     img: img.substring(0, img.length - 20),
                     heading,
@@ -111,11 +111,11 @@ const papariusScraper = async (city, radius, sortGlobal, minPrice, maxPrice) => 
             })
         })
 
-        papariusData.push(...data)
+        parariusData.push(...data)
         currentPage++
     }
     await page.close()
-    return papariusData
+    return parariusData
 }
 
 async function autoScroll(page) {
@@ -137,4 +137,4 @@ async function autoScroll(page) {
     })
 }
 
-module.exports = papariusScraper
+module.exports = parariusScraper

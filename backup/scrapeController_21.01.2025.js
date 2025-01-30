@@ -1,11 +1,11 @@
 const fundaScraper = require('./scrapers/funda')
 const hAnywhereScraper = require('./scrapers/hAnywhere')
-const papariusScraper = require('./scrapers/paparius')
+const parariusScraper = require('./scrapers/pararius')
 const rentolaScraper = require('./scrapers/rentola')
 const kamernetScraper = require('./scrapers/kamernet')
 const huurwoningenScraper = require('./scrapers/huurwoningen')
 
-const sortProviders = ['funda', 'hAnywhere', 'kamernet', 'paparius', 'huurwoningen', 'rentola']
+const sortProviders = ['funda', 'hAnywhere', 'kamernet', 'pararius', 'huurwoningen', 'rentola']
 
 const scrapeController = async (req, res) => {
     const city = req.body.city
@@ -24,7 +24,7 @@ const scrapeController = async (req, res) => {
         funda: fundaScraper,
         hAnywhere: hAnywhereScraper,
         kamernet: kamernetScraper,
-        paparius: papariusScraper,
+        pararius: parariusScraper,
         huurwoningen: huurwoningenScraper,
         rentola: rentolaScraper,
     }

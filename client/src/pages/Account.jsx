@@ -17,7 +17,6 @@ import { toast } from "react-toastify"
 import axios from "axios"
 import { BarChartUser } from "@/components/ui/custom/BarChartUser"
 import { AreaChartUser } from "@/components/ui/custom/AreaChartUser"
-import { Card, CardHeader, CardTitle } from "@/components/ui/card"
 import { PieChartUser } from "@/components/ui/custom/PieChartUser"
 
 export default function Account() {
@@ -126,7 +125,7 @@ export default function Account() {
   const convertQuery = (dataset) => {
     const convertedQuery = {
       funda: [],
-      paparius: [],
+      pararius: [],
       rentola: [],
       hAnywhere: [],
       kamernet: [],

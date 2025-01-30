@@ -4,7 +4,7 @@ const { DEFAULT_INTERCEPT_RESOLUTION_PRIORITY } = require('puppeteer')
 const AdblockerPlugin = require('puppeteer-extra-plugin-adblocker')
 
 const FUNDA_URL = `https://www.funda.nl/en/zoeken/huur?selected_area=%5B%22${city},${radius}km%22%5D&sort="${sortFunda}"&price="${minPrice}-${maxPrice}`
-const PAPARIUS_URL = `https://www.pararius.com/apartments/${city}/${minPrice}-${maxPrice}/radius-${radius}${sortPaparius}`
+const PARARIUS_URL = `https://www.pararius.com/apartments/${city}/${minPrice}-${maxPrice}/radius-${radius}${sortPararius}`
 const RENTOLA_URL = `https://rentola.nl/en/for-rent?location=${city}&order=${sortRentola}&rent=${minPrice}-${maxPrice}`
 const HOUSING_ANYWHERE_URL = `https://housinganywhere.com/s/${city}--Netherlands?sorting=${sortHA}&categories=shared-rooms%2Cprivate-rooms%2Cstudio-for-rent%2Cstudent-housing&priceMin=${minPrice}00&priceMax=${maxPrice}00`
 const IAMEXPAT_URL = `https://www.iamexpat.nl/housing/rentals/${city}/room/${minPrice}-${maxPrice}` //Order will be done by puppeteer in headless

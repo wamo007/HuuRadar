@@ -109,7 +109,7 @@ export default function Account() {
       const { data } = await axios.delete(backendUrl + `/api/query/delete/${queryId}`)
       if (data.success) {
           toast.success(data.message)
-          await getQueries() // Refresh the queries list
+          await getQueries()
       } else {
           toast.error(data.error)
       }
@@ -246,12 +246,16 @@ export default function Account() {
                           provider.charAt(0).toUpperCase() + provider.slice(1)).join(", ")
 
                         return (
-                          <SelectItem 
-                          key={query._id} 
-                          value={query}>
-                          {city}: {providers}
-                        </SelectItem>
-                        )
+                          <div key={query._id} className="flex justify-between items-center">
+                            <SelectItem 
+                              value={query}>
+                              {city}: {providers}
+                            </SelectItem>
+                            <button onClick={() => deleteQuery(query._id)} className="ml-2">
+                              <img src={assets.trash} alt="" />
+                            </button>
+                          </div>
+                        ) 
                       })
                     ) : (
                       <SelectItem value="no-queries" disabled>

@@ -191,6 +191,7 @@ export default function Nav ({ className }) {
                                     <ul className={`list-none m-0 p-1 ${isHome ? 'bg-background hover:*:bg-gray-200': 'bg-gray-800 hover:*:bg-blue-900 text-primary-foreground dark:bg-background dark:hover:*:bg-gray-200 dark:text-primary'} *:cursor-pointer rounded-b-xl [&_*]:text-lg`}>
                                         { !userData.accountVerified && <li onClick={sendVerificationOtp}>Verify email</li> }
                                         { userData.accountVerified && <li onClick={() => navigate('/account')}>Account</li> }
+                                        <li onClick={() => navigate('/search')}>Search</li>
                                         <li onClick={logout}>Logout</li>
                                     </ul>                              
                                 </div>    
@@ -229,6 +230,7 @@ export default function Nav ({ className }) {
                     <a onClick={() => setShowMobileMenu(false)} href='/#Header' className='px-4 py-2 rounded-full inline-block'>Home</a>
                     <a onClick={() => setShowMobileMenu(false)} href='/#About' className='px-4 py-2 rounded-full inline-block'>About</a>
                     <a onClick={() => setShowMobileMenu(false)} href='/#Contacts' className='px-4 py-2 rounded-full inline-block'>Contact me</a>
+                    <a onClick={() => setShowMobileMenu(false)} href='/search' className='px-4 py-2 rounded-full inline-block'>Search</a>
                     { isLogin || isRegistration ? (
                         <>
                             { !isLogin && <Link to='/login' className='px-4 py-2 rounded-full inline-block'>Log in</Link> }

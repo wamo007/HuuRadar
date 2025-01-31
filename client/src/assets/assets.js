@@ -5,6 +5,7 @@ import star_icon from './star_icon.svg'
 import left_arrow from './left_arrow.svg'
 import right_arrow from './right_arrow.svg'
 import check from './check.svg'
+import trash from './trash.svg'
 import loadingBuilding from './loadingBuilding.gif'
 import funda from './funda.png'
 import pararius from './pararius.png'
@@ -40,6 +41,7 @@ export const assets = {
     left_arrow,
     right_arrow,
     check,
+    trash,
     loadingBuilding,
     funda,
     pararius,

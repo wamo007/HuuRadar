@@ -20,7 +20,7 @@ mongoose.connect(process.env.MONGO_URL)
     .catch(() => console.log('Database not connected', err))
 
 const app = express()
-const PORT = 8080
+const PORT = 8089
 
 app.use(cors(corsOptions))
 app.use(cookieParser())

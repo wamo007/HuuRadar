@@ -126,10 +126,11 @@ export default function Account() {
     const convertedQuery = {
       funda: [],
       pararius: [],
-      rentola: [],
+      kamerNL: [],
       hAnywhere: [],
       kamernet: [],
       huurwoningen: [],
+      rentola: [],
     }
 
     dataset.forEach((set) => {

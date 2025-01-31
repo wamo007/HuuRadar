@@ -36,7 +36,7 @@ export function BarChartUser({ queryData }) {
     { provider: "KamerNL", desktop: 0 },
     { provider: "Pararius", desktop: 0 },
     { provider: "Huurwoningen", desktop: 0 },
-    // { provider: "Rentola", desktop: 0 },
+    { provider: "Rentola", desktop: 0 },
   ])
 
   const averagePrices = (provider) => {
@@ -69,7 +69,7 @@ export function BarChartUser({ queryData }) {
     if (queryData) {
       const fundaAverage = averagePrices(queryData?.funda)
       const parariusAverage = averagePrices(queryData?.pararius)
-      // const rentolaAverage = averagePrices(queryData?.rentola)
+      const rentolaAverage = averagePrices(queryData?.rentola)
       const hAnywhereAverage = averagePrices(queryData?.hAnywhere)
       const kamernetAverage = averagePrices(queryData?.kamernet)
       const kamerNLAverage = averagePrices(queryData?.kamerNL)
@@ -82,7 +82,7 @@ export function BarChartUser({ queryData }) {
         { provider: "KamerNL", desktop: kamerNLAverage },
         { provider: "Pararius", desktop: parariusAverage },
         { provider: "Huurwoningen", desktop: huurwoningenAverage },
-        // { provider: "Rentola", desktop: rentolaAverage },
+        { provider: "Rentola", desktop: rentolaAverage },
       ])
     }
   }, [queryData])
@@ -90,7 +90,7 @@ export function BarChartUser({ queryData }) {
   return (
     <Card className='flex flex-col justify-between w-full dark:bg-gray-800 dark:border-gray-600'>
       <CardHeader className='max-lg:pt-3 px-3'>
-        <CardTitle>Provider's Latest Average Price</CardTitle>
+        <CardTitle>Providers' Latest Average Price</CardTitle>
         {/* <CardDescription>January - June 2024</CardDescription> */}
       </CardHeader>
       <CardContent>

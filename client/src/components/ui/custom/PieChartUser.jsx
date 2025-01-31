@@ -47,6 +47,10 @@ const chartConfig = {
     label: "Huurwoningen",
     color: "hsl(var(--chart-6))",
   },
+  rentola: {
+    label: "Rentola",
+    color: "hsl(var(--chart-7))",
+  }
 }
 
 export function PieChartUser({ queryData }) {
@@ -58,7 +62,7 @@ export function PieChartUser({ queryData }) {
     { provider: "kamerNL", prices: 0, fill: "var(--color-kamerNL)" },
     { provider: "pararius", prices: 0, fill: "var(--color-pararius)" },
     { provider: "huurwoningen", prices: 0, fill: "var(--color-huurwoningen)" },
-    // { provider: "rentola", prices: 0, fill: "var(--color-rentola)" },
+    { provider: "rentola", prices: 0, fill: "var(--color-rentola)" },
   ])
   const [totalAveragePrice, setTotalAveragePrice] = useState(0)
 
@@ -92,13 +96,13 @@ export function PieChartUser({ queryData }) {
     if (queryData) {
       const fundaAverage = averagePrices(queryData?.funda)
       const parariusAverage = averagePrices(queryData?.pararius)
-      // const rentolaAverage = averagePrices(queryData?.rentola)
+      const rentolaAverage = averagePrices(queryData?.rentola)
       const hAnywhereAverage = averagePrices(queryData?.hAnywhere)
       const kamernetAverage = averagePrices(queryData?.kamernet)
       const kamerNLAverage = averagePrices(queryData?.kamerNL)
       const huurwoningenAverage = averagePrices(queryData?.huurwoningen)
 
-      const averages = [fundaAverage, hAnywhereAverage, kamernetAverage, parariusAverage, huurwoningenAverage, kamerNLAverage].filter(average => average > 0)
+      const averages = [fundaAverage, hAnywhereAverage, kamernetAverage, parariusAverage, huurwoningenAverage, kamerNLAverage, rentolaAverage].filter(average => average > 0)
       const totalAverage = 
         averages.length > 0 ? Math.round(averages.reduce((sum, average) => sum + average, 0) / averages.length) : 0
 
@@ -106,10 +110,10 @@ export function PieChartUser({ queryData }) {
         { provider: "Funda", prices: fundaAverage, fill: "var(--color-funda)" },
         { provider: "H.Anywhere", prices: hAnywhereAverage, fill: "var(--color-hAnywhere)" },
         { provider: "Kamernet", prices: kamernetAverage, fill: "var(--color-kamernet)" },
-        { provider: "KamerNL", prices: kamerNLAverage, fill: "var(--color-kanerNL)" },
+        { provider: "KamerNL", prices: kamerNLAverage, fill: "var(--color-kamerNL)" },
         { provider: "Pararius", prices: parariusAverage, fill: "var(--color-pararius)" },
         { provider: "Huurwoningen", prices: huurwoningenAverage, fill: "var(--color-huurwoningen)" },
-        // { provider: "Rentola", prices: rentolaAverage, fill: "var(--color-rentola)" },
+        { provider: "Rentola", prices: rentolaAverage, fill: "var(--color-rentola)" },
       ])
       setTotalAveragePrice(totalAverage)
     }

@@ -166,56 +166,50 @@ const KamernetFeedback = () => {
 const KamerNLFeedback = () => {
   return (
     <div className="dark:text-muted *:pb-2 pt-2">
-      <h2 className="text-2xl text-center font-semibold">Public Feedback About Kamernet for Renting Apartments in the Netherlands</h2>
+      <h2 className="text-2xl text-center font-semibold">
+        Public Feedback About Kamer.nl for Renting Apartments in the Netherlands
+      </h2>
+
       <h3 className="text-xl font-semibold underline underline-offset-2">Pros:</h3>
       <ul className="*:py-1 lg:text-lg">
         <li>
-          <strong>Extensive Listings:</strong> Kamernet offers a vast database of available properties and roommates, providing users with a wide range of options to choose from.
+          <strong>Free to Use:</strong> Unlike some competitors, Kamer.nl allows users to browse listings and contact landlords without a subscription fee.
         </li>
         <li>
-          <strong>User-Friendly Interface:</strong> The platform is easy to navigate, with advanced search filters that allow users to narrow down their options based on preferences such as location, price, and property type.
+          <strong>Wide Range of Listings:</strong> The platform offers various types of rentals, including studios, apartments, and rooms.
         </li>
         <li>
-          <strong>Direct Communication:</strong> Kamernet enables direct contact between potential tenants and landlords, streamlining the rental process.
+          <strong>Direct Contact with Landlords:</strong> You can communicate directly with property owners without intermediaries.
         </li>
         <li>
-          <strong>Responsive Customer Service:</strong> The platform has a dedicated customer service team that is readily available to address any queries or issues users may encounter.
-        </li>
-        <li>
-          <strong>Secure Payment Options:</strong> Kamernet offers secure payment options for its subscription plans, ensuring convenience and peace of mind for users.
+          <strong>No Registration Required to Browse:</strong> Users can explore available listings without creating an account.
         </li>
       </ul>
 
       <h3 className="text-xl font-semibold underline underline-offset-2">Cons:</h3>
       <ul className="*:py-1 lg:text-lg">
         <li>
-          <strong>Subscription Fees:</strong> Accessing full features and contacting landlords requires a paid subscription, which some users may find costly.
+          <strong>Smaller Database:</strong> Compared to larger platforms like Kamernet and Pararius, Kamer.nl has fewer listings, which may limit options in competitive markets.
         </li>
         <li>
-          <strong>High Competition:</strong> Due to its popularity, listings can be highly competitive, requiring users to respond quickly to secure a desired property.
+          <strong>Less Active Landlords:</strong> Some users report delays in landlord responses or inactive listings.
         </li>
         <li>
-          <strong>Risk of Scams:</strong> Some users have reported encountering scams or fake listings on the platform. Kamernet provides tips on recognizing and avoiding scammers, but users should remain vigilant.
-        </li>
-        <li>
-          <strong>Limited Language Options:</strong> The platform is primarily available in Dutch, which may pose a challenge for non-Dutch speaking users.
-        </li>
-        <li>
-          <strong>Variable Listing Quality:</strong> The quality and detail of property listings can vary, with some lacking comprehensive information or clear photos.
+          <strong>Risk of Outdated Listings:</strong> Since there is no strict verification process, some listings may not be updated frequently.
         </li>
       </ul>
 
       <h3 className="text-xl font-semibold underline underline-offset-2">General Feedback from Users:</h3>
       <p className="py-1 lg:text-lg">
-        <strong>Positive:</strong> Users appreciate Kamernet's extensive database, user-friendly interface, and the ability to communicate directly with landlords. The platform's customer service is also frequently praised for its responsiveness.
+        <strong>Positive:</strong> Users appreciate that Kamer.nl is free, easy to navigate, and provides direct landlord contact.
       </p>
       <p className="py-1 lg:text-lg">
-        <strong>Negative:</strong> Common complaints include the necessity of a paid subscription to access full features, the competitive nature of desirable listings, and occasional encounters with scams or fake listings.
+        <strong>Negative:</strong> The limited number of listings and occasional inactive landlords are common concerns among users.
       </p>
 
       <h3 className="text-xl font-semibold underline underline-offset-2">Conclusion:</h3>
       <p className="py-1 lg:text-lg">
-        Kamernet is a valuable resource for finding rental properties and roommates in the Netherlands, offering a broad selection and user-friendly experience. However, users should be prepared for subscription costs, act swiftly due to high competition, and remain vigilant against potential scams. For non-Dutch speakers, the language barrier may present a challenge, and it is advisable to use Kamernet in conjunction with other platforms to maximize opportunities.
+        Kamer.nl is a good option for people looking for free access to listings and direct landlord contact. However, due to the smaller number of listings and occasional delays in responses, users may benefit from using it alongside other rental platforms for the best results.
       </p>
     </div>
   )

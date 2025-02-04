@@ -9,6 +9,10 @@
   font-family: Outfit;
 }
 
+:root {
+  --toastify-color-success: #111827 !important;
+}
+
 button:disabled:hover {
   cursor: default;
   animation: shake 0.6s cubic-bezier(.36,.07,.19,.97) both;

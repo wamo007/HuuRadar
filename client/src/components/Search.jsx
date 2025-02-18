@@ -162,7 +162,7 @@ function SearchPanel({ responseDataChange, loadingStatus, providerSet }) {
         <Button onClick={(e) => saveQuery(e)} className={`${(!loading) && (Object.keys(queryData).length > 0) ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-5 md:translate-y-5 max-[602px]:-translate-y-12 pointer-events-none'} transition-all duration-500 ease-in-out absolute m-auto top-[5.5rem] md:-top-[4.7rem] max-[585px]:top-44 [@media_((min-width:585px)_and_(max-width:602px))]:top-[132px] max-[419px]:top-[19.3rem] left-0 right-0 w-[7.5rem] text-md shadow-gray-400 shadow-lg hover:scale-105 hover:shadow-2xl dark:border dark:border-input dark:bg-background dark:hover:bg-background/85 dark:hover:text-accent-foreground dark:text-primary dark:shadow-slate-800 dark:font-semibold`} type='button'>
           Notify me!
         </Button>
-        <form onSubmit={handleSubmit} className="flex flex-nowrap max-[833px]:flex-wrap max-[419px]:flex-col flex-row gap-1 lg:gap-3 w-full justify-center min-[833px]:justify-stretch items-center animate-slideIn4">
+        <form onSubmit={handleSubmit} className="flex flex-nowrap max-[833px]:flex-wrap max-[419px]:flex-col flex-row gap-1 lg:gap-3 w-full justify-center min-[833px]:justify-start items-center animate-slideIn4">
           
           <Select>
             <SelectTrigger className="w-40 max-w-44 dark:border-gray-600 dark:bg-gray-800 dark:text-white animate-slideIn4 transition-all duration-700 ease-in-out text-md">
